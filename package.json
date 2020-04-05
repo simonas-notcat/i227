@@ -1,0 +1,28 @@
+{
+  "name": "i227",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:simonas-notcat/i227.git",
+  "author": "Simonas Karuzas <simonas@not.cat>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "update-daf-beta": "yarn add daf-core@beta daf-w3c@beta daf-ethr-did@beta daf-did-jwt@beta daf-selective-disclosure@beta daf-libsodium@beta"
+  },
+  "dependencies": {
+    "apollo-server": "^2.11.0",
+    "daf-core": "^4.0.0-beta.32",
+    "daf-did-jwt": "^4.0.0-beta.32",
+    "daf-ethr-did": "^4.0.0-beta.32",
+    "daf-libsodium": "^4.0.0-beta.32",
+    "daf-resolver": "^3.0.1",
+    "daf-selective-disclosure": "^4.0.0-beta.32",
+    "daf-w3c": "^4.0.0-beta.32",
+    "lodash.merge": "^4.6.2",
+    "pg": "^8.0.0",
+    "sqlite3": "^4.1.1",
+    "typeorm": "^0.2.24",
+    "typescript": "^3.8.3"
+  }
+}
