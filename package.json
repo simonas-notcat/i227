@@ -12,7 +12,7 @@
     "update-daf-beta": "yarn add daf-core@beta daf-w3c@beta daf-ethr-did@beta daf-did-jwt@beta daf-selective-disclosure@beta daf-libsodium@beta"
   },
   "dependencies": {
-    "apollo-server": "^2.11.0",
+    "apollo-server-express": "^2.11.0",
     "daf-core": "^4.0.0-beta.32",
     "daf-did-jwt": "^4.0.0-beta.32",
     "daf-ethr-did": "^4.0.0-beta.32",

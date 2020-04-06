@@ -5,9 +5,10 @@ import { SdrMessageHandler, SdrActionHandler, SdrGql } from 'daf-selective-discl
 import * as DafEthrDid from 'daf-ethr-did'
 import * as DafLibSodium from 'daf-libsodium'
 import { DafResolver } from 'daf-resolver'
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-express'
 import merge from 'lodash.merge'
 import { createConnection } from 'typeorm'
+import express from 'express'
 
 const infuraProjectId = '5ffc47f65c4042ce847ef66a3fa70d4c'
 
@@ -60,6 +61,9 @@ const server = new ApolloServer({
   introspection: true,
 })
 
+const app = express();
+server.applyMiddleware({ app, path: '/graphql' });
+
 const main = async () => {
   await createConnection({
     type: 'sqlite',
@@ -69,8 +73,10 @@ const main = async () => {
     entities: [...Daf.Entities],
   })
 
-  const info = await server.listen({port: 8080, path: '/graphql'})
-  console.log(`🚀  Server ready at ${info.url}`)
+  
+
+  await app.listen({port: 8080})
+  console.log(`🚀  Server ready at http://localhost:8080`)
 }
 
 main().catch(console.log)
