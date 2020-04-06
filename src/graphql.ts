@@ -69,7 +69,7 @@ const main = async () => {
     entities: [...Daf.Entities],
   })
 
-  const info = await server.listen({port: 8080})
+  const info = await server.listen({port: 8080, path: '/graphql'})
   console.log(`🚀  Server ready at ${info.url}`)
 }
 

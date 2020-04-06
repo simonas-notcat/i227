@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js",
+    "start:graphql": "node build/graphql.js",
+    "start:webserver": "node build/webserver.js",
     "update-daf-beta": "yarn add daf-core@beta daf-w3c@beta daf-ethr-did@beta daf-did-jwt@beta daf-selective-disclosure@beta daf-libsodium@beta"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "daf-resolver": "^3.0.1",
     "daf-selective-disclosure": "^4.0.0-beta.32",
     "daf-w3c": "^4.0.0-beta.32",
+    "express": "^4.17.1",
     "lodash.merge": "^4.6.2",
     "pg": "^8.0.0",
     "sqlite3": "^4.1.1",
