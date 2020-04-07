@@ -95,7 +95,7 @@ app.command('/profile', async ({ command, ack, say, payload, context, body }) =>
     const result = await app.client.views.open({
       token: context.botToken,
       trigger_id: body.trigger_id,
-      view: getProfileView()
+      view: getProfileView({})
     });
   }
   catch (error) {
@@ -141,7 +141,24 @@ app.event('app_home_opened', async ({ payload, context }) => {
             },
             "value": "click_me_123"
           }
-        }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Check profile"
+          },
+          "accessory": {
+            "type": "button",
+            action_id: "home_check_profile_pressed",
+            "text": {
+              "type": "plain_text",
+              "text": "Profile",
+              "emoji": true
+            },
+            "value": "click_me_123"
+          }
+        },        
       ]
     }
   })
@@ -164,6 +181,22 @@ app.action('home_give_kudos_pressed', async ({ ack, say, payload, context, body 
   }
 });
 
+
+app.action('home_check_profile_pressed', async ({ ack, say, payload, context, body }) => {
+  await ack();
+
+  try {
+    await app.client.views.open({
+      token: context.botToken,
+      //@ts-ignore
+      trigger_id: body.trigger_id,
+      view: getProfileView({})
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
 
 
 const main = async () => {

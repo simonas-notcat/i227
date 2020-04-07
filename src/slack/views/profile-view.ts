@@ -1,6 +1,6 @@
 import { View } from '@slack/types'
 
-export const getProfileView = (): View => ( {
+export const getProfileView = (options: {initial_conversation?: string, initial_user?: string}): View => ( {
   "type": "modal",
   callback_id: 'profileView',
 	"title": {
