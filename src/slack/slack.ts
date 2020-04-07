@@ -2,7 +2,8 @@ import { config } from 'dotenv'
 import { Credential } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App, LogLevel } from '@slack/bolt'
-import * as CredentialForm from './blocks/credential-form'
+import { getKudosFormView } from './views/kudos-form-view'
+import { getProfileView } from './views/profile-view'
 import { getSlackUserDid } from './helpers/users'
 import { initDB } from '../database'
 import { agent } from '../agent'
@@ -16,16 +17,34 @@ const app = new App({
   logLevel: LogLevel.DEBUG
 });
 
-app.action('kudos_selected', async ({ ack, body, context }) => {
+
+
+
+
+app.command('/kudos', async ({ command, ack, say, payload, context, body }) => {
   await ack();
 
-})
+  const found = body.text.match(/@\w+/g)
+  const subjectUserId = found && found[0] && found[0].substring(1)
+  console.log({subjectUserId})
 
-app.action('user_selected', async ({ ack, body, context }) => {
-  await ack();
-})
+  try {
+    const result = await app.client.views.open({
+      token: context.botToken,
+      trigger_id: body.trigger_id,
+      view: getKudosFormView({
+        initial_conversation: body.channel_id,
+        initial_user: subjectUserId
+      })
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
 
-app.view('credentialForm', async(args) => {
+
+app.view('kudosForm', async(args) => {
   await args.ack()
 
   const channel = args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation || args.body.user.id
@@ -63,41 +82,94 @@ app.view('credentialForm', async(args) => {
   
 })
 
-app.command('/dev', async ({ command, ack, say, payload, context, body }) => {
-  // Acknowledge command request
+
+
+app.command('/profile', async ({ command, ack, say, payload, context, body }) => {
   await ack();
+  console.dir(body, {depth: 10})
+  console.dir(context, {depth: 10})
+  console.dir(payload, {depth: 10})
+
 
   try {
     const result = await app.client.views.open({
       token: context.botToken,
-      // Pass a valid trigger_id within 3 seconds of receiving it
       trigger_id: body.trigger_id,
-      // View payload
-      view: {
-        type: 'modal',
-        // View identifier
-        callback_id: 'credentialForm',
-        title: {
-          type: 'plain_text',
-          text: 'Modal title'
-        },
-        blocks: CredentialForm.blocks,
-        submit: {
-          type: 'plain_text',
-          text: 'Sign'
-        }
-      }
+      view: getProfileView()
     });
   }
   catch (error) {
     console.error(error);
   }
+});
 
+app.view('profileView', async(args) => {
+  await args.ack()
+  console.log(args.body)
+  console.log(args.body.view.state.values)
 });
 
 
-(async () => {
+app.action('user_selected', async ({ ack, body, context, payload }) => {
+  await ack();
+  console.dir(body, {depth: 10})
+  console.dir(context, {depth: 10})
+  console.dir(payload, {depth: 10})
+
+});
+
+app.event('app_home_opened', async ({ payload, context }) => {
+  await app.client.views.publish({
+    token: context.botToken,
+    user_id: payload.user,
+    view: {
+      type: "home",
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Give kudos"
+          },
+          "accessory": {
+            "type": "button",
+            action_id: "home_give_kudos_pressed",
+            "text": {
+              "type": "plain_text",
+              "text": "Give",
+              "emoji": true
+            },
+            "value": "click_me_123"
+          }
+        }
+      ]
+    }
+  })
+
+})
+
+app.action('home_give_kudos_pressed', async ({ ack, say, payload, context, body }) => {
+  await ack();
+
+  try {
+    await app.client.views.open({
+      token: context.botToken,
+      //@ts-ignore
+      trigger_id: body.trigger_id,
+      view: getKudosFormView({})
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
+
+
+
+const main = async () => {
   await initDB()
   await app.start(process.env.BOLT_PORT);
   console.log('⚡️ Bolt app is running!');
-})()
+}
+
+main().catch(console.error)

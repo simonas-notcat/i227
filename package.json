@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@slack/bolt": "^2.0.0",
+    "@slack/types": "^1.5.0",
     "apollo-server-express": "^2.11.0",
     "daf-core": "^4.0.0-beta.39",
     "daf-did-jwt": "^4.0.0-beta.39",
