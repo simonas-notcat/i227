@@ -8,10 +8,12 @@
   "scripts": {
     "build": "tsc",
     "start:graphql": "node build/graphql.js",
-    "start:webserver": "node build/webserver.js",
+    "start:slack": "node build/slack.js",
+    "start:web": "node build/webserver.js",
     "update-daf-beta": "yarn add daf-core@beta daf-w3c@beta daf-ethr-did@beta daf-did-jwt@beta daf-selective-disclosure@beta daf-libsodium@beta"
   },
   "dependencies": {
+    "@slack/bolt": "^2.0.0",
     "apollo-server-express": "^2.11.0",
     "daf-core": "^4.0.0-beta.32",
     "daf-did-jwt": "^4.0.0-beta.32",
@@ -20,6 +22,7 @@
     "daf-resolver": "^3.0.1",
     "daf-selective-disclosure": "^4.0.0-beta.32",
     "daf-w3c": "^4.0.0-beta.32",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash.merge": "^4.6.2",
     "pg": "^8.0.0",
