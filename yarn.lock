@@ -964,54 +964,54 @@ cross-fetch@^3.0.4:
     node-fetch "2.6.0"
     whatwg-fetch "3.0.0"
 
-daf-core@^4.0.0-beta.32, daf-core@^4.0.0-beta.32+8aefe92:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-core/-/daf-core-4.0.0-beta.32.tgz#68af2eb69fa34bcfa85131b6d64ea1381bb42000"
-  integrity sha512-9byBt1tDWVhY9cs9wSrQul2Xa7I+tbPsvGM2DWANLPjqU1+pLdYjH7UD0G1xyQFEgTanZdLcF6FjwnjtfzQ2pg==
+daf-core@^4.0.0-beta.39, daf-core@^4.0.0-beta.39+63dd12d:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-core/-/daf-core-4.0.0-beta.39.tgz#87997fd0db6f1ac9ca5510508b2bacf584697ec9"
+  integrity sha512-kQ4VD7iPWcWoIRxXnlKVKfi1ct+W3CnXywNiRadMNK6S5s/zZkGi7dLjU/CKj27E9knFgA12fQb0xVSrMQScQw==
   dependencies:
     blakejs "^1.1.0"
     debug "^4.1.1"
     events "^3.0.0"
     typeorm "^0.2.24"
 
-daf-data-store@^4.0.0-beta.32+8aefe92:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-data-store/-/daf-data-store-4.0.0-beta.32.tgz#2a708661991ada871f161f6f15a2e282f0a9377e"
-  integrity sha512-7LhJCyRcezfIAgUQ0r5WtdOJZQ5aX42xH9ARYpF3R1XylswF0ZN3kCtAA8XQuj4pM5n4ra9HXIhrTyD0/80zqw==
+daf-data-store@^4.0.0-beta.39+63dd12d:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-data-store/-/daf-data-store-4.0.0-beta.39.tgz#e328aa8b5583a07a2e279f5e3da0df65721b31ff"
+  integrity sha512-DaOeBUZo5l9Dlg2vrFLuxCMMqZGofkFK7q72tmOMdTDUkKfP0BtacB4wmr5PeTSDOtJosKcHI3uVAHI4Ksq0Wg==
   dependencies:
     blakejs "^1.1.0"
-    daf-core "^4.0.0-beta.32+8aefe92"
+    daf-core "^4.0.0-beta.39+63dd12d"
     debug "^4.1.1"
     sql-bricks-sqlite "^0.1.0"
 
-daf-did-jwt@^4.0.0-beta.32, daf-did-jwt@^4.0.0-beta.32+8aefe92:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-did-jwt/-/daf-did-jwt-4.0.0-beta.32.tgz#f46feb609a0eec8dba174624a4ab04a5000d1859"
-  integrity sha512-NUIGnCammR9hJ/3odPKkricST19b4f4XNkoytUjSSM8uC903l1kVkAPvepYeMG+zc86A+aJQkI9R9FOkAwuzqg==
+daf-did-jwt@^4.0.0-beta.39, daf-did-jwt@^4.0.0-beta.39+63dd12d:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-did-jwt/-/daf-did-jwt-4.0.0-beta.39.tgz#cdadf0363f291787c187953a0d7ed1df090b70e6"
+  integrity sha512-NHXCDjc+klHg7l+wpA2nTklhs6c5NPZ1WQoIXPhNmfxWPmyy1rmHMJohytxDyEXuujoZw15wlBrtNsCsqq7TAA==
   dependencies:
-    daf-core "^4.0.0-beta.32+8aefe92"
+    daf-core "^4.0.0-beta.39+63dd12d"
     debug "^4.1.1"
     did-jwt "^4.0.0"
     did-resolver "^1.1.0"
 
-daf-ethr-did@^4.0.0-beta.32:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-ethr-did/-/daf-ethr-did-4.0.0-beta.32.tgz#c0b0815d0b263a8372ba0acb1f37c88a73fe869d"
-  integrity sha512-P3c2jIdVmbiy6eF/S4GKvDV2sMskFMUlt20D6b972clrUwXQbEXgx6o62gpxGs09fyholtOWGBEm1PtXc4tATw==
+daf-ethr-did@^4.0.0-beta.39:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-ethr-did/-/daf-ethr-did-4.0.0-beta.39.tgz#70470f91e6cba139f44f5273b23ebdf4b2730734"
+  integrity sha512-pqW6EEqjxTjvRR6x01xOXGuYUthDEDIN42KDPhaaunJMuExf00gd2IbWs8xS+51DvgO1vYr/TM8bIGNGev9GGw==
   dependencies:
-    daf-core "^4.0.0-beta.32+8aefe92"
+    daf-core "^4.0.0-beta.39+63dd12d"
     debug "^4.1.1"
     ethjs-provider-signer "^0.1.4"
     ethr-did "^1.1.0"
     js-sha3 "^0.8.0"
 
-daf-libsodium@^4.0.0-beta.32:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-libsodium/-/daf-libsodium-4.0.0-beta.32.tgz#c0562d4b1578ffdfdc6139b09956a9e618ffa77b"
-  integrity sha512-Oslq16SlT2DZcm8TzrF/vcE8k/+3856X5iHar/Ad4xchxHMJHWwTMYob8kg8WqKlmNBw4C5VHNZrrAbrnboLFQ==
+daf-libsodium@^4.0.0-beta.39:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-libsodium/-/daf-libsodium-4.0.0-beta.39.tgz#6e21334077d854e76deecc81385bcb96a9317389"
+  integrity sha512-1JyqfGsaRayu0IrhW6yGJ6CnlpIiOZUDTBrTMEijUxXe2yhI2rxK6KlzuimskSLTd1Q7SQOPfFCieucwuIDINA==
   dependencies:
     base-58 "^0.0.1"
-    daf-core "^4.0.0-beta.32+8aefe92"
+    daf-core "^4.0.0-beta.39+63dd12d"
     debug "^4.1.1"
     did-jwt "^4.0.0"
     elliptic "^6.5.2"
@@ -1029,27 +1029,27 @@ daf-resolver@^3.0.1:
     nacl-did "^1.0.0"
     web-did-resolver "^1.2.0"
 
-daf-selective-disclosure@^4.0.0-beta.32:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-selective-disclosure/-/daf-selective-disclosure-4.0.0-beta.32.tgz#b973831ec56cd7040c105673e884737448e028ec"
-  integrity sha512-DtcJaIHqJaiVb2tK8NNsSHq/qsCTzWlJZyXXpTJB5+sVexRTMQDcEuFdZ6jktM5ZS8JRilBTgmotS2XrAMNzNQ==
+daf-selective-disclosure@^4.0.0-beta.39:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-selective-disclosure/-/daf-selective-disclosure-4.0.0-beta.39.tgz#339db326321822af4d44ffd0d1f55de31ab46a2f"
+  integrity sha512-sqQnpMwceEX/R7V4LazF6eS3nD9fEA8ijypIneKC/xyLf4cn76CzDucYfwjrt8UHQcu4RqyPbfPpsy6C9HBhvw==
   dependencies:
     blakejs "^1.1.0"
-    daf-core "^4.0.0-beta.32+8aefe92"
-    daf-data-store "^4.0.0-beta.32+8aefe92"
-    daf-did-jwt "^4.0.0-beta.32+8aefe92"
+    daf-core "^4.0.0-beta.39+63dd12d"
+    daf-data-store "^4.0.0-beta.39+63dd12d"
+    daf-did-jwt "^4.0.0-beta.39+63dd12d"
     debug "^4.1.1"
     did-jwt "^4.0.0"
     typeorm "^0.2.24"
 
-daf-w3c@^4.0.0-beta.32:
-  version "4.0.0-beta.32"
-  resolved "https://registry.yarnpkg.com/daf-w3c/-/daf-w3c-4.0.0-beta.32.tgz#67d678ecd40c7998fb12dd9d261d0af3289bb2b9"
-  integrity sha512-SGII+ORS0eFnDqc0ioGIxU0L3/htX93qUYkcJUi2AZYl/ap7ni6+2X1R/1eJ3afYmVT1Mi7H3BiYOo6z0MxL0A==
+daf-w3c@^4.0.0-beta.39:
+  version "4.0.0-beta.39"
+  resolved "https://registry.yarnpkg.com/daf-w3c/-/daf-w3c-4.0.0-beta.39.tgz#05e528a190e66433f82154e54e7b47006c1af76a"
+  integrity sha512-vN7RE9r8ZzkKWlbCjehKC+lhrN16WEvPA3l7ZUk7caRjXfXvtBHXby4Km97jMYHi5yUgYD9gX6KG0YUZ5adwcQ==
   dependencies:
     blakejs "^1.1.0"
-    daf-core "^4.0.0-beta.32+8aefe92"
-    daf-did-jwt "^4.0.0-beta.32+8aefe92"
+    daf-core "^4.0.0-beta.39+63dd12d"
+    daf-did-jwt "^4.0.0-beta.39+63dd12d"
     debug "^4.1.1"
     did-jwt-vc "^0.1.3"
     did-resolver "^1.1.0"
@@ -1181,9 +1181,9 @@ did-jwt@^3.0.0:
     uport-base64url "3.0.2-alpha.0"
 
 did-jwt@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-4.0.0.tgz#243bf1da82d5a67ce4d742afb10f5f63169f5b4e"
-  integrity sha512-esCR3mVngXQhV2Q1NjdVdkzirgxHpuzqnn4Ga4mNwXFbvYNj9fHD2/oTJXaLZeXxImJmHJQwFEr0TPMoQAlcwg==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-4.1.0.tgz#f0dcac2e7899f4cad79651c177efb12856201cb7"
+  integrity sha512-aW8QYgRaPAiFeVjdwH5H4nLJrfo9PmOi//gVUOXQRU0jzhZvL3nnpxVEPfrTpIpI+GQ/tmET8/NoyYShmPuyKA==
   dependencies:
     "@babel/runtime" "^7.3.1"
     "@stablelib/utf8" "^0.10.1"

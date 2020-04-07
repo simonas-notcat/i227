@@ -1,6 +1,11 @@
 import { config } from 'dotenv'
+import { Credential } from 'daf-core'
+import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App, LogLevel } from '@slack/bolt'
-import * as CredentialForm from './slack-blocks/credential-form'
+import * as CredentialForm from './blocks/credential-form'
+import { getSlackUserDid } from './helpers/users'
+import { initDB } from '../database'
+import { agent } from '../agent'
 
 config()
 
@@ -28,11 +33,28 @@ app.view('credentialForm', async(args) => {
   const subjectSlackId = args.body.view.state.values?.user_select_block?.user_selected?.selected_user
   const issuerSlackId = args.body.user.id
 
+  const issuerDid = await getSlackUserDid(issuerSlackId, app, args.context.botToken)
+  const subjectDid = await getSlackUserDid(subjectSlackId, app, args.context.botToken)
+
+  const credential: Credential = await agent.handleAction({
+    type: ActionTypes.signCredentialJwt,
+    save: true,
+    data: {
+      '@context': ['https://www.w3.org/2018/credentials/v1'],
+      type: ['VerifiableCredential', 'Kudos'],
+      issuer: issuerDid,
+      credentialSubject: {
+        id: subjectDid,
+        kudos: kudos.text.text
+      }
+    }
+  } as ActionSignW3cVc)
+
   try {
     await app.client.chat.postMessage({
       token: args.context.botToken,
       channel,
-      text: `<@${issuerSlackId}> sent *${kudos.text.text}* kudos to <@${subjectSlackId}>`
+      text: `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}credential/${credential.hash}|kudos> to <@${subjectSlackId}>`
     });
   }
   catch (error) {
@@ -75,8 +97,7 @@ app.command('/dev', async ({ command, ack, say, payload, context, body }) => {
 
 
 (async () => {
-  // Start your app
+  await initDB()
   await app.start(process.env.BOLT_PORT);
-
   console.log('⚡️ Bolt app is running!');
-})();
+})()
