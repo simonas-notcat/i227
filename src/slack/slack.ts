@@ -3,8 +3,8 @@ import { Credential } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App, LogLevel } from '@slack/bolt'
 import { getKudosFormView } from './views/kudos-form-view'
-import { getProfileView } from './views/profile-view'
-import { getSlackUserDid } from './helpers/users'
+import { getProfileView, getProfileBlocks } from './views/profile-view'
+import { getSlackUserIdentity } from './helpers/users'
 import { initDB } from '../database'
 import { agent } from '../agent'
 
@@ -16,9 +16,6 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   logLevel: LogLevel.DEBUG
 });
-
-
-
 
 
 app.command('/kudos', async ({ command, ack, say, payload, context, body }) => {
@@ -52,8 +49,8 @@ app.view('kudosForm', async(args) => {
   const subjectSlackId = args.body.view.state.values?.user_select_block?.user_selected?.selected_user
   const issuerSlackId = args.body.user.id
 
-  const issuerDid = await getSlackUserDid(issuerSlackId, app, args.context.botToken)
-  const subjectDid = await getSlackUserDid(subjectSlackId, app, args.context.botToken)
+  const issuer = await getSlackUserIdentity(issuerSlackId, app, args.context.botToken)
+  const subject = await getSlackUserIdentity(subjectSlackId, app, args.context.botToken)
 
   const credential: Credential = await agent.handleAction({
     type: ActionTypes.signCredentialJwt,
@@ -61,9 +58,9 @@ app.view('kudosForm', async(args) => {
     data: {
       '@context': ['https://www.w3.org/2018/credentials/v1'],
       type: ['VerifiableCredential', 'Kudos'],
-      issuer: issuerDid,
+      issuer: issuer.did,
       credentialSubject: {
-        id: subjectDid,
+        id: subject.did,
         kudos: kudos.text.text
       }
     }
@@ -86,16 +83,15 @@ app.view('kudosForm', async(args) => {
 
 app.command('/profile', async ({ command, ack, say, payload, context, body }) => {
   await ack();
-  console.dir(body, {depth: 10})
-  console.dir(context, {depth: 10})
-  console.dir(payload, {depth: 10})
 
+  const found = body.text.match(/@\w+/g)
+  const subjectUserId = found && found[0] && found[0].substring(1)
 
   try {
     const result = await app.client.views.open({
       token: context.botToken,
       trigger_id: body.trigger_id,
-      view: getProfileView({})
+      view: await getProfileView({initial_user: subjectUserId}, app, context.botToken)
     });
   }
   catch (error) {
@@ -103,22 +99,31 @@ app.command('/profile', async ({ command, ack, say, payload, context, body }) =>
   }
 });
 
-app.view('profileView', async(args) => {
-  await args.ack()
-  console.log(args.body)
-  console.log(args.body.view.state.values)
-});
 
 
-app.action('user_selected', async ({ ack, body, context, payload }) => {
+app.action('profileView_user_selected', async ({ ack, body, context, payload }) => {
   await ack();
   console.dir(body, {depth: 10})
   console.dir(context, {depth: 10})
   console.dir(payload, {depth: 10})
+  //@ts-ignore
+  const initial_user = payload.selected_user
 
+  try {
+    const result = await app.client.views.update({
+      token: context.botToken,
+      //@ts-ignore
+      view_id: body.view.id,
+      view: await getProfileView({initial_user}, app, context.botToken)
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
 });
 
 app.event('app_home_opened', async ({ payload, context }) => {
+  const profileBlocks = await getProfileBlocks(payload.user, app, context.botToken)
   await app.client.views.publish({
     token: context.botToken,
     user_id: payload.user,
@@ -126,39 +131,35 @@ app.event('app_home_opened', async ({ payload, context }) => {
       type: "home",
       "blocks": [
         {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "Give kudos"
-          },
-          "accessory": {
-            "type": "button",
-            action_id: "home_give_kudos_pressed",
-            "text": {
-              "type": "plain_text",
-              "text": "Give",
-              "emoji": true
+          "type": "actions",
+          "elements": [
+            {
+              "type": "button",
+              action_id: "home_give_kudos_pressed",
+              "text": {
+                "type": "plain_text",
+                "text": "Give kudos",
+                "emoji": true,
+              },
+              "style": "primary",
+              "value": "click_me_123"
             },
-            "value": "click_me_123"
-          }
+            {
+              "type": "button",
+              action_id: "home_check_profile_pressed",
+              "text": {
+                "type": "plain_text",
+                "text": "View other profile",
+                "emoji": true
+              },
+              "value": "click_me_123"
+            },
+          ]
         },
         {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "Check profile"
-          },
-          "accessory": {
-            "type": "button",
-            action_id: "home_check_profile_pressed",
-            "text": {
-              "type": "plain_text",
-              "text": "Profile",
-              "emoji": true
-            },
-            "value": "click_me_123"
-          }
-        },        
+          type: "divider"
+        },
+        ...profileBlocks       
       ]
     }
   })
@@ -190,7 +191,7 @@ app.action('home_check_profile_pressed', async ({ ack, say, payload, context, bo
       token: context.botToken,
       //@ts-ignore
       trigger_id: body.trigger_id,
-      view: getProfileView({})
+      view: await getProfileView({}, app, context.botToken)
     });
   }
   catch (error) {

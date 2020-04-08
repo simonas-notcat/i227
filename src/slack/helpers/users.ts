@@ -1,9 +1,9 @@
-import { Claim } from 'daf-core'
+import { Claim, Identity } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App } from '@slack/bolt'
 import { agent } from '../../agent'
 
-export const getSlackUserDid = async (slackUserId: string, app: App, token: string) => {
+export const getSlackUserIdentity = async (slackUserId: string, app: App, token: string): Promise<Identity> => {
   const claim = await Claim.findOne({
     where: { 
       issuer: process.env.MAIN_DID,
@@ -12,7 +12,7 @@ export const getSlackUserDid = async (slackUserId: string, app: App, token: stri
      }
   })
   if (claim) {
-    return claim.subject.did
+    return claim.subject
   } else {
 
     const result = await app.client.users.info({ token, user: slackUserId })
@@ -29,6 +29,12 @@ export const getSlackUserDid = async (slackUserId: string, app: App, token: stri
       // @ts-ignore
       credentialSubject['profileImage'] = result.user?.profile?.image_512
     }
+    // @ts-ignore
+    if (result.user?.profile?.real_name){
+      // @ts-ignore
+      credentialSubject['realName'] = result.user?.profile?.real_name
+    }
+
     await agent.handleAction({
       type: ActionTypes.signCredentialJwt,
       save: true,
@@ -39,6 +45,6 @@ export const getSlackUserDid = async (slackUserId: string, app: App, token: stri
         credentialSubject
       }
     } as ActionSignW3cVc)
-    return identity.did
+    return Identity.findOne(identity.did)
   }
 }
