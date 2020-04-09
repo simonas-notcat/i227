@@ -3,6 +3,7 @@ import { App } from '@slack/bolt'
 import { Claim } from 'daf-core'
 import { formatDistanceToNow } from 'date-fns'
 import { getSlackUserIdentity } from '../helpers/users'
+import { agent } from '../../agent'
 
 export const getProfileView = async (options: { initial_user?: string }, app: App, token: string): Promise<View> => { 
 
@@ -53,8 +54,8 @@ export const getProfileView = async (options: { initial_user?: string }, app: Ap
 export const getProfileBlocks = async(slackUserId: string, app: App, token: string) => {
   const blocks = []
   const subject = await getSlackUserIdentity(slackUserId, app, token)
-    const name = await subject.getLatestClaimValue({type: 'realName'})
-    const profileImage = await subject.getLatestClaimValue({type: 'profileImage'})
+    const name = await subject.getLatestClaimValue(agent.dbConnection, {type: 'realName'})
+    const profileImage = await subject.getLatestClaimValue(agent.dbConnection, {type: 'profileImage'})
     blocks.push({
       "type": "section",
       "text": {
@@ -87,8 +88,8 @@ export const getProfileBlocks = async(slackUserId: string, app: App, token: stri
 }
 
 const kudosListItem = async (claim: Claim) => {
-  const image_url = await claim.issuer.getLatestClaimValue({type: 'profileImage'})
-  const name = await claim.issuer.getLatestClaimValue({type: 'realName'})
+  const image_url = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'profileImage'})
+  const name = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'realName'})
   return [
     {
       "type": "section",

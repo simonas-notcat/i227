@@ -1,0 +1,12 @@
+<h1>Home</h1>
+
+<table>
+{{#each items}}
+  <tr>
+    <td>{{date}}</th>
+    <td><a href="/credential/{{hash}}">{{value}}</a></th>
+    <td>{{issuer.name}}</th>
+    <td>{{subject.name}}</th>
+  </tr>
+{{~/each}}
+</table>

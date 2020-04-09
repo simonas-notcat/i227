@@ -5,7 +5,6 @@ import { ApolloServer } from 'apollo-server-express'
 import merge from 'lodash.merge'
 import express from 'express'
 import { agent } from './agent'
-import { initDB } from './database'
 
 const server = new ApolloServer({
   typeDefs: [
@@ -31,10 +30,5 @@ const server = new ApolloServer({
 const app = express();
 server.applyMiddleware({ app, path: '/graphql' });
 
-const main = async () => {
-  await initDB()
-  await app.listen({port: 8080})
-  console.log(`🚀  Server ready at http://localhost:8080`)
-}
-
-main().catch(console.log)
+app.listen({port: 8080})
+console.log(`🚀  Server ready at http://localhost:8080`)

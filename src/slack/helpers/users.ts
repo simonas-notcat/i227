@@ -4,7 +4,8 @@ import { App } from '@slack/bolt'
 import { agent } from '../../agent'
 
 export const getSlackUserIdentity = async (slackUserId: string, app: App, token: string): Promise<Identity> => {
-  const claim = await Claim.findOne({
+  const connection = await agent.dbConnection
+  const claim = await connection.getRepository(Claim).findOne({
     where: { 
       issuer: process.env.MAIN_DID,
       type: 'slackUserId',
@@ -45,6 +46,6 @@ export const getSlackUserIdentity = async (slackUserId: string, app: App, token:
         credentialSubject
       }
     } as ActionSignW3cVc)
-    return Identity.findOne(identity.did)
+    return connection.getRepository(Identity).findOne(identity.did)
   }
 }

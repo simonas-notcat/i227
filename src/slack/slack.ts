@@ -5,7 +5,6 @@ import { App, LogLevel } from '@slack/bolt'
 import { getKudosFormView } from './views/kudos-form-view'
 import { getProfileView, getProfileBlocks } from './views/profile-view'
 import { getSlackUserIdentity } from './helpers/users'
-import { initDB } from '../database'
 import { agent } from '../agent'
 
 config()
@@ -201,7 +200,6 @@ app.action('home_check_profile_pressed', async ({ ack, say, payload, context, bo
 
 
 const main = async () => {
-  await initDB()
   await app.start(process.env.BOLT_PORT);
   console.log('⚡️ Bolt app is running!');
 }
