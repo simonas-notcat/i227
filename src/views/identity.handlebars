@@ -1,0 +1,28 @@
+<img src="{{identity.profileImage}}" width="50" height="50" />
+<H1>{{identity.name}}</H1>
+
+<h3>Received credentials</h3>
+
+{{#each identity.receivedCredentials}}
+  <div>
+    From: <img src="{{issuer.profileImage}}" width="20" height="20" /> {{issuer.name}}
+
+  <a href="/credential/{{hash}}">Link</a>
+  {{#each claims}}
+    <div>{{type}} <b>{{value}}</b></div>
+  {{~/each}}
+  </div>
+{{~/each}}
+
+<h3>Issued credentials</h3>
+
+{{#each identity.issuedCredentials}}
+  <div>
+    To: <img src="{{subject.profileImage}}" width="20" height="20" /> {{subject.name}}
+  <a href="/credential/{{hash}}">Link</a>
+  {{#each claims}}
+    <div>{{type}} <b>{{value}}</b></div>
+  {{~/each}}
+  </div>
+{{~/each}}
+

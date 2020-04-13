@@ -1,12 +1,18 @@
 <h1>Home</h1>
 
 <table>
-{{#each items}}
   <tr>
-    <td>{{date}}</th>
-    <td><a href="/credential/{{hash}}">{{value}}</a></th>
-    <td>{{issuer.name}}</th>
-    <td>{{subject.name}}</th>
+    <th>Date</th>
+    <th>Kudos</th>
+    <th>From</th>
+    <th>To</th>
+  </tr>
+{{#each claims}}
+  <tr>
+    <td>{{issuanceDate}}</th>
+    <td><a href="/credential/{{credential.hash}}">{{value}}</a></th>
+    <td><a href="/identity/{{issuer.did}}"><img src="{{issuer.profileImage}}" width="20" height="20" /> {{issuer.name}}</a></th>
+    <td><a href="/identity/{{subject.did}}"><img src="{{subject.profileImage}}" width="20" height="20" />{{subject.name}}</a></th>
   </tr>
 {{~/each}}
 </table>
