@@ -1,28 +1,34 @@
 <img src="{{identity.profileImage}}" width="50" height="50" />
 <H1>{{identity.name}}</H1>
 
-<h3>Received credentials</h3>
+<h3>Latest received kudos</h3>
 
-{{#each identity.receivedCredentials}}
-  <div>
-    From: <img src="{{issuer.profileImage}}" width="20" height="20" /> {{issuer.name}}
+{{#each receivedCredentials}}
+  <div class="credential">
+    
 
-  <a href="/credential/{{hash}}">Link</a>
-  {{#each claims}}
-    <div>{{type}} <b>{{value}}</b></div>
-  {{~/each}}
+    <a href="/credential/{{hash}}">
+      {{#each claims}}
+        <div><b>{{value}}</b></div>
+      {{~/each}}
+    </a>
+    <a href="/identity/{{issuer.did}}"><img src="{{issuer.profileImage}}" width="20" height="20" /> {{issuer.name}}</a> | {{formatDistanceToNow issuanceDate}}
+  </div>
+{{~/each}}
+Total: {{receivedCredentialsCount}}
+
+<h3>Latest given kudos</h3>
+
+{{#each issuedCredentials}}
+  <div class="credential">
+    <a href="/identity/{{subject.did}}"><img src="{{subject.profileImage}}" width="20" height="20" /> {{subject.name}}</a>
+    <a href="/credential/{{hash}}">
+      {{#each claims}}
+        <div><b>{{value}}</b></div>
+      {{~/each}}
+    </a>
+    {{formatDistanceToNow issuanceDate}}
   </div>
 {{~/each}}
 
-<h3>Issued credentials</h3>
-
-{{#each identity.issuedCredentials}}
-  <div>
-    To: <img src="{{subject.profileImage}}" width="20" height="20" /> {{subject.name}}
-  <a href="/credential/{{hash}}">Link</a>
-  {{#each claims}}
-    <div>{{type}} <b>{{value}}</b></div>
-  {{~/each}}
-  </div>
-{{~/each}}
-
+Total: {{issuedCredentialsCount}}

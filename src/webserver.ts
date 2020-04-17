@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 import express from 'express'
-import handlebars from 'express-handlebars'
+import exphbs from 'express-handlebars'
 import { Claim, Identity, Credential } from 'daf-core'
 import { agent } from './agent'
 import { formatDistanceToNow } from 'date-fns'
@@ -10,15 +10,22 @@ import * as queries from './queries/queries'
 config()
 const app = express()
 const port = 8081
-app.engine('handlebars', handlebars())
-app.set('view engine', 'handlebars')
+
+const hbs = exphbs.create({
+  helpers: {
+    formatDistanceToNow: (date: string) => formatDistanceToNow(Date.parse(date))
+  }
+});
+
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 app.set('views', './src/views')
 
 const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
 app.get('/', async (req, res) => {
-  const { claims } = await api.request(queries.getLatestKudos, { take: 10, skip: 0})
-  res.render('home', { claims })
+  const data = await api.request(queries.getLatestKudos, { take: 10, skip: 0})
+  res.render('home', data)
 })
 
 app.get('/identities', async (req, res) => {
@@ -28,8 +35,8 @@ app.get('/identities', async (req, res) => {
 
 app.get('/identity/:did', async (req, res) => {
   const { did } = req.params
-  const { identity } = await api.request(queries.getIdentity, { did })
-  res.render('identity', { identity })
+  const data = await api.request(queries.getIdentity, { did, take: 10 })
+  res.render('identity', data )
 })
 
 app.get('/credential/:hash', async (req, res) => {

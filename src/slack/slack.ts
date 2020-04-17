@@ -43,7 +43,6 @@ app.command('/kudos', async ({ command, ack, say, payload, context, body }) => {
 app.view('kudosForm', async(args) => {
   await args.ack()
 
-  const channel = args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation || args.body.user.id
   const kudos = args.body.view.state.values?.kudos_select_block?.kudos_selected?.selected_option
   const subjectSlackId = args.body.view.state.values?.user_select_block?.user_selected?.selected_user
   const issuerSlackId = args.body.user.id
@@ -65,15 +64,17 @@ app.view('kudosForm', async(args) => {
     }
   } as ActionSignW3cVc)
 
-  try {
-    await app.client.chat.postMessage({
-      token: args.context.botToken,
-      channel,
-      text: `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}credential/${credential.hash}|kudos> to <@${subjectSlackId}>`
-    });
-  }
-  catch (error) {
-    console.error(error);
+  if (args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation) {
+    try {
+      await app.client.chat.postMessage({
+        token: args.context.botToken,
+        channel: args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation,
+        text: `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}credential/${credential.hash}|kudos> to <@${subjectSlackId}>`
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
   }
   
 })
