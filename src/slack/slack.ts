@@ -2,6 +2,7 @@ import { config } from 'dotenv'
 import { Credential } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App, LogLevel } from '@slack/bolt'
+import shortId from 'shortid'
 import { getKudosFormView } from './views/kudos-form-view'
 import { getProfileView, getProfileBlocks } from './views/profile-view'
 import { getSlackUserIdentity } from './helpers/users'
@@ -54,6 +55,7 @@ app.view('kudosForm', async(args) => {
     type: ActionTypes.signCredentialJwt,
     save: true,
     data: {
+      id: shortId.generate(),
       '@context': ['https://www.w3.org/2018/credentials/v1'],
       type: ['VerifiableCredential', 'Kudos'],
       issuer: issuer.did,
@@ -66,10 +68,31 @@ app.view('kudosForm', async(args) => {
 
   if (args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation) {
     try {
+      const image_url = `${process.env.BASE_URL}img/c/${credential.id}/png`
+      console.log({image_url})
       await app.client.chat.postMessage({
         token: args.context.botToken,
         channel: args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation,
-        text: `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}credential/${credential.hash}|kudos> to <@${subjectSlackId}>`
+        blocks: [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}c/${credential.id}|kudos> to <@${subjectSlackId}>`
+            }
+          },
+          // {
+          //   "type": "image",
+          //   "title": {
+          //     "type": "plain_text",
+          //     "text": "image1",
+          //     "emoji": true
+          //   },
+          //   image_url,
+          //   "alt_text": "image1"
+          // }
+        ],
+        text: `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}c/${credential.id}|kudos> to <@${subjectSlackId}>`
       });
     }
     catch (error) {

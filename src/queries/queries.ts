@@ -29,6 +29,7 @@ export const getLatestKudos = `
       issuanceDate
       credential {
         hash
+        id
       }
     }
   }
@@ -37,6 +38,36 @@ export const getLatestKudos = `
 export const getCredential = `
   query getCredential($hash: ID!) {
     credential(hash: $hash) {
+      hash
+      id
+      issuer {
+        did
+        name: latestClaimValue(type: "realName")
+        profileImage: latestClaimValue(type: "profileImage")
+      }
+      subject {
+        did
+        name: latestClaimValue(type: "realName")
+        profileImage: latestClaimValue(type: "profileImage")
+      }
+      type
+      issuanceDate
+      claims {
+        type
+        value
+      }
+    }
+  }
+`
+
+export const getCredentialsById = `
+  query getCredentialsById($id: String!) {
+    credentials(input: {
+      where: [
+        { column: id, value: [$id] }
+      ]
+    }) {
+      id
       hash
       issuer {
         did
@@ -57,6 +88,7 @@ export const getCredential = `
     }
   }
 `
+
 
 export const getIdentities = `
   query getIdentities($take: Int, $skip: Int) {
@@ -88,6 +120,7 @@ export const getIdentity = `
       ],
       take: $take
     }) {
+      id
       hash
       issuanceDate
       issuer {
@@ -116,6 +149,7 @@ export const getIdentity = `
       ],
       take: $take
     }) {
+      id
       hash
       issuanceDate
       subject {

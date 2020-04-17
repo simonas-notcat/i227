@@ -7,7 +7,7 @@
   <div class="credential">
     
 
-    <a href="/credential/{{hash}}">
+    <a href="/c/{{id}}">
       {{#each claims}}
         <div><b>{{value}}</b></div>
       {{~/each}}
@@ -22,7 +22,7 @@ Total: {{receivedCredentialsCount}}
 {{#each issuedCredentials}}
   <div class="credential">
     <a href="/identity/{{subject.did}}"><img src="{{subject.profileImage}}" width="20" height="20" /> {{subject.name}}</a>
-    <a href="/credential/{{hash}}">
+    <a href="/c/{{id}}">
       {{#each claims}}
         <div><b>{{value}}</b></div>
       {{~/each}}
