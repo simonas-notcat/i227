@@ -25,6 +25,8 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './src/views')
 
+const reactBuildPath = '/home/simonas/dev/i227/web/build'
+
 const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
 const meta = {
@@ -35,22 +37,6 @@ const meta = {
   og_image: process.env.BASE_URL + 'img/default.png'
 }
 
-app.get('/', async (req, res) => {
-  const data = await api.request(queries.getLatestKudos, { take: 10, skip: 0})
-  res.render('home', { ...meta, ...data })
-})
-
-app.get('/identities', async (req, res) => {
-  const { identities } = await api.request(queries.getIdentities, { take: 10, skip: 0})
-  res.render('identities', { ...meta, identities })
-})
-
-app.get('/identity/:did', async (req, res) => {
-  const { did } = req.params
-  const data = await api.request(queries.getIdentity, { did, take: 10 })
-  res.render('identity', {...meta, ...data} )
-})
-
 app.get('/c/:id', async (req, res) => {
   const { id } = req.params
   const { credentials } = await api.request(queries.getCredentialsById, { id })
@@ -58,8 +44,8 @@ app.get('/c/:id', async (req, res) => {
   const og_image = meta.og_url + 'img/c/' + credential.id + '/png'
   const og_url = meta.og_url + 'c/' + credential.id
   const og_title = `${credential.issuer.name} gave ${credential.claims[0].value} kudos to ${credential.subject.name}`
-
-  res.render('credential', { ...meta, og_url, og_image, og_title, credential })
+  const html = await hbs.render(reactBuildPath + '/index.html', { ...meta, og_url, og_image, og_title, credential })
+  res.send(html)
 })
 
 app.get('/img/c/:id/:type', async (req, res) => {
@@ -104,5 +90,15 @@ app.get('/img/default.png', async (req, res) => {
   res.set('Content-Type', 'image/png')
   res.send(png)
 })
+
+app.use(express.static(reactBuildPath));
+
+app.get('*', async (req, res) => {
+  const html = await hbs.render(reactBuildPath + '/index.html', { ...meta })
+  res.send(html)
+})
+
+
+
 
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
