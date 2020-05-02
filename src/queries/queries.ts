@@ -40,6 +40,7 @@ export const getCredential = `
     credential(hash: $hash) {
       hash
       id
+      raw
       issuer {
         did
         name: latestClaimValue(type: "realName")
@@ -69,6 +70,7 @@ export const getCredentialsById = `
     }) {
       id
       hash
+      raw
       issuer {
         did
         name: latestClaimValue(type: "realName")

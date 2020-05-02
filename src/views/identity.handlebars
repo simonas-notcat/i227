@@ -1,7 +1,7 @@
 <img src="{{identity.profileImage}}" width="50" height="50" />
-<H1>{{identity.name}}</H1>
+<H2>{{identity.name}}</H2>
 
-<h3>Latest received kudos</h3>
+<h4>Latest received kudos</h4>
 
 {{#each receivedCredentials}}
   <div class="credential">
@@ -17,7 +17,7 @@
 {{~/each}}
 Total: {{receivedCredentialsCount}}
 
-<h3>Latest given kudos</h3>
+<h4>Latest given kudos</h4>
 
 {{#each issuedCredentials}}
   <div class="credential">

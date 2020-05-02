@@ -17,7 +17,7 @@ const hbs = exphbs.create({
 		"views/partials/",
 	],
   helpers: {
-    formatDistanceToNow: (date: string) => formatDistanceToNow(Date.parse(date))
+    formatDistanceToNow: (date: string) => formatDistanceToNow(Date.parse(date)) + ' ago'
   }
 });
 
@@ -29,6 +29,7 @@ const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
 const meta = {
   og_title: 'i227',
+  og_site_name: 'i227',
   og_url: process.env.BASE_URL,
   og_description: 'Your verifiable reputation',
   og_image: process.env.BASE_URL + 'img/default.png'
@@ -56,8 +57,9 @@ app.get('/c/:id', async (req, res) => {
   const credential = credentials[0]
   const og_image = meta.og_url + 'img/c/' + credential.id + '/png'
   const og_url = meta.og_url + 'c/' + credential.id
+  const og_title = `${credential.issuer.name} gave ${credential.claims[0].value} kudos to ${credential.subject.name}`
 
-  res.render('credential', { ...meta, og_url, og_image, credential })
+  res.render('credential', { ...meta, og_url, og_image, og_title, credential })
 })
 
 app.get('/img/c/:id/:type', async (req, res) => {

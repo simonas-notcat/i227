@@ -6,15 +6,20 @@ import shortId from 'shortid'
 import { getKudosFormView } from './views/kudos-form-view'
 import { getProfileView, getProfileBlocks } from './views/profile-view'
 import { getSlackUserIdentity } from './helpers/users'
+import { GraphQLClient } from 'graphql-request'
+import * as queries from '../queries/queries'
+
 import { agent } from '../agent'
 
 config()
+
+const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
-  logLevel: LogLevel.DEBUG
+  logLevel: LogLevel.INFO
 });
 
 
@@ -23,7 +28,6 @@ app.command('/kudos', async ({ command, ack, say, payload, context, body }) => {
 
   const found = body.text.match(/@\w+/g)
   const subjectUserId = found && found[0] && found[0].substring(1)
-  console.log({subjectUserId})
 
   try {
     const result = await app.client.views.open({
@@ -68,31 +72,45 @@ app.view('kudosForm', async(args) => {
 
   if (args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation) {
     try {
+      const issuerName = await credential.issuer.getLatestClaimValue(agent.dbConnection, {type: 'realName'})
+      const subjectName = await credential.subject.getLatestClaimValue(agent.dbConnection, {type: 'realName'})
       const image_url = `${process.env.BASE_URL}img/c/${credential.id}/png`
-      console.log({image_url})
+      const text = `<${process.env.BASE_URL}identity/${credential.issuer.did}|${issuerName}> gave  <${process.env.BASE_URL}c/${credential.id}|${kudos.text.text}> kudos to <${process.env.BASE_URL}identity/${credential.subject.did}|${subjectName}>`
       await app.client.chat.postMessage({
         token: args.context.botToken,
         channel: args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation,
+        unfurl_links: false,
         blocks: [
           {
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}c/${credential.id}|kudos> to <@${subjectSlackId}>`
+              text
+            },
+            "accessory": {
+              "type": "button",
+              "action_id": "message_give_pressed",
+              "text": {
+                "type": "plain_text",
+                "text": "Give",
+                "emoji": true
+              },
+              "value": `${credential.id}`
             }
           },
-          // {
-          //   "type": "image",
-          //   "title": {
-          //     "type": "plain_text",
-          //     "text": "image1",
-          //     "emoji": true
-          //   },
-          //   image_url,
-          //   "alt_text": "image1"
-          // }
+          
+          {
+            "type": "image",
+            "title": {
+              "type": "plain_text",
+              "text": "Kudos",
+              "emoji": true
+            },
+            image_url,
+            "alt_text": "Kudos"
+          }
         ],
-        text: `<@${issuerSlackId}> sent *${kudos.text.text}* <${process.env.BASE_URL}c/${credential.id}|kudos> to <@${subjectSlackId}>`
+        text
       });
     }
     catch (error) {
@@ -144,6 +162,42 @@ app.action('profileView_user_selected', async ({ ack, body, context, payload }) 
     console.error(error);
   }
 });
+
+
+app.event('link_shared', async ({ payload, context }) => {
+  const unfurls = {}
+  for(const link of payload.links) {
+    const found = link.url.match(/https\:\/\/i227\.dev\/c\/(.*)/)
+    if (found && found[1]) {
+      const id = found[1]
+      const { credentials } = await api.request(queries.getCredentialsById, { id })
+      const credential = credentials[0]
+    
+      const image_url = `${process.env.BASE_URL}img/c/${credential.id}/png`
+      const text = `<${process.env.BASE_URL}identity/${credential.issuer.did}|${credential.issuer.name}> gave <${process.env.BASE_URL}c/${credential.id}|${credential.claims[0].value}> kudos to <${process.env.BASE_URL}identity/${credential.subject.did}|${credential.subject.name}>`
+
+      unfurls[link.url] = {
+        blocks: [
+          { "type": "section", "text": { "type": "mrkdwn", text }},
+          { "type": "image", "title": { "type": "plain_text", "text": "Kudos", "emoji": true }, image_url, "alt_text": "Kudos"}
+        ]
+      }
+    }
+  }
+      
+  try {
+    const data = {
+      channel: payload.channel,
+      token: context.botToken,
+      ts: payload.message_ts,
+      unfurls
+    }
+
+    await app.client.chat.unfurl(data)
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 app.event('app_home_opened', async ({ payload, context }) => {
   const profileBlocks = await getProfileBlocks(payload.user, app, context.botToken)
@@ -220,6 +274,59 @@ app.action('home_check_profile_pressed', async ({ ack, say, payload, context, bo
   catch (error) {
     console.error(error);
   }
+});
+
+
+app.action('message_give_pressed', async ({ ack, say, payload, context, body }) => {
+  await ack();
+  console.log({payload, context, body})
+  try {
+    const data = {
+      token: context.botToken,
+      channel: body.channel.id,
+      //@ts-ignore
+      ts: body.message.ts,
+      //@ts-ignore
+      text: body.message.text,
+      //@ts-ignore
+      blocks: [{
+        "type": "context",
+        "elements": [
+          {
+            "type": "image",
+            "image_url": "https://secure.gravatar.com/avatar/82f63bb5062699f9e9fce88fa9659b3b.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0004-512.png",
+            "alt_text": "palm tree"
+          },
+
+          {
+            "type": "image",
+            "image_url": "https://avatars.slack-edge.com/2020-04-10/1046418716583_3ac8789fa1a089bf8a31_512.jpg",
+            "alt_text": "palm tree"
+          },
+          {
+            "type": "image",
+            "image_url": "https://avatars.slack-edge.com/2019-07-03/683888599765_ede58ff4caa79406242e_512.jpg",
+            "alt_text": "palm tree"
+          },
+
+          {
+            "type": "image",
+            "image_url": "https://avatars.slack-edge.com/2020-04-18/1071540051714_37f94326b84e67ed0de0_512.png",
+            "alt_text": "palm tree"
+          },
+          {
+            "type": "mrkdwn",
+            "text": "From: <https://i227.dev/identity/did:ethr:rinkeby:0xc4aa56b0b5f4b3eca39ef12fcdd67639ac84dbb5|Simonas Karuzas> and 32+"
+          }
+        ]
+      }],
+    }
+    console.log(data)
+    await app.client.chat.update(data)
+  } catch (e) {
+    console.error(e)
+  }
+
 });
 
 

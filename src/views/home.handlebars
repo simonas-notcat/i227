@@ -1,19 +1,22 @@
-<h1>Home</h1>
-<table>
-  <tr>
-    <th>Date</th>
-    <th>Kudos</th>
-    <th>From</th>
-    <th>To</th>
-  </tr>
 {{#each claims}}
-  <tr>
-    <td>{{formatDistanceToNow issuanceDate}}</th>
-    <td><a href="/c/{{credential.id}}">{{value}}</a></th>
-    <td><a href="/identity/{{issuer.did}}"><img src="{{issuer.profileImage}}" width="20" height="20" /> {{issuer.name}}</a></th>
-    <td><a href="/identity/{{subject.did}}"><img src="{{subject.profileImage}}" width="20" height="20" />{{subject.name}}</a></th>
-  </tr>
+<div style="margin-bottom: 20px;">
+
+  <div>
+    From: <a href="/identity/{{issuer.did}}"><img src="{{issuer.profileImage}}" width="20" height="20" /> {{issuer.name}}</a>
+  </div>
+  <div>
+    To: <a href="/identity/{{subject.did}}"><img src="{{subject.profileImage}}" width="20" height="20" />{{subject.name}}</a>
+  </div>
+  <div>
+    {{formatDistanceToNow issuanceDate}}
+  </div>
+  <a href="/c/{{credential.id}}">
+    <img src="/img/c/{{credential.id}}/svg" style="max-width: 300px; width: 100%; margin-top: 10px" />
+  </a>
+  <hr/>
+
+</div>
 {{~/each}}
-</table>
+
 
 Total: {{count}}
