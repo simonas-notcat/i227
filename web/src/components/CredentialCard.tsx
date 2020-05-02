@@ -42,7 +42,7 @@ function CredentialCard(props: Props) {
   const classes = useStyles();
   const { claim } = props
   return (
-    <Card>
+    <Card elevation={3}>
       <CardActionArea>
         <CardHeader
           avatar={

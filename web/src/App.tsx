@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      paddingTop: theme.spacing(3),
     },
   }),
 );
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ResponsiveDrawer() {
   const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { loading } = useAuth0();
 

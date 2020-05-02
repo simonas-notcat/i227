@@ -14,7 +14,7 @@ function Home(props: any) {
 
   return (
     <Container maxWidth="sm">
-      <Grid container spacing={4} justify="center">
+      <Grid container spacing={2} justify="center">
         {data?.claims.map(claim => (
           <Grid item key={claim.credential.id} xs={12}>
             <CredentialCard key={claim.credential.id} claim={claim} />
