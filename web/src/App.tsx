@@ -32,7 +32,8 @@ import Identities from './views/Identities'
 import Identity from './views/Identity'
 import ListItemLink from './components/ListItemLink'
 import AuthBox from './components/AuthBox'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, useMediaQuery, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import CredentialDialog from './components/CredentialDialog'
+import { useMediaQuery } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -187,55 +188,12 @@ export default function ResponsiveDrawer() {
       <Fab color="primary" aria-label="New" className={classes.fab} onClick={handleOpenModal}>
         <AddIcon />
       </Fab>
-      <Dialog
+      <CredentialDialog
         fullScreen={fullScreen}
         open={openModal}
         onClose={handleCloseModal}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">Create new Verifiable Credential</DialogTitle>
-        <DialogContent>
-
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="outlined"
-          />
-
-
-
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Kudos award <span role="img" aria-label="award">🏆</span></FormLabel>
-          <RadioGroup aria-label="gender" name="gender1" 
-          // value={value} onChange={handleChange}
-          >
-            <FormControlLabel value="Thank you" control={<Radio />} label="Thank you" />
-            <FormControlLabel value="Going Above and Beyond" control={<Radio />} label="Going Above and Beyond" />
-            <FormControlLabel value="Inspirational Leader" control={<Radio />} label="Inspirational Leader" />
-            <FormControlLabel value="Team Player" control={<Radio />} label="Team Player" />
-            <FormControlLabel value="Great Job" control={<Radio />} label="Great Job" />
-            <FormControlLabel value="Making Work Fun" control={<Radio />} label="Making Work Fun" />
-            <FormControlLabel value="Amazing Mentor" control={<Radio />} label="Amazing Mentor" />
-            <FormControlLabel value="Outside the Box Thinker" control={<Radio />} label="Outside the Box Thinker" />
-            <FormControlLabel value="Great Presentation" control={<Radio />} label="Great Presentation" />
-            <FormControlLabel value="Making an Impact" control={<Radio />} label="Making an Impact" />
-          </RadioGroup>
-        </FormControl>
-
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleCloseModal} color="default">
-            Cancel
-          </Button>
-          <Button onClick={handleCloseModal} color="primary" autoFocus>
-            Sign
-          </Button>
-        </DialogActions>
-      </Dialog>
+      />
+        
     </div>
     </BrowserRouter>
   );
