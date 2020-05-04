@@ -32,7 +32,7 @@ export const getAuth0UserIdentity = async ( userInfo: Auth0UserInfo): Promise<Id
       // @ts-ignore
       name: userInfo.name,
       nickname: userInfo.nickname,
-      profileImage: userInfo.picture
+      picture: userInfo.picture
     }
 
     await agent.handleAction({
