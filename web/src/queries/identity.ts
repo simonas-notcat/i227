@@ -1,20 +1,11 @@
 import { gql } from 'apollo-boost';
-import { Identity } from '../types'
+import { Identity, Credential } from '../types'
+
 
 interface ShortClaim {
   type: string
   value: string
 }
-
-export interface Credential {
-  id: string
-  hash: string
-  issuanceDate: string
-  issuer: Identity
-  subject: Identity
-  claims: ShortClaim[]
-}
-
 export interface IdentityData {
   identity: Identity
   receivedCredentials: Credential[]
@@ -53,6 +44,11 @@ query getIdentity($did: String!, $take: Int!) {
       name: latestClaimValue(type: "realName")
       profileImage: latestClaimValue(type: "profileImage")
     }
+    subject {
+      did
+      name: latestClaimValue(type: "realName")
+      profileImage: latestClaimValue(type: "profileImage")
+    }
     claims {
       type
       value
@@ -77,6 +73,11 @@ query getIdentity($did: String!, $take: Int!) {
     id
     hash
     issuanceDate
+    issuer {
+      did
+      name: latestClaimValue(type: "realName")
+      profileImage: latestClaimValue(type: "profileImage")
+    }
     subject {
       did
       name: latestClaimValue(type: "realName")

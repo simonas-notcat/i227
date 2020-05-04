@@ -1,21 +1,21 @@
 import { gql } from 'apollo-boost';
-import { Claim } from '../types'
+import { Credential } from '../types'
 
 export interface LatestKudosData {
   count: number
-  claims: Claim[]
+  credentials: Credential[]
 }
 
 export const getLatestKudos = gql`
   query getLatestKudos($take: Int, $skip: Int) {
-    count: claimsCount(input: {
+    count: credentialsCount(input: {
       where: [
-        { column: type, value: "kudos"}
+        { column: type, value: "VerifiableCredential,Kudos"}
       ],
     })
-    claims(input: {
+    credentials(input: {
       where: [
-        { column: type, value: "kudos"}
+        { column: type, value: "VerifiableCredential,Kudos"}
       ],
       order: [
         { column: issuanceDate, direction: DESC }
@@ -33,11 +33,11 @@ export const getLatestKudos = gql`
         name: latestClaimValue(type: "realName")
         profileImage: latestClaimValue(type: "profileImage")
       }
-      value
+      type
       issuanceDate
-      credential {
-        hash
-        id
+      claims {
+        type
+        value
       }
     }
   }

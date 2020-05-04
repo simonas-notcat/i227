@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CredentialCard from '../components/CredentialCard'
 import { getLatestKudos, LatestKudosData } from '../queries/latestKudos'
+import CredentialFAB from "../components/CredentialFAB";
 
 function Home(props: any) {
   const { loading, error, data } = useQuery<LatestKudosData>(getLatestKudos);
@@ -15,12 +16,13 @@ function Home(props: any) {
   return (
     <Container maxWidth="sm">
       <Grid container spacing={2} justify="center">
-        {data?.claims.map(claim => (
-          <Grid item key={claim.credential.id} xs={12}>
-            <CredentialCard key={claim.credential.id} claim={claim} />
+        {data?.credentials.map(credential => (
+          <Grid item key={credential.id} xs={12}>
+            <CredentialCard credential={credential} />
           </Grid>
         ))}
       </Grid>
+      <CredentialFAB />
     </Container>
   );
 }

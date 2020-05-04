@@ -12,10 +12,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { formatDistanceToNow } from 'date-fns'
-import { Claim } from '../types'
+import { Credential } from '../types'
 
 interface Props {
-  claim: Claim
+  credential: Credential
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -40,37 +40,41 @@ const useStyles = makeStyles((theme) => ({
 
 function CredentialCard(props: Props) {
   const classes = useStyles();
-  const { claim } = props
+  const { credential } = props
   return (
     <Card elevation={3}>
       <CardActionArea>
         <CardHeader
           avatar={
-            <Avatar src={claim.issuer.profileImage} />
+            <Avatar src={credential.issuer.profileImage} />
           }
           action={
             <IconButton aria-label="settings">
               <MoreVertIcon />
             </IconButton>
           }
-          title={`${claim.issuer.name}`}
-          subheader={formatDistanceToNow(Date.parse(claim.issuanceDate)) + ' ago'}
+          title={`${credential.issuer.name}`}
+          subheader={formatDistanceToNow(Date.parse(credential.issuanceDate)) + ' ago'}
         />
         <div className={classes.root}>
           <div className={classes.details}>
-            <CardContent className={classes.content}>
+            {credential.claims.map(claim => (<CardContent className={classes.content}>
+              {/* <Typography gutterBottom variant="h6" component="h2">
+                {claim.type}
+              </Typography> */}
               <Typography gutterBottom variant="h5" component="h2">
                 {claim.value}
               </Typography>
-              <Typography component="p">{claim.subject.name}</Typography>
-            </CardContent>
+              <Typography component="p">{credential.subject.name}</Typography>
+            </CardContent>))}
+            
             
           </div>
           <Avatar
             variant="rounded" 
             className={classes.cover}
             // component="img"
-            src={claim.subject.profileImage}
+            src={credential.subject.profileImage}
           />
         </div>
       </CardActionArea>

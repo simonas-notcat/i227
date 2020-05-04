@@ -13,8 +13,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Toolbar from '@material-ui/core/Toolbar';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
@@ -32,8 +30,6 @@ import Identities from './views/Identities'
 import Identity from './views/Identity'
 import ListItemLink from './components/ListItemLink'
 import AuthBox from './components/AuthBox'
-import CredentialDialog from './components/CredentialDialog'
-import { useMediaQuery } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -81,19 +77,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ResponsiveDrawer() {
   const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { loading } = useAuth0();
-
-  const [openModal, setOpenModal] = React.useState(false);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  
+  
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -185,15 +172,6 @@ export default function ResponsiveDrawer() {
           <Route path={'/identity/:did'} component={Identity} />
         </Switch>
       </main>
-      <Fab color="primary" aria-label="New" className={classes.fab} onClick={handleOpenModal}>
-        <AddIcon />
-      </Fab>
-      <CredentialDialog
-        fullScreen={fullScreen}
-        open={openModal}
-        onClose={handleCloseModal}
-      />
-        
     </div>
     </BrowserRouter>
   );

@@ -1,37 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { useAuth0 } from "../react-auth0-spa";
-import { Dialog, DialogTitle, DialogContent, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions } from "@material-ui/core";
+import { useQuery } from '@apollo/react-hooks';
+
+import { Dialog, DialogTitle, DialogContent, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions, LinearProgress, InputLabel, Select, MenuItem, makeStyles, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
+import { getIdentities, IdentitiesData } from '../queries/identities'
+import Identities from "../views/Identities";
 
 interface Props {
   fullScreen: boolean,
   open: boolean,
-  onClose: any
+  onClose: any,
+  subject?: string
 }
 
+const useStyles = makeStyles((theme) => ({
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: 'auto',
+    // width: 'fit-content',
+  },
+  formControl: {
+    marginTop: theme.spacing(2),
+    minWidth: 120,
+  },
+  select: {
+    height: '48px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  avatar: {
+    marginTop: theme.spacing(2),
+    height: 30,
+    width: 30,
+  },
+  formControlLabel: {
+    marginTop: theme.spacing(1),
+  },
+}));
+
 function CredentialDialog(props: Props) {
+  const classes = useStyles();
   const { getTokenSilently, user, isAuthenticated, loginWithRedirect } = useAuth0();
+  const [kudos, setKudos] = useState<String|null>(null)
+  const [subject, setSubject] = useState<String|undefined>(props.subject)
+
+  const { loading, error, data } = useQuery<IdentitiesData>(getIdentities);
+
+  const identity = (data?.identities && subject) ? data.identities.find(i=>i.did == subject) : null
+  if (loading) return <LinearProgress />;
+  if (error) return <p>Error :(</p>;
 
   const callApi = async () => {
     try {
       const token = await getTokenSilently();
 
-      console.log({token})
+      const data = {
+        subject,
+        kudos
+      }
 
       const response = await fetch(`https://i227.dev/sign`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           Origin: 'http://localhost:3000',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
-        mode: 'cors'
+        mode: 'cors',
+        body: JSON.stringify(data)
       });
-
-      console.log('AAAA')
 
       const responseData = await response.json();
 
-      console.log({responseData})
     } catch (error) {
       console.error(error);
     }
@@ -46,23 +89,42 @@ function CredentialDialog(props: Props) {
       >
         <DialogTitle id="responsive-dialog-title">Create new Verifiable Credential</DialogTitle>
         <DialogContent>
+        <form className={classes.form} noValidate>
 
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="outlined"
+        {!subject && <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-label">Subject</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={subject}
+            onChange={(event) => setSubject(event.target.value as string)}
+          >
+            {data?.identities.map(identity => (
+              <MenuItem value={identity.did}>
+                <Avatar src={identity.profileImage}/>
+                {identity.name}
+              </MenuItem>
+            ))}
+
+          </Select>
+        </FormControl> }
+
+      {identity !== null && <List >
+        <ListItem>
+          <ListItemAvatar>
+          <Avatar
+           src={identity?.profileImage}
           />
+          </ListItemAvatar>
+          <ListItemText primary={identity?.name} />
+        </ListItem>
+      </List>}
 
 
-
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Kudos award <span role="img" aria-label="award">🏆</span></FormLabel>
           <RadioGroup aria-label="gender" name="gender1" 
-          // value={value} onChange={handleChange}
+            value={kudos} onChange={(event) => setKudos(event.target.value)}
           >
             <FormControlLabel value="Thank you" control={<Radio />} label="Thank you" />
             <FormControlLabel value="Going Above and Beyond" control={<Radio />} label="Going Above and Beyond" />
@@ -76,6 +138,7 @@ function CredentialDialog(props: Props) {
             <FormControlLabel value="Making an Impact" control={<Radio />} label="Making an Impact" />
           </RadioGroup>
         </FormControl>
+        </form>
 
         </DialogContent>
         <DialogActions>

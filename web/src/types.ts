@@ -1,3 +1,14 @@
+export interface Credential {
+  id: string
+  hash: string
+  issuer: Identity,
+  subject: Identity,
+  issuanceDate: string,
+  type: string,
+  context: string,
+  claims: Claim[]
+}
+
 export interface Claim {
   credential: {
     id: string
