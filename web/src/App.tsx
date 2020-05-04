@@ -89,9 +89,9 @@ export default function ResponsiveDrawer() {
   const drawer = (
     <div>
       <div className={classes.toolbar} />
-      <AuthBox />
-      <Divider />
       <List>
+      <Divider />
+      <AuthBox />
         
         <ListItemLink to={'/home'}>
           <ListItemIcon><HomeIcon /></ListItemIcon>

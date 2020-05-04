@@ -7,14 +7,14 @@ export const getCredential = gql`
       id
       raw
       issuer {
-        did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       subject {
-        did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       type
       issuanceDate
@@ -37,14 +37,14 @@ export const getCredentialsById = gql`
       hash
       raw
       issuer {
-        did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       subject {
-        did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       type
       issuanceDate

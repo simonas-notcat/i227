@@ -23,17 +23,17 @@ export const getSlackUserIdentity = async (slackUserId: string, app: App, token:
       id: identity.did,
       slackUserId,
       // @ts-ignore
-      name: result.user?.name,
+      nickname: result.user?.name,
     }
     // @ts-ignore
     if (result.user?.profile?.image_512){
       // @ts-ignore
-      credentialSubject['profileImage'] = result.user?.profile?.image_512
+      credentialSubject['picture'] = result.user?.profile?.image_512
     }
     // @ts-ignore
     if (result.user?.profile?.real_name){
       // @ts-ignore
-      credentialSubject['realName'] = result.user?.profile?.real_name
+      credentialSubject['name'] = result.user?.profile?.real_name
     }
 
     await agent.handleAction({

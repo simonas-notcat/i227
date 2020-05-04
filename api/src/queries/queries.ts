@@ -17,13 +17,15 @@ export const getLatestKudos = `
     }) {
       issuer {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       subject {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       value
       issuanceDate
@@ -43,13 +45,15 @@ export const getCredential = `
       raw
       issuer {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       subject {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       type
       issuanceDate
@@ -73,13 +77,15 @@ export const getCredentialsById = `
       raw
       issuer {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       subject {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       type
       issuanceDate
@@ -99,8 +105,9 @@ export const getIdentities = `
       skip: $skip,
     }) {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
     }
   }
 `
@@ -127,8 +134,9 @@ export const getIdentity = `
       issuanceDate
       issuer {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       claims {
         type
@@ -156,8 +164,9 @@ export const getIdentity = `
       issuanceDate
       subject {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
       }
       claims {
         type

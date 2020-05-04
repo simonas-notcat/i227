@@ -23,8 +23,9 @@ export const getIdentity = gql`
 query getIdentity($did: String!, $take: Int!) {
   identity(did: $did) {
     did
-    name: latestClaimValue(type: "realName")
-    profileImage: latestClaimValue(type: "profileImage")
+    name: latestClaimValue(type: "name")
+    nickname: latestClaimValue(type: "nickname")
+    picture: latestClaimValue(type: "picture")
   }
   receivedCredentials: credentials(input: {
     where: [
@@ -41,13 +42,15 @@ query getIdentity($did: String!, $take: Int!) {
     issuanceDate
     issuer {
       did
-      name: latestClaimValue(type: "realName")
-      profileImage: latestClaimValue(type: "profileImage")
+      name: latestClaimValue(type: "name")
+      nickname: latestClaimValue(type: "nickname")
+      picture: latestClaimValue(type: "picture")
     }
     subject {
       did
-      name: latestClaimValue(type: "realName")
-      profileImage: latestClaimValue(type: "profileImage")
+      name: latestClaimValue(type: "name")
+      nickname: latestClaimValue(type: "nickname")
+      picture: latestClaimValue(type: "picture")
     }
     claims {
       type
@@ -75,13 +78,15 @@ query getIdentity($did: String!, $take: Int!) {
     issuanceDate
     issuer {
       did
-      name: latestClaimValue(type: "realName")
-      profileImage: latestClaimValue(type: "profileImage")
+      name: latestClaimValue(type: "name")
+      nickname: latestClaimValue(type: "nickname")
+      picture: latestClaimValue(type: "picture")
     }
     subject {
       did
-      name: latestClaimValue(type: "realName")
-      profileImage: latestClaimValue(type: "profileImage")
+      name: latestClaimValue(type: "name")
+      nickname: latestClaimValue(type: "nickname")
+      picture: latestClaimValue(type: "picture")
     }
     claims {
       type

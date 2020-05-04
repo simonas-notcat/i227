@@ -8,7 +8,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useAuth0 } from "../react-auth0-spa";
-
+import { List, ListItem, ListItemIcon, ListItemText, ListItemAvatar, Avatar } from "@material-ui/core";
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 interface Props {
 }
 
@@ -17,39 +18,23 @@ function AuthBox(props: Props) {
 
   if (isAuthenticated) {
     return (
-      <Card>
-        <CardActionArea>
-          <CardMedia 
-            component="img"
-            image={user.picture} />
+      <ListItem button onClick={() => logout()}>
 
-          <CardHeader
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={`${user.nickname}`}
-            subheader={`${user.name}`}
-          />
-          <CardActions>
-            <Button size="small" color="primary" onClick={() => logout()}>
-              Logout
-            </Button>
-          </CardActions>
-          
-        </CardActionArea>
-      </Card>
+      <ListItemAvatar>
+          <Avatar
+           src={user.picture}
+           />
+          </ListItemAvatar>
+          <ListItemText primary={user.nickname} secondary={user.name}/>
+      </ListItem>
+
     );
   } else {
     return (
-      <Card>
-      <CardActionArea>
-        <Button onClick={() => loginWithRedirect({})}>Login</Button>
-       
-        
-      </CardActionArea>
-    </Card>
+      <ListItem button onClick={() => loginWithRedirect({})}>
+        <ListItemIcon><LockOpenIcon /></ListItemIcon>
+        <ListItemText primary={'Login'} />
+      </ListItem>
     )
   }
 

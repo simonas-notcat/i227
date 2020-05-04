@@ -10,7 +10,8 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
-
+import ExposurePlus1Icon from '@material-ui/icons/ExposurePlus1';
+import ShareIcon from '@material-ui/icons/Share';
 import { formatDistanceToNow } from 'date-fns'
 import { Credential } from '../types'
 
@@ -28,14 +29,30 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: theme.palette.text.secondary
+  },
   content: {
     flex: '1 0 auto',
   },
   cover: {
     width: 100,
     height: 100,
-
+    marginTop: theme.spacing(2)
   },
+  smallAvatar: {
+    width: 28,
+    height: 28,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
 }));
 
 function CredentialCard(props: Props) {
@@ -44,18 +61,6 @@ function CredentialCard(props: Props) {
   return (
     <Card elevation={3}>
       <CardActionArea>
-        <CardHeader
-          avatar={
-            <Avatar src={credential.issuer.profileImage} />
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={`${credential.issuer.name}`}
-          subheader={formatDistanceToNow(Date.parse(credential.issuanceDate)) + ' ago'}
-        />
         <div className={classes.root}>
           <div className={classes.details}>
             {credential.claims.map(claim => (<CardContent className={classes.content}>
@@ -78,13 +83,23 @@ function CredentialCard(props: Props) {
           />
         </div>
       </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Sign
-        </Button>
-        <Button size="small" color="primary">
-          Share
-        </Button>
+      <CardActions className={classes.actions} >
+        <div className={classes.row}>
+          <Avatar
+            variant="rounded" 
+            src={credential.issuer.profileImage}
+            className={classes.smallAvatar}
+            />
+          <Typography variant="caption">{credential.issuer.name} | {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
+        </div>
+        <div>
+        <IconButton aria-label="add to favorites">
+          <ExposurePlus1Icon />
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+        </div>
       </CardActions>
     </Card>
   );

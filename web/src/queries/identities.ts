@@ -12,8 +12,9 @@ export const getIdentities = gql`
       skip: $skip,
     }) {
         did
-        name: latestClaimValue(type: "realName")
-        profileImage: latestClaimValue(type: "profileImage")
+        name: latestClaimValue(type: "name")
+        nickname: latestClaimValue(type: "nickname")
+        picture: latestClaimValue(type: "picture")
     }
   }
 `

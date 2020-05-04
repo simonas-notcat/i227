@@ -88,8 +88,8 @@ export const getProfileBlocks = async(slackUserId: string, app: App, token: stri
 }
 
 const kudosListItem = async (claim: Claim) => {
-  const image_url = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'profileImage'})
-  const name = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'realName'})
+  const image_url = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'picture'})
+  const name = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'name'})
   return [
     {
       "type": "section",
