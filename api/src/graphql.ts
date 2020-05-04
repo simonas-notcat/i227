@@ -1,3 +1,4 @@
+import { config } from 'dotenv'
 import * as Daf from 'daf-core'
 import { W3cGql } from 'daf-w3c'
 import { SdrGql } from 'daf-selective-disclosure'
@@ -7,8 +8,11 @@ import express from 'express'
 import jwt from 'express-jwt'
 import jwksRsa from 'jwks-rsa'
 import cors from 'cors'
+import fetch from 'node-fetch'
 import { agent } from './agent'
+import { getAuth0UserIdentity } from './auth0'
 
+config()
 
 const server = new ApolloServer({
   typeDefs: [
@@ -39,11 +43,10 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: 'https://simonas.eu.auth0.com/.well-known/jwks.json'
+    jwksUri: process.env.AUTH0_DOMAIN + '.well-known/jwks.json'
   }),
-
-  audience: 'https://i227.dev',
-  issuer: 'https://simonas.eu.auth0.com/',
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: process.env.AUTH0_DOMAIN,
   algorithm: ["RS256"]
 });
 
@@ -53,7 +56,13 @@ var corsOptions = {
 
 app.options('/sign', cors(corsOptions))
 app.post('/sign', cors(corsOptions), checkJwt, async (req, res) => {
-  res.send({foo: 'bar'})
+  const request = await fetch(process.env.AUTH0_DOMAIN + 'userinfo', {
+    headers: { Authorization: req.headers.authorization }
+  })
+  const userInfo = await request.json()
+  const identity = await getAuth0UserIdentity(userInfo)
+
+  res.send({did: identity.did})
 })
 
 app.listen({port: 8080})

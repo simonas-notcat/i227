@@ -9,9 +9,10 @@ import { getSlackUserIdentity } from './helpers/users'
 import { GraphQLClient } from 'graphql-request'
 import * as queries from '../queries/queries'
 
+config()
+
 import { agent } from '../agent'
 
-config()
 
 const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
