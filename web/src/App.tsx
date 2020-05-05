@@ -28,6 +28,7 @@ import { useAuth0 } from "./react-auth0-spa";
 import Home from './views/Home'
 import Identities from './views/Identities'
 import Identity from './views/Identity'
+import Credential from './views/Credential'
 import ListItemLink from './components/ListItemLink'
 import AuthBox from './components/AuthBox'
 
@@ -170,6 +171,7 @@ export default function ResponsiveDrawer() {
           <Route path={'/home'} component={Home} />
           <Route path={'/identities'} component={Identities} />
           <Route path={'/identity/:did'} component={Identity} />
+          <Route path={'/credential/:id'} component={Credential} />
         </Switch>
       </main>
     </div>

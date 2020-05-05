@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 import { Credential } from '../types'
+import { profile } from './fragments'
 
 export interface LatestKudosData {
   count: number
@@ -7,6 +8,7 @@ export interface LatestKudosData {
 }
 
 export const getLatestKudos = gql`
+  ${profile}
   query getLatestKudos($take: Int, $skip: Int) {
     count: credentialsCount(input: {
       where: [
@@ -23,20 +25,13 @@ export const getLatestKudos = gql`
       take: $take,
       skip: $skip
     }) {
-      issuer {
-        did
-        name: latestClaimValue(type: "name")
-        nickname: latestClaimValue(type: "nickname")
-        picture: latestClaimValue(type: "picture")
-      }
-      subject {
-        name: latestClaimValue(type: "name")
-        nickname: latestClaimValue(type: "nickname")
-        picture: latestClaimValue(type: "picture")
-      }
+      issuer { ...profile }
+      subject { ...profile }
+      id
       type
       issuanceDate
       claims {
+        hash
         type
         value
       }

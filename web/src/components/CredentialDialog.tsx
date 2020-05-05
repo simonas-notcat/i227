@@ -3,9 +3,8 @@ import Button from "@material-ui/core/Button";
 import { useAuth0 } from "../react-auth0-spa";
 import { useQuery } from '@apollo/react-hooks';
 
-import { Dialog, DialogTitle, DialogContent, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions, LinearProgress, InputLabel, Select, MenuItem, makeStyles, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions, LinearProgress, InputLabel, Select, MenuItem, makeStyles, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
 import { getIdentities, IdentitiesData } from '../queries/identities'
-import Identities from "../views/Identities";
 
 interface Props {
   fullScreen: boolean,
@@ -42,13 +41,13 @@ const useStyles = makeStyles((theme) => ({
 
 function CredentialDialog(props: Props) {
   const classes = useStyles();
-  const { getTokenSilently, user, isAuthenticated, loginWithRedirect } = useAuth0();
+  const { getTokenSilently } = useAuth0();
   const [kudos, setKudos] = useState<String|null>(null)
   const [subject, setSubject] = useState<String|undefined>(props.subject)
 
   const { loading, error, data } = useQuery<IdentitiesData>(getIdentities);
 
-  const identity = (data?.identities && subject) ? data.identities.find(i=>i.did == subject) : null
+  const identity = (data?.identities && subject) ? data.identities.find(i=>i.did === subject) : null
   if (loading) return <LinearProgress />;
   if (error) return <p>Error :(</p>;
 
@@ -100,7 +99,7 @@ function CredentialDialog(props: Props) {
             onChange={(event) => setSubject(event.target.value as string)}
           >
             {data?.identities.map(identity => (
-              <MenuItem value={identity.did}>
+              <MenuItem value={identity.did} key={identity.did}>
                 <Avatar src={identity.picture}/>
                 {identity.name}
               </MenuItem>

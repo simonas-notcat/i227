@@ -1,14 +1,6 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useAuth0 } from "../react-auth0-spa";
-import { List, ListItem, ListItemIcon, ListItemText, ListItemAvatar, Avatar } from "@material-ui/core";
+import { ListItem, ListItemIcon, ListItemText, ListItemAvatar, Avatar } from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 interface Props {
 }

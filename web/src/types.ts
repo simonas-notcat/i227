@@ -14,6 +14,7 @@ export interface Claim {
     id: string
     hash: string
   },
+  hash: string,
   issuer: Identity,
   subject: Identity,
   issuanceDate: string,

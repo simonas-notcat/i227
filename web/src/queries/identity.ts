@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 import { Identity, Credential } from '../types'
-
+import { profile } from './fragments'
 
 interface ShortClaim {
   type: string
@@ -20,12 +20,10 @@ export interface IdentityVariables {
 }
 
 export const getIdentity = gql`
+${profile}
 query getIdentity($did: String!, $take: Int!) {
   identity(did: $did) {
-    did
-    name: latestClaimValue(type: "name")
-    nickname: latestClaimValue(type: "nickname")
-    picture: latestClaimValue(type: "picture")
+    ...profile
   }
   receivedCredentials: credentials(input: {
     where: [
@@ -40,19 +38,10 @@ query getIdentity($did: String!, $take: Int!) {
     id
     hash
     issuanceDate
-    issuer {
-      did
-      name: latestClaimValue(type: "name")
-      nickname: latestClaimValue(type: "nickname")
-      picture: latestClaimValue(type: "picture")
-    }
-    subject {
-      did
-      name: latestClaimValue(type: "name")
-      nickname: latestClaimValue(type: "nickname")
-      picture: latestClaimValue(type: "picture")
-    }
+    issuer { ...profile }
+    subject { ...profile }
     claims {
+      hash
       type
       value
     }
@@ -76,19 +65,10 @@ query getIdentity($did: String!, $take: Int!) {
     id
     hash
     issuanceDate
-    issuer {
-      did
-      name: latestClaimValue(type: "name")
-      nickname: latestClaimValue(type: "nickname")
-      picture: latestClaimValue(type: "picture")
-    }
-    subject {
-      did
-      name: latestClaimValue(type: "name")
-      nickname: latestClaimValue(type: "nickname")
-      picture: latestClaimValue(type: "picture")
-    }
+    issuer { ...profile }
+    subject { ...profile }
     claims {
+      hash
       type
       value
     }

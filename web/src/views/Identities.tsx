@@ -1,12 +1,7 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Grid, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardActionAreaLink from "../components/CardActionAreaLink";
-
+import { List, ListItemAvatar, ListItemText } from "@material-ui/core";
 import Avatar from '@material-ui/core/Avatar';
-
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { getIdentities, IdentitiesData } from '../queries/identities'

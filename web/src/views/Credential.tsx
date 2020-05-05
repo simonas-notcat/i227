@@ -1,20 +1,19 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardActionAreaLink from "./CardActionAreaLink";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
+import { useQuery } from '@apollo/react-hooks';
+import { Grid, Typography, makeStyles, Card, CardActionArea, CardContent, CardActions, IconButton } from "@material-ui/core";
+import { useParams } from "react-router-dom";
+
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
 import ExposurePlus1Icon from '@material-ui/icons/ExposurePlus1';
 import ShareIcon from '@material-ui/icons/Share';
-import { formatDistanceToNow } from 'date-fns'
-import { Credential } from '../types'
 
-interface Props {
-  credential: Credential
-}
+import Container from '@material-ui/core/Container';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
+import CredentialFAB from "../components/CredentialFAB";
+import { formatDistanceToNow } from "date-fns";
+import { NavLink, NavLinkProps } from 'react-router-dom'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,12 +51,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function CredentialCard(props: Props) {
+function Credential(props: any) {
+  const { id } = useParams<{ id: string }>()
   const classes = useStyles();
-  const { credential } = props
+
+  const { loading, error, data } = useQuery<CredentialData, CredentialVariables>(getCredential, { variables: { id }});
+
+  if (loading) return <LinearProgress />;
+  if (error) return <p>Error :(</p>;
+
+  const credential = data?.credentials[0]
+
   return (
-    <Card elevation={3}>
-      <CardActionAreaLink to={'/credential/' + credential.id}>
+    <Container maxWidth="sm">
+      {credential !== undefined && <Card elevation={3}>
+      <CardContent>
         <div className={classes.root}>
           <div className={classes.details}>
             {credential.claims.map(claim => (<CardContent className={classes.content} key={claim.hash}>
@@ -72,21 +80,26 @@ function CredentialCard(props: Props) {
             
             
           </div>
+          <NavLink to={'/identity/'+credential.subject.did}>
+
           <Avatar
             variant="rounded" 
             className={classes.cover}
             // component="img"
             src={credential.subject.picture}
-          />
+            />
+            </NavLink>
         </div>
-      </CardActionAreaLink>
+      </CardContent>
       <CardActions className={classes.actions} >
         <div className={classes.row}>
+          <NavLink to={'/identity/'+credential.issuer.did}>
           <Avatar
             variant="rounded" 
             src={credential.issuer.picture}
             className={classes.smallAvatar}
             />
+          </NavLink>
           <Typography variant="caption">{credential.issuer.nickname} | {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
         </div>
         <div>
@@ -98,8 +111,10 @@ function CredentialCard(props: Props) {
         </IconButton>
         </div>
       </CardActions>
-    </Card>
+    </Card>}
+      <CredentialFAB subject={credential?.subject.did} />
+    </Container>
   );
 }
 
-export default CredentialCard;
+export default Credential;
