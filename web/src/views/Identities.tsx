@@ -26,10 +26,13 @@ function Identities(props: any) {
         <ListItemLink key={identity.did} to={'/identity/'+ identity.did}>
           <ListItemAvatar>
           <Avatar
-           src={identity?.profileImage}
+           src={identity?.picture}
           />
           </ListItemAvatar>
-          <ListItemText primary={identity?.name} />
+          <ListItemText 
+            primary={identity?.name} 
+            secondary={identity?.nickname} 
+            />
         </ListItemLink>
         ))}
       </List>

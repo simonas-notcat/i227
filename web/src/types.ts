@@ -24,5 +24,6 @@ export interface Claim {
 export interface Identity {
   did: string,
   name: string,
-  profileImage: string,
+  nickname: string,
+  picture: string,
 }

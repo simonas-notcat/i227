@@ -79,7 +79,7 @@ function CredentialCard(props: Props) {
             variant="rounded" 
             className={classes.cover}
             // component="img"
-            src={credential.subject.profileImage}
+            src={credential.subject.picture}
           />
         </div>
       </CardActionArea>
@@ -87,10 +87,10 @@ function CredentialCard(props: Props) {
         <div className={classes.row}>
           <Avatar
             variant="rounded" 
-            src={credential.issuer.profileImage}
+            src={credential.issuer.picture}
             className={classes.smallAvatar}
             />
-          <Typography variant="caption">{credential.issuer.name} | {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
+          <Typography variant="caption">{credential.issuer.nickname} | {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
         </div>
         <div>
         <IconButton aria-label="add to favorites">

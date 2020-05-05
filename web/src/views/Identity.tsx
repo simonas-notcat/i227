@@ -24,8 +24,9 @@ function Identity(props: any) {
       <Grid container spacing={4} justify="center">
         <Grid item xs={12}>
 
-        <Avatar src={data?.identity.profileImage} />
-        <Typography component='h1'>{data?.identity.name}</Typography>
+        <Avatar src={data?.identity.picture} />
+        <Typography variant='h4'>{data?.identity.name}</Typography>
+        <Typography variant='h5'>{data?.identity.nickname}</Typography>
         </Grid>
 
         <Typography component='h1'>Received ({data?.receivedCredentialsCount})</Typography>

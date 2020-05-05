@@ -53,20 +53,20 @@ app.get('/img/c/:id/:type', async (req, res) => {
   const { credentials } = await api.request(queries.getCredentialsById, { id })
   const credential = credentials[0]
 
-  const issuerImgReq = await fetch(credential.issuer.profileImage)
-  const issuerImgBuffer = await issuerImgReq.buffer()
-  const issuerImgtype = await fileType.fromBuffer(issuerImgBuffer)
-  const issuerImgbase64 = issuerImgBuffer.toString('base64')
+  // const issuerImgReq = await fetch(credential.issuer.picture)
+  // const issuerImgBuffer = await issuerImgReq.buffer()
+  // const issuerImgtype = await fileType.fromBuffer(issuerImgBuffer)
+  // const issuerImgbase64 = issuerImgBuffer.toString('base64')
 
-  const subjectImgReq = await fetch(credential.subject.profileImage)
+  const subjectImgReq = await fetch(credential.subject.picture)
   const subjectImgBuffer = await subjectImgReq.buffer()
   const subjectImgtype = await fileType.fromBuffer(subjectImgBuffer)
   const subjectImgbase64 = subjectImgBuffer.toString('base64')
 
   const svg = await hbs.render('src/views/svg/credential.svg', {
     credential,
-    issuerImgtype,
-    issuerImgbase64,
+    // issuerImgtype,
+    // issuerImgbase64,
     subjectImgtype,
     subjectImgbase64,
   })

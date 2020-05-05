@@ -101,7 +101,7 @@ function CredentialDialog(props: Props) {
           >
             {data?.identities.map(identity => (
               <MenuItem value={identity.did}>
-                <Avatar src={identity.profileImage}/>
+                <Avatar src={identity.picture}/>
                 {identity.name}
               </MenuItem>
             ))}
@@ -113,10 +113,13 @@ function CredentialDialog(props: Props) {
         <ListItem>
           <ListItemAvatar>
           <Avatar
-           src={identity?.profileImage}
+           src={identity?.picture}
           />
           </ListItemAvatar>
-          <ListItemText primary={identity?.name} />
+          <ListItemText 
+            primary={identity?.name} 
+            secondary={identity?.nickname} 
+            />
         </ListItem>
       </List>}
 

@@ -54,8 +54,8 @@ export const getProfileView = async (options: { initial_user?: string }, app: Ap
 export const getProfileBlocks = async(slackUserId: string, app: App, token: string) => {
   const blocks = []
   const subject = await getSlackUserIdentity(slackUserId, app, token)
-    const name = await subject.getLatestClaimValue(agent.dbConnection, {type: 'realName'})
-    const profileImage = await subject.getLatestClaimValue(agent.dbConnection, {type: 'profileImage'})
+    const name = await subject.getLatestClaimValue(agent.dbConnection, {type: 'name'})
+    const picture = await subject.getLatestClaimValue(agent.dbConnection, {type: 'picture'})
     blocks.push({
       "type": "section",
       "text": {
@@ -65,7 +65,7 @@ export const getProfileBlocks = async(slackUserId: string, app: App, token: stri
       "accessory": {
         "type": "image",
         //@ts-ignore
-        "image_url": profileImage,
+        "image_url": picture,
         "alt_text": "plants"
       }
     },
