@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, CardHeader } from "@material-ui/core";
+import { Typography, CardHeader, CardMedia } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -37,9 +37,11 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 0 auto',
   },
   cover: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     // marginTop: theme.spacing(2)
+    alignSelf: 'center',
+    margin: theme.spacing(2)
   },
   smallAvatar: {
     width: 28,
@@ -49,7 +51,22 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-between'
+    // justifyContent: 'space-between'
+  },
+  claim: {
+
+    display: 'flex',
+    flexDirection: 'column',
+    // alignItems: 'center'
+  },
+  claimTextBox: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    flex: 1,
+    // flexGrow: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)'
   }
 }));
 
@@ -68,31 +85,29 @@ function CredentialCard(props: Props) {
           subheader={`${credential.issuer.nickname} | ${formatDistanceToNow(Date.parse(credential.issuanceDate))} ago`}
         />
       </CardActionAreaLink>
-      <CardContent>
       <CardActionAreaLink to={'/c/' + credential.id}>
-        <div className={classes.root}>
-          <div className={classes.details}>
-            {credential.claims.map(claim => (<CardContent className={classes.content} key={claim.hash}>
-              {/* <Typography gutterBottom variant="h6" component="h2">
-                {claim.type}
-              </Typography> */}
-              <Typography gutterBottom variant="h5" component="h2">
+        {credential.claims.map(claim => (
+          <CardMedia 
+            key={claim.hash}
+            className={classes.claim}
+            image={'/kudos1.png'}
+            >
+            <Avatar
+              variant="circle" 
+              className={classes.cover}
+              src={credential.subject.picture}
+            />
+            <div className={classes.claimTextBox}>
+              <Typography variant="h5">
                 {claim.value}
               </Typography>
-              <Typography component="p">{credential.subject.name}</Typography>
-            </CardContent>))}
+              <Typography variant="h6">{credential.subject.name}</Typography>
+            </div>
+          </CardMedia>
+        ))}
             
             
-          </div>
-          <Avatar
-            variant="rounded" 
-            className={classes.cover}
-            // component="img"
-            src={credential.subject.picture}
-          />
-        </div>
       </CardActionAreaLink>
-      </CardContent>
       <CardActions className={classes.actions} >
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />

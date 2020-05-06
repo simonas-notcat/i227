@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { useAuth0 } from "../react-auth0-spa";
 import { useQuery } from '@apollo/react-hooks';
-
+import { useHistory } from "react-router-dom";
 import { Dialog, DialogTitle, DialogContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions, LinearProgress, InputLabel, Select, MenuItem, makeStyles, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
 import { getIdentities, IdentitiesData } from '../queries/identities'
 
@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CredentialDialog(props: Props) {
-  const classes = useStyles();
-  const { getTokenSilently } = useAuth0();
+  const classes = useStyles()
+  const history = useHistory()
+  const { getTokenSilently } = useAuth0()
   const [kudos, setKudos] = useState<String|null>(null)
   const [subject, setSubject] = useState<String|undefined>(props.subject)
 
@@ -73,6 +74,8 @@ function CredentialDialog(props: Props) {
       });
 
       const responseData = await response.json();
+      props.onClose()
+      history.push('/c/'+ responseData.id)
 
     } catch (error) {
       console.error(error);
