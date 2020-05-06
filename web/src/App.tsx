@@ -171,7 +171,7 @@ export default function ResponsiveDrawer() {
           <Route path={'/home'} component={Home} />
           <Route path={'/identities'} component={Identities} />
           <Route path={'/identity/:did'} component={Identity} />
-          <Route path={'/credential/:id'} component={Credential} />
+          <Route path={'/c/:id'} component={Credential} />
         </Switch>
       </main>
     </div>

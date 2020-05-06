@@ -69,7 +69,7 @@ function CredentialCard(props: Props) {
         />
       </CardActionAreaLink>
       <CardContent>
-      <CardActionAreaLink to={'/credential/' + credential.id}>
+      <CardActionAreaLink to={'/c/' + credential.id}>
         <div className={classes.root}>
           <div className={classes.details}>
             {credential.claims.map(claim => (<CardContent className={classes.content} key={claim.hash}>
