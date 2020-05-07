@@ -18,7 +18,6 @@ import Typography from '@material-ui/core/Typography';
 
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import {
-  BrowserRouter,
   Route,
   Redirect,
   Switch,

@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Typography, makeStyles, Card, CardContent, CardActions, IconButton, CardHeader, CardMedia } from "@material-ui/core";
+import { Typography, makeStyles, Card, CardActions, IconButton, CardHeader, CardMedia } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
@@ -13,7 +13,6 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
 import CredentialFAB from "../components/CredentialFAB";
 import { formatDistanceToNow } from "date-fns";
-import { NavLink } from 'react-router-dom'
 import CardActionAreaLink from "../components/Nav/CardActionAreaLink";
 
 
