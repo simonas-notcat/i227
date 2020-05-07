@@ -9,7 +9,7 @@ import jwt from 'express-jwt'
 import jwksRsa from 'jwks-rsa'
 import cors from 'cors'
 import fetch from 'node-fetch'
-import { agent } from './agent'
+import { agent } from './agent/agent'
 import { getAuth0UserIdentity } from './auth0'
 import { ActionTypes, ActionSignW3cVc } from 'daf-w3c'
 import shortId from 'shortid'
@@ -59,31 +59,36 @@ var corsOptions = {
 
 app.options('/sign', cors(corsOptions))
 app.post('/sign', cors(corsOptions), express.json(), checkJwt, async (req, res) => {
-  const request = await fetch(process.env.AUTH0_DOMAIN + 'userinfo', {
-    headers: { Authorization: req.headers.authorization }
-  })
-  const userInfo = await request.json()
 
-  const issuer = await getAuth0UserIdentity(userInfo)
-
-  const credential: Credential = await agent.handleAction({
-    type: ActionTypes.signCredentialJwt,
-    save: true,
-    data: {
-      id: shortId.generate(),
-      '@context': ['https://www.w3.org/2018/credentials/v1'],
-      type: ['VerifiableCredential', 'Kudos'],
-      issuer: issuer.did,
-      credentialSubject: {
-        id: req.body.subject,
-        kudos: req.body.kudos
+  if (!req.body.subject || !req.body.kudos) {
+    res.send({error: 'Subject and kudos are required'})
+  } else {
+    const request = await fetch(process.env.AUTH0_DOMAIN + 'userinfo', {
+      headers: { Authorization: req.headers.authorization }
+    })
+    const userInfo = await request.json()
+    
+    const issuer = await getAuth0UserIdentity(userInfo)
+    
+    const credential: Credential = await agent.handleAction({
+      type: ActionTypes.signCredentialJwt,
+      save: true,
+      data: {
+        id: shortId.generate(),
+        '@context': ['https://www.w3.org/2018/credentials/v1'],
+        type: ['VerifiableCredential', 'Kudos'],
+        issuer: issuer.did,
+        credentialSubject: {
+          id: req.body.subject,
+          kudos: req.body.kudos
+        }
       }
-    }
-  } as ActionSignW3cVc)
-
-
-  res.send({id: credential.id})
-
+    } as ActionSignW3cVc)
+    
+    
+    res.send({id: credential.id})
+  }
+    
 })
 
 app.listen({port: 8080})
