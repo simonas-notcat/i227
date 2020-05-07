@@ -3,7 +3,6 @@ import { Grid, makeStyles, Typography, Button } from "@material-ui/core";
 import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import { services } from '../utils/services'
-import CredentialFAB from "../components/CredentialFAB";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,11 +30,10 @@ function Service(props: any) {
         <Grid item xs={12} sm={9}>
           <Typography variant={'h4'}>{service.title}</Typography>
           <Typography variant={'h5'} gutterBottom>{service.subtitle}</Typography>
-          <Typography variant='body1'>{service.description}</Typography>
+          <Typography variant='body1' gutterBottom>{service.description}</Typography>
           <Button color='primary' variant="contained"  href={service.url}>Open</Button>
         </Grid>
       </Grid>
-      <CredentialFAB />
     </Container>
   );
 }

@@ -22,6 +22,7 @@ import {
   Route,
   Redirect,
   Switch,
+  useRouteMatch
 } from 'react-router-dom' 
 
 import { useAuth0 } from "./react-auth0-spa";
@@ -83,6 +84,11 @@ export default function ResponsiveDrawer() {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { loading } = useAuth0();
+  const homeMatch = useRouteMatch("/home");
+  const identitiesMatch = useRouteMatch("/identities");
+  const identityMatch = useRouteMatch("/identity/:did");
+  const marketPlaceMatch = useRouteMatch("/marketplace");
+  const serviceMatch = useRouteMatch("/s/:id");
   
   
 
@@ -97,15 +103,23 @@ export default function ResponsiveDrawer() {
       <Divider />
       <AuthBox />
         
-        <ListItemLink to={'/home'}>
+        <ListItemLink to={'/home'} 
+          selected={homeMatch !== null}
+          >
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary={'Home'} />
         </ListItemLink>
-        <ListItemLink to={'/marketplace'}>
+        <ListItemLink 
+          to={'/marketplace'}
+          selected={marketPlaceMatch !== null || serviceMatch !== null}
+        >
           <ListItemIcon><LocalActivityIcon /></ListItemIcon>
           <ListItemText primary={'Marketplace'} />
         </ListItemLink>
-        <ListItemLink to={'/identities'}>
+        <ListItemLink
+          to={'/identities'}
+          selected={identitiesMatch !== null || identityMatch !== null}
+          >
           <ListItemIcon><ContactsIcon /></ListItemIcon>
           <ListItemText primary={'Identities'} />
         </ListItemLink>
@@ -121,7 +135,6 @@ export default function ResponsiveDrawer() {
   }
 
   return (
-    <BrowserRouter>
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar} color={'inherit'}>
@@ -184,6 +197,5 @@ export default function ResponsiveDrawer() {
         </Switch>
       </main>
     </div>
-    </BrowserRouter>
   );
 }

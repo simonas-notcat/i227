@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 0 auto',
   },
   cover: {
+    [theme.breakpoints.down('sm')]: {
+      width: 100,
+      height: 100,
+    },
     width: 150,
     height: 150,
     // marginTop: theme.spacing(2)
@@ -65,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)'
+    backgroundColor: 'rgba(0,0,0,0.6)'
   }
 }));
 

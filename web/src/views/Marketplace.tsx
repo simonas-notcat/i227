@@ -4,9 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import ListItemLink from "../components/Nav/ListItemLink";
 import { services } from '../utils/services'
-import CredentialFAB from "../components/CredentialFAB";
 import { Service } from "../types";
-
 
 interface ServiceBoxProps {
   service: Service
@@ -50,7 +48,6 @@ function Marketplace(props: any) {
         ))}
       </Grid>
 
-      <CredentialFAB />
     </Container>
   );
 }

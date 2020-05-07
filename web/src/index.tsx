@@ -7,7 +7,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Auth0Provider } from "./react-auth0-spa";
 import config from "./auth_config.json";
 import history from "./utils/history";
-
+import { BrowserRouter } from 'react-router-dom' 
 import App from './App';
 import theme from './theme';
 
@@ -28,22 +28,24 @@ const onRedirectCallback = (appState: any) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Auth0Provider
-      domain={config.domain}
-      client_id={config.clientId}
-      audience={config.audience}
-      redirect_uri={window.location.origin}
-      //@ts-ignore
-      onRedirectCallback={onRedirectCallback}
-    >
+    <BrowserRouter>
+      <Auth0Provider
+        domain={config.domain}
+        client_id={config.clientId}
+        audience={config.audience}
+        redirect_uri={window.location.origin}
+        //@ts-ignore
+        onRedirectCallback={onRedirectCallback}
+        >
 
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </ApolloProvider>
-  </Auth0Provider>
+        <ApolloProvider client={client}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </ApolloProvider>
+        </Auth0Provider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

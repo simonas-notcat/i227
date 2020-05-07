@@ -53,7 +53,7 @@ export const services: Service[] = [
   
 
   {
-    id: 'tb',
+    id: 'jolo',
     title: 'Jolocom',
     subtitle: 'Decentralized identity & access management',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
