@@ -3,7 +3,7 @@ import { App } from '@slack/bolt'
 import { Claim } from 'daf-core'
 import { formatDistanceToNow } from 'date-fns'
 import { getSlackUserIdentity } from '../helpers/users'
-import { agent } from '../../agent'
+import { agent } from '../../agent/agent'
 
 export const getProfileView = async (options: { initial_user?: string }, app: App, token: string): Promise<View> => { 
 

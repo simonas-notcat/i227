@@ -7,7 +7,7 @@ import * as queries from './queries/queries'
 import sharp from 'sharp'
 import fetch from 'node-fetch'
 import fileType from 'file-type'
-
+const fs = require('fs')
 config()
 const app = express()
 const port = 8081
@@ -53,6 +53,10 @@ app.get('/img/c/:id/:type', async (req, res) => {
   const { credentials } = await api.request(queries.getCredentialsById, { id })
   const credential = credentials[0]
 
+  const bgImg = fs.readFileSync('/home/simonas/dev/i227/web/public/kudos1.png')
+  const bgImgType = await fileType.fromBuffer(bgImg)
+  const bgImgBase64 = bgImg.toString('base64')
+
   // const issuerImgReq = await fetch(credential.issuer.picture)
   // const issuerImgBuffer = await issuerImgReq.buffer()
   // const issuerImgtype = await fileType.fromBuffer(issuerImgBuffer)
@@ -69,6 +73,8 @@ app.get('/img/c/:id/:type', async (req, res) => {
     // issuerImgbase64,
     subjectImgtype,
     subjectImgbase64,
+    bgImgBase64,
+    bgImgType
   })
 
   if (type === 'svg') {

@@ -1,7 +1,7 @@
 import { Claim, Identity } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App } from '@slack/bolt'
-import { agent } from '../agent'
+import { agent } from '../agent/agent'
 
 export interface Auth0UserInfo{
   sub: string,

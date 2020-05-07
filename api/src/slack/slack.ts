@@ -11,7 +11,7 @@ import * as queries from '../queries/queries'
 
 config()
 
-import { agent } from '../agent'
+import { agent } from '../agent/agent'
 
 
 const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })

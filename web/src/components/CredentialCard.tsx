@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)'
+    backgroundColor: 'rgba(0,0,0,0.8)'
   }
 }));
 
