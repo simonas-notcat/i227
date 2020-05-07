@@ -1,11 +1,12 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Typography, makeStyles, Card, CardContent, CardActions, IconButton } from "@material-ui/core";
+import { Typography, makeStyles, Card, CardContent, CardActions, IconButton, CardHeader, CardMedia } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
 import ExposurePlus1Icon from '@material-ui/icons/ExposurePlus1';
 import ShareIcon from '@material-ui/icons/Share';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -13,6 +14,7 @@ import { getCredential, CredentialData, CredentialVariables } from '../queries/c
 import CredentialFAB from "../components/CredentialFAB";
 import { formatDistanceToNow } from "date-fns";
 import { NavLink } from 'react-router-dom'
+import CardActionAreaLink from "../components/Nav/CardActionAreaLink";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,9 +37,15 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 0 auto',
   },
   cover: {
-    width: 100,
-    height: 100,
-    marginTop: theme.spacing(2)
+    [theme.breakpoints.down('sm')]: {
+      width: 100,
+      height: 100,
+    },
+    width: 150,
+    height: 150,
+    // marginTop: theme.spacing(2)
+    alignSelf: 'center',
+    margin: theme.spacing(2)
   },
   smallAvatar: {
     width: 28,
@@ -47,7 +55,22 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-between'
+    // justifyContent: 'space-between'
+  },
+  claim: {
+
+    display: 'flex',
+    flexDirection: 'column',
+    // alignItems: 'center'
+  },
+  claimTextBox: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    flex: 1,
+    // flexGrow: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.8)'
   }
 }));
 
@@ -67,52 +90,50 @@ function Credential(props: any) {
   return (
     <Container maxWidth="sm">
       {loading && <LinearProgress />}
-      {credential !== undefined && <Card elevation={3}>
-      <CardContent>
-        <div className={classes.root}>
-          <div className={classes.details}>
-            {credential.claims.map(claim => (<CardContent className={classes.content} key={claim.hash}>
-              {/* <Typography gutterBottom variant="h6" component="h2">
-                {claim.type}
-              </Typography> */}
-              <Typography gutterBottom variant="h5" component="h2">
+      {credential !== undefined && <Card elevation={2}>
+      <CardActionAreaLink to={'/identity/' + credential.issuer.did}>
+        <CardHeader
+          avatar={
+            <Avatar src={credential.issuer.picture} />
+          }
+
+          title={`${credential.issuer.name}`}
+          subheader={`${credential.issuer.nickname} | ${formatDistanceToNow(Date.parse(credential.issuanceDate))} ago`}
+        />
+      </CardActionAreaLink>
+      <CardActionAreaLink to={'/identity/' + credential.subject.did}>
+        {credential.claims.map(claim => (
+          <CardMedia 
+            key={claim.hash}
+            className={classes.claim}
+            image={'/kudos1.png'}
+            >
+            <Avatar
+              variant="circle" 
+              className={classes.cover}
+              src={credential.subject.picture}
+            />
+            <div className={classes.claimTextBox}>
+              <Typography variant="h5">
                 {claim.value}
               </Typography>
-              <Typography component="p">{credential.subject.name}</Typography>
-            </CardContent>))}
+              <Typography variant="h6">{credential.subject.name}</Typography>
+            </div>
+          </CardMedia>
+        ))}
             
             
-          </div>
-          <NavLink to={'/identity/'+credential.subject.did}>
-
-          <Avatar
-            variant="rounded" 
-            className={classes.cover}
-            // component="img"
-            src={credential.subject.picture}
-            />
-            </NavLink>
-        </div>
-      </CardContent>
+      </CardActionAreaLink>
       <CardActions className={classes.actions} >
-        <div className={classes.row}>
-          <NavLink to={'/identity/'+credential.issuer.did}>
-          <Avatar
-            variant="rounded" 
-            src={credential.issuer.picture}
-            className={classes.smallAvatar}
-            />
-          </NavLink>
-          <Typography variant="caption">{credential.issuer.nickname} | {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
-        </div>
-        <div>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
         <IconButton aria-label="add to favorites">
           <ExposurePlus1Icon />
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        </div>
       </CardActions>
     </Card>}
       <CredentialFAB subject={credential?.subject.did} />
