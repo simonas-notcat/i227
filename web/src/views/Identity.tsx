@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, ListItemAvatar, ListItemText, ListItem } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
@@ -14,22 +14,35 @@ import CredentialFAB from "../components/CredentialFAB";
 function Identity(props: any) {
   const { did } = useParams<{ did: string }>()
 
-  const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, { variables: { did, take: 5 }});
+  const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, { 
+    variables: { did, take: 5 },
+    fetchPolicy: 'cache-and-network'
+  });
 
-  if (loading) return <LinearProgress />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Container maxWidth="sm">
+      {loading && <LinearProgress />}
       <Grid container spacing={4} justify="center">
         <Grid item xs={12}>
+          <ListItem>
 
-        <Avatar src={data?.identity.picture} />
-        <Typography variant='h4'>{data?.identity.name}</Typography>
-        <Typography variant='h5'>{data?.identity.nickname}</Typography>
+            <ListItemAvatar>
+              <Avatar
+              src={data?.identity.picture}
+              />
+            </ListItemAvatar>
+            <ListItemText 
+              primary={data?.identity.name} 
+              secondary={data?.identity?.nickname} 
+              />
+            </ListItem>
         </Grid>
 
-        <Typography component='h1'>Received ({data?.receivedCredentialsCount})</Typography>
+        <Grid item xs={12}>
+          <Typography variant='h6'>Received ({data?.receivedCredentialsCount})</Typography>
+        </Grid>
 
         {data?.receivedCredentials.map(credential => (
           <Grid item key={credential.id} xs={12}>
@@ -37,8 +50,9 @@ function Identity(props: any) {
           </Grid>
         ))}
 
-        <Typography component='h1'>Sent( {data?.issuedCredentialsCount})</Typography>
-
+        <Grid item xs={12}>
+          <Typography variant='h6'>Sent( {data?.issuedCredentialsCount})</Typography>
+        </Grid>
         {data?.issuedCredentials.map(credential => (
           <Grid item key={credential.id} xs={12}>
             <CredentialCard credential={credential} />

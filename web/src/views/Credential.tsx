@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Grid, Typography, makeStyles, Card, CardActionArea, CardContent, CardActions, IconButton } from "@material-ui/core";
+import { Typography, makeStyles, Card, CardContent, CardActions, IconButton } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
@@ -12,7 +12,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
 import CredentialFAB from "../components/CredentialFAB";
 import { formatDistanceToNow } from "date-fns";
-import { NavLink, NavLinkProps } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,15 +55,18 @@ function Credential(props: any) {
   const { id } = useParams<{ id: string }>()
   const classes = useStyles();
 
-  const { loading, error, data } = useQuery<CredentialData, CredentialVariables>(getCredential, { variables: { id }});
+  const { loading, error, data } = useQuery<CredentialData, CredentialVariables>(getCredential, { 
+    variables: { id },
+    fetchPolicy: 'cache-and-network'
+  });
 
-  if (loading) return <LinearProgress />;
   if (error) return <p>Error :(</p>;
 
   const credential = data?.credentials[0]
 
   return (
     <Container maxWidth="sm">
+      {loading && <LinearProgress />}
       {credential !== undefined && <Card elevation={3}>
       <CardContent>
         <div className={classes.root}>

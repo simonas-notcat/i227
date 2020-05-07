@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
+import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -29,7 +30,9 @@ import Home from './views/Home'
 import Identities from './views/Identities'
 import Identity from './views/Identity'
 import Credential from './views/Credential'
-import ListItemLink from './components/ListItemLink'
+import Marketplace from './views/Marketplace'
+import Service from './views/Service'
+import ListItemLink from './components/Nav/ListItemLink'
 import AuthBox from './components/AuthBox'
 
 const drawerWidth = 240;
@@ -98,6 +101,10 @@ export default function ResponsiveDrawer() {
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary={'Home'} />
         </ListItemLink>
+        <ListItemLink to={'/marketplace'}>
+          <ListItemIcon><LocalActivityIcon /></ListItemIcon>
+          <ListItemText primary={'Marketplace'} />
+        </ListItemLink>
         <ListItemLink to={'/identities'}>
           <ListItemIcon><ContactsIcon /></ListItemIcon>
           <ListItemText primary={'Identities'} />
@@ -117,7 +124,7 @@ export default function ResponsiveDrawer() {
     <BrowserRouter>
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar} color={'inherit'}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -129,7 +136,7 @@ export default function ResponsiveDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            i227
+            
           </Typography>
         </Toolbar>
       </AppBar>
@@ -172,6 +179,8 @@ export default function ResponsiveDrawer() {
           <Route path={'/identities'} component={Identities} />
           <Route path={'/identity/:did'} component={Identity} />
           <Route path={'/c/:id'} component={Credential} />
+          <Route path={'/marketplace'} component={Marketplace} />
+          <Route path={'/s/:id'} component={Service} />
         </Switch>
       </main>
     </div>

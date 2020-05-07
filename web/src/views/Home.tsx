@@ -8,13 +8,13 @@ import { getLatestKudos, LatestKudosData } from '../queries/latestKudos'
 import CredentialFAB from "../components/CredentialFAB";
 
 function Home(props: any) {
-  const { loading, error, data } = useQuery<LatestKudosData>(getLatestKudos);
+  const { loading, error, data } = useQuery<LatestKudosData>(getLatestKudos, { fetchPolicy: 'cache-and-network'});
 
-  if (loading) return <LinearProgress />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Container maxWidth="sm">
+      {loading && <LinearProgress />}
       <Grid container spacing={2} justify="center">
         {data?.credentials.map(credential => (
           <Grid item key={credential.id} xs={12}>
