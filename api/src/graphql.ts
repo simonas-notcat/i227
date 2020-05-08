@@ -1,4 +1,6 @@
 import { config } from 'dotenv'
+config()
+
 import * as Daf from 'daf-core'
 import { W3cGql } from 'daf-w3c'
 import { SdrGql } from 'daf-selective-disclosure'
@@ -15,7 +17,7 @@ import { ActionTypes, ActionSignW3cVc } from 'daf-w3c'
 import shortId from 'shortid'
 
 
-config()
+
 
 const server = new ApolloServer({
   typeDefs: [
@@ -59,9 +61,9 @@ var corsOptions = {
 
 app.options('/sign', cors(corsOptions))
 app.post('/sign', cors(corsOptions), express.json(), checkJwt, async (req, res) => {
-
-  if (!req.body.subject || !req.body.kudos) {
-    res.send({error: 'Subject and kudos are required'})
+  const { credentialSubject, type } = req.body
+  if (!credentialSubject?.id || !type) {
+    res.send({error: 'credentialSubject.id and type are required'})
   } else {
     const request = await fetch(process.env.AUTH0_DOMAIN + 'userinfo', {
       headers: { Authorization: req.headers.authorization }
@@ -76,12 +78,9 @@ app.post('/sign', cors(corsOptions), express.json(), checkJwt, async (req, res) 
       data: {
         id: shortId.generate(),
         '@context': ['https://www.w3.org/2018/credentials/v1'],
-        type: ['VerifiableCredential', 'Kudos'],
+        type: ['VerifiableCredential', type],
         issuer: issuer.did,
-        credentialSubject: {
-          id: req.body.subject,
-          kudos: req.body.kudos
-        }
+        credentialSubject
       }
     } as ActionSignW3cVc)
     

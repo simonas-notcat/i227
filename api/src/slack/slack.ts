@@ -62,7 +62,7 @@ app.view('kudosForm', async(args) => {
     data: {
       id: shortId.generate(),
       '@context': ['https://www.w3.org/2018/credentials/v1'],
-      type: ['VerifiableCredential', 'Kudos'],
+      type: ['VerifiableCredential', 'Post'],
       issuer: issuer.did,
       credentialSubject: {
         id: subject.did,

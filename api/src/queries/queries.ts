@@ -123,7 +123,7 @@ export const getIdentity = `
     receivedCredentials: credentials(input: {
       where: [
         { column: subject, value: [$did]},
-        { column: type, value: "VerifiableCredential,Kudos"}
+        { column: type, value: "VerifiableCredential,Post"}
       ],
       order: [
         { column: issuanceDate, direction: DESC }
@@ -147,13 +147,13 @@ export const getIdentity = `
     receivedCredentialsCount: credentialsCount(input: {
       where: [
         { column: subject, value: [$did]},
-        { column: type, value: "VerifiableCredential,Kudos"}
+        { column: type, value: "VerifiableCredential,Post"}
       ]
     }) 
     issuedCredentials: credentials(input: {
       where: [
         { column: issuer, value: [$did]},
-        { column: type, value: "VerifiableCredential,Kudos"}
+        { column: type, value: "VerifiableCredential,Post"}
       ],
       order: [
         { column: issuanceDate, direction: DESC }
@@ -177,7 +177,7 @@ export const getIdentity = `
     issuedCredentialsCount: credentialsCount(input: {
       where: [
         { column: issuer, value: [$did]},
-        { column: type, value: "VerifiableCredential,Kudos"}
+        { column: type, value: "VerifiableCredential,Post"}
       ]
     }) 
   }

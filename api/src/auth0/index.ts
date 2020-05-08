@@ -40,7 +40,7 @@ export const getAuth0UserIdentity = async ( userInfo: Auth0UserInfo): Promise<Id
       save: true,
       data: {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
-        type: ['VerifiableCredential', 'Auth0User'],
+        type: ['VerifiableCredential', 'ExternalUser'],
         issuer: process.env.MAIN_DID,
         credentialSubject
       }
