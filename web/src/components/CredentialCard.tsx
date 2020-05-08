@@ -1,20 +1,10 @@
 import React from "react";
-import { Typography, CardHeader, CardMedia, Collapse, CardContent, GridList, GridListTile, Badge } from "@material-ui/core";
+import { Typography, CardHeader } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
-import CardActions from "@material-ui/core/CardActions";
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import { makeStyles } from '@material-ui/core/styles';
-import RepeatIcon from '@material-ui/icons/Repeat';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CredentialPostCard from './CredentialPostCard'
 import CredentialReactionCard from './CredentialReactionCard'
-import clsx from 'clsx';
-import { useAuth0 } from "../react-auth0-spa";
 
 import { formatDistanceToNow } from 'date-fns'
 import { Credential } from '../types'
@@ -23,18 +13,8 @@ interface Props {
   credential: Credential
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingRight: theme.spacing(2)
-  },
-
-}));
-
 function CredentialCard(props: Props) {
   const { credential } = props
-  const classes = useStyles();
 
   if (credential.type.includes('Post')) {
     return (<CredentialPostCard credential={credential} /> )
@@ -43,7 +23,6 @@ function CredentialCard(props: Props) {
   if (credential.type.includes('Reaction')) {
     return (<CredentialReactionCard credential={credential} /> )
   }
-
 
   return (
     <Card elevation={2}>

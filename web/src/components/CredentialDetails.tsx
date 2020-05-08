@@ -3,7 +3,7 @@ import { Typography, CardContent, Box } from "@material-ui/core";
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
-import RepeatIcon from '@material-ui/icons/Repeat';
+// import RepeatIcon from '@material-ui/icons/Repeat';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Credential } from '../types'
 import { useQuery } from '@apollo/react-hooks';
@@ -37,6 +37,7 @@ function CredentialDetails(props: Props) {
     fetchPolicy: 'cache-and-network'
   });
 
+  if (error) return <p>Error :(</p>;
 
   return (
     <CardContent>

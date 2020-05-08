@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, CardHeader, CardMedia, Collapse, CardContent, GridList, GridListTile, Badge } from "@material-ui/core";
+import { Typography, CardHeader, Collapse, CardContent, GridList, GridListTile } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
-import RepeatIcon from '@material-ui/icons/Repeat';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CredentialDetails from './CredentialDetails'

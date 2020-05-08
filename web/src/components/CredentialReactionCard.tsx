@@ -1,19 +1,15 @@
 import React from "react";
-import { Typography, CardContent, Box, CardHeader } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
-import RepeatIcon from '@material-ui/icons/Repeat';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Credential } from '../types'
 import { useQuery } from '@apollo/react-hooks';
 import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
-import Avatar from '@material-ui/core/Avatar';
 import CredentialPostCard from './CredentialPostCard'
-import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import { formatDistanceToNow } from "date-fns";
-import { NavLink, NavLinkProps } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 
 interface Props {
@@ -51,6 +47,7 @@ function CredentialReactionCard(props: Props) {
     fetchPolicy: 'cache-and-network'
   });
 
+  if (error) return <p>Error :(</p>;
 
   return (
     <Box >
