@@ -57,8 +57,11 @@ function CredentialDialog(props: Props) {
       const token = await getTokenSilently();
 
       const data = {
-        subject,
-        kudos
+        type: 'Kudos',
+        credentialSubject: {
+          id: subject,
+          kudos
+        }
       }
 
       const response = await fetch(`https://i227.dev/sign`, {

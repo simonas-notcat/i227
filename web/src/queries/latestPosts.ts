@@ -2,22 +2,27 @@ import { gql } from 'apollo-boost';
 import { Credential } from '../types'
 import { profile } from './fragments'
 
-export interface LatestKudosData {
+export interface LatestPostsData {
   count: number
   credentials: Credential[]
 }
 
-export const getLatestKudos = gql`
+export interface LatestPostsVariables {
+  take: number
+  skip: number
+}
+
+export const getLatestPosts = gql`
   ${profile}
-  query getLatestKudos($take: Int, $skip: Int) {
+  query getLatestPosts($take: Int, $skip: Int) {
     count: credentialsCount(input: {
       where: [
-        { column: type, value: "VerifiableCredential,Kudos"}
+        { column: type, value: "VerifiableCredential,ExternalUser", not: true}
       ],
     })
     credentials(input: {
       where: [
-        { column: type, value: "VerifiableCredential,Kudos"}
+        { column: type, value: "VerifiableCredential,ExternalUser", not: true}
       ],
       order: [
         { column: issuanceDate, direction: DESC }

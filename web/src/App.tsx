@@ -106,7 +106,7 @@ export default function ResponsiveDrawer() {
           selected={homeMatch !== null}
           >
           <ListItemIcon><HomeIcon /></ListItemIcon>
-          <ListItemText primary={'Home'} />
+          <ListItemText primary={'Activity feed'} />
         </ListItemLink>
         <ListItemLink 
           to={'/marketplace'}

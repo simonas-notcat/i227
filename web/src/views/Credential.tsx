@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
 import CredentialFAB from "../components/CredentialFAB";
+import CredentialCard from "../components/CredentialCard";
 import { formatDistanceToNow } from "date-fns";
 import CardActionAreaLink from "../components/Nav/CardActionAreaLink";
 
@@ -89,52 +90,7 @@ function Credential(props: any) {
   return (
     <Container maxWidth="sm">
       {loading && <LinearProgress />}
-      {credential !== undefined && <Card elevation={2}>
-      <CardActionAreaLink to={'/identity/' + credential.issuer.did}>
-        <CardHeader
-          avatar={
-            <Avatar src={credential.issuer.picture} />
-          }
-
-          title={`${credential.issuer.name}`}
-          subheader={`${credential.issuer.nickname} | ${formatDistanceToNow(Date.parse(credential.issuanceDate))} ago`}
-        />
-      </CardActionAreaLink>
-      <CardActionAreaLink to={'/identity/' + credential.subject.did}>
-        {credential.claims.map(claim => (
-          <CardMedia 
-            key={claim.hash}
-            className={classes.claim}
-            image={'/kudos1.png'}
-            >
-            <Avatar
-              variant="circle" 
-              className={classes.cover}
-              src={credential.subject.picture}
-            />
-            <div className={classes.claimTextBox}>
-              <Typography variant="h5">
-                {claim.value}
-              </Typography>
-              <Typography variant="h6">{credential.subject.name}</Typography>
-            </div>
-          </CardMedia>
-        ))}
-            
-            
-      </CardActionAreaLink>
-      <CardActions className={classes.actions} >
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="add to favorites">
-          <ExposurePlus1Icon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-      </CardActions>
-    </Card>}
+      {credential !== undefined && <CredentialCard credential={credential} />}
       <CredentialFAB subject={credential?.subject.did} />
     </Container>
   );

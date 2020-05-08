@@ -28,7 +28,7 @@ query getIdentity($did: String!, $take: Int!) {
   receivedCredentials: credentials(input: {
     where: [
       { column: subject, value: [$did]},
-      { column: type, value: "VerifiableCredential,Kudos"}
+      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
     ],
     order: [
       { column: issuanceDate, direction: DESC }
@@ -38,6 +38,7 @@ query getIdentity($did: String!, $take: Int!) {
     id
     hash
     issuanceDate
+    type
     issuer { ...profile }
     subject { ...profile }
     claims {
@@ -49,13 +50,13 @@ query getIdentity($did: String!, $take: Int!) {
   receivedCredentialsCount: credentialsCount(input: {
     where: [
       { column: subject, value: [$did]},
-      { column: type, value: "VerifiableCredential,Kudos"}
+      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
     ]
   }) 
   issuedCredentials: credentials(input: {
     where: [
       { column: issuer, value: [$did]},
-      { column: type, value: "VerifiableCredential,Kudos"}
+      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
     ],
     order: [
       { column: issuanceDate, direction: DESC }
@@ -67,6 +68,7 @@ query getIdentity($did: String!, $take: Int!) {
     issuanceDate
     issuer { ...profile }
     subject { ...profile }
+    type
     claims {
       hash
       type
@@ -76,7 +78,7 @@ query getIdentity($did: String!, $take: Int!) {
   issuedCredentialsCount: credentialsCount(input: {
     where: [
       { column: issuer, value: [$did]},
-      { column: type, value: "VerifiableCredential,Kudos"}
+      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
     ]
   }) 
 }

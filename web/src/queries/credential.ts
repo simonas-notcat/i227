@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost';
-import { Credential } from '../types'
+import { Credential, Claim } from '../types'
 import { profile } from './fragments'
 
 export interface CredentialData {
@@ -35,6 +35,49 @@ export const getCredential = gql`
     }
   }
 `
+
+
+export interface CredentialDetailsData {
+  likes: Claim[]
+  likesCount: number
+  dislikes: Claim[]
+  dislikesCount: number
+}
+
+export const getCredentialDetails = gql`
+  ${profile}
+  query getCredentialDetails($id: String!) {
+    likes: claims(input: {
+      where: [
+        { column: type, value: ["like"] },
+        { column: value, value: [$id] },
+      ]
+    }) {
+      issuer { ...profile }
+    }
+    likesCount: claimsCount(input: {
+      where: [
+        { column: type, value: ["like"] },
+        { column: value, value: [$id] },
+      ]
+    })
+    dislikes: claims(input: {
+      where: [
+        { column: type, value: ["dislike"] },
+        { column: value, value: [$id] },
+      ]
+    }) {
+      issuer { ...profile }
+    }
+    dislikesCount: claimsCount(input: {
+      where: [
+        { column: type, value: ["dislike"] },
+        { column: value, value: [$id] },
+      ]
+    })    
+  }
+`
+
 
 
 

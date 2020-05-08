@@ -4,11 +4,17 @@ import { Grid } from "@material-ui/core";
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CredentialCard from '../components/CredentialCard'
-import { getLatestKudos, LatestKudosData } from '../queries/latestKudos'
+import { getLatestPosts, LatestPostsData, LatestPostsVariables } from '../queries/latestPosts'
 import CredentialFAB from "../components/CredentialFAB";
 
 function Home(props: any) {
-  const { loading, error, data } = useQuery<LatestKudosData>(getLatestKudos, { fetchPolicy: 'cache-and-network'});
+  const { loading, error, data } = useQuery<LatestPostsData, LatestPostsVariables>(getLatestPosts, { 
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      take: 40,
+      skip: 0
+    }
+  });
 
   if (error) return <p>Error :(</p>;
 
