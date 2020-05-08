@@ -57,7 +57,7 @@ function CredentialDialog(props: Props) {
       const token = await getTokenSilently();
 
       const data = {
-        type: 'Kudos',
+        type: 'Post',
         credentialSubject: {
           id: subject,
           kudos
