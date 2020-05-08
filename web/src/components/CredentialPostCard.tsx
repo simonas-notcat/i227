@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, CardHeader, Collapse, CardContent, GridList, GridListTile } from "@material-ui/core";
+import { Typography, CardHeader, Collapse, CardContent, GridList, GridListTile, Tooltip } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -96,8 +96,22 @@ function CredentialPostCard(props: Props) {
   const { credential } = props
   const classes = useStyles();
   const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
+  const [openShareTooltip, setOpenShareTooltip] = React.useState(false);
 
   const [expanded, setExpanded] = React.useState(false);
+
+  const handleShare = async () => {
+    const url = 'https://i227.dev/c/'+credential.id
+    try {
+      //@ts-ignore
+      await navigator.share({ title: "Credential", url });
+    } catch (e) {
+      navigator.clipboard.writeText(url)
+      setOpenShareTooltip(true)
+      setTimeout(()=> setOpenShareTooltip(false), 2000)
+
+    }
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -136,6 +150,8 @@ function CredentialPostCard(props: Props) {
       console.error(error);
     }
   };
+
+
 
   const tileData = [
     { 
@@ -187,9 +203,11 @@ function CredentialPostCard(props: Props) {
         {/* <IconButton aria-label="repost">
           <RepeatIcon />
         </IconButton> */}
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        <Tooltip open={openShareTooltip} title="Link copied">
+          <IconButton aria-label="share" onClick={handleShare}>
+            <ShareIcon />
+          </IconButton>
+        </Tooltip>
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
