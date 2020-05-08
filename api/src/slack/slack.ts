@@ -1,4 +1,5 @@
 import { config } from 'dotenv'
+config()
 import { Credential } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App, LogLevel } from '@slack/bolt'
@@ -9,7 +10,7 @@ import { getSlackUserIdentity } from './helpers/users'
 import { GraphQLClient } from 'graphql-request'
 import * as queries from '../queries/queries'
 
-config()
+
 
 import { agent } from '../agent/agent'
 
