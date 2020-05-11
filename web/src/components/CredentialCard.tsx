@@ -6,6 +6,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CredentialPostCard from './CredentialPostCard'
 import CredentialReactionCard from './CredentialReactionCard'
 import CredentialProfileCard from './CredentialProfileCard'
+import CredentialServiceCard from './CredentialServiceCard'
 
 import { formatDistanceToNow } from 'date-fns'
 import { Credential } from '../types'
@@ -27,6 +28,10 @@ function CredentialCard(props: Props) {
 
   if (credential.type.includes('Reaction')) {
     return (<CredentialReactionCard credential={credential} /> )
+  }
+
+  if (credential.type.includes('Service')) {
+    return (<CredentialServiceCard credential={credential} /> )
   }
 
   return (

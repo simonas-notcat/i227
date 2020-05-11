@@ -13,6 +13,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { getIdentity, IdentityData, IdentityVariables } from '../queries/identity'
 import CredentialFAB from "../components/CredentialFAB";
 import ProfileDialog from "../components/ProfileDialog"
+import ServiceDialog from "../components/ServiceDialog"
 import AppBar from "../components/Nav/AppBar";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,16 +58,26 @@ function Identity(props: any) {
   };
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
-  const [openModal, setOpenModal] = React.useState(false);
+  const [openProfileModal, setOpenProfileModal] = React.useState(false);
+  const [openServiceModal, setOpenServiceModal] = React.useState(false);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const handleOpenProfileModal = () => {
+    setOpenProfileModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseProfileModal = () => {
+    setOpenProfileModal(false);
   };
 
+  const handleOpenServiceModal = () => {
+    setOpenServiceModal(true);
+  };
+
+  const handleCloseServiceModal = () => {
+    setOpenServiceModal(false);
+  };
+
+  
   let type = [
     'VerifiableCredential,Post',
     'VerifiableCredential,Reaction',
@@ -145,8 +156,11 @@ function Identity(props: any) {
               <Box className={classes.collapse}>
 
                 <Typography variant='subtitle2' color='textSecondary'>{data?.identity.did}</Typography>
-                <Button size="small" color="primary" onClick={handleOpenModal}>
+                <Button size="small" color="primary" onClick={handleOpenProfileModal}>
                   Profile
+                </Button>
+                <Button size="small" color="primary" onClick={handleOpenServiceModal}>
+                  Service
                 </Button>
               </Box>
             </Collapse>
@@ -176,8 +190,14 @@ function Identity(props: any) {
       <CredentialFAB subject={data?.identity.did} />
       {data?.identity && <ProfileDialog
         fullScreen={fullScreen}
-        open={openModal}
-        onClose={handleCloseModal}
+        open={openProfileModal}
+        onClose={handleCloseProfileModal}
+        subject={data?.identity.did}
+      />}
+      {data?.identity && <ServiceDialog
+        fullScreen={fullScreen}
+        open={openServiceModal}
+        onClose={handleCloseServiceModal}
         subject={data?.identity.did}
       />}
     </Container>
