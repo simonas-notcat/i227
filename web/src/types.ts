@@ -27,6 +27,8 @@ export interface Identity {
   name: string,
   nickname: string,
   picture: string,
+  url?: string
+  email?: string
 }
 
 export interface Service {
@@ -38,3 +40,4 @@ export interface Service {
   picture: string
   available: boolean
 }
+

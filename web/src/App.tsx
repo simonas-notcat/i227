@@ -8,10 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ContactsIcon from '@material-ui/icons/Contacts';
+import PeopleIcon from '@material-ui/icons/People';
 import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
-import LocalActivityIcon from '@material-ui/icons/LocalActivity';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import StoreIcon from '@material-ui/icons/Store';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -105,22 +105,22 @@ export default function ResponsiveDrawer() {
         <ListItemLink to={'/home'} 
           selected={homeMatch !== null}
           >
-          <ListItemIcon><HomeIcon /></ListItemIcon>
-          <ListItemText primary={'Activity feed'} />
+          <ListItemIcon><DashboardIcon /></ListItemIcon>
+          <ListItemText primary={'Activity'} />
         </ListItemLink>
         <ListItemLink 
           to={'/marketplace'}
           selected={marketPlaceMatch !== null || serviceMatch !== null}
         >
-          <ListItemIcon><LocalActivityIcon /></ListItemIcon>
+          <ListItemIcon><StoreIcon /></ListItemIcon>
           <ListItemText primary={'Marketplace'} />
         </ListItemLink>
         <ListItemLink
           to={'/identities'}
           selected={identitiesMatch !== null || identityMatch !== null}
           >
-          <ListItemIcon><ContactsIcon /></ListItemIcon>
-          <ListItemText primary={'Identities'} />
+          <ListItemIcon><PeopleIcon /></ListItemIcon>
+          <ListItemText primary={'Connections'} />
         </ListItemLink>
 
       </List>

@@ -6,6 +6,7 @@ interface ShortClaim {
   type: string
   value: string
 }
+
 export interface IdentityData {
   identity: Identity
   receivedCredentials: Credential[]
@@ -24,6 +25,8 @@ ${profile}
 query getIdentity($did: String!, $take: Int!) {
   identity(did: $did) {
     ...profile
+    url: latestClaimValue(type: "url")
+    email: latestClaimValue(type: "email")
   }
   receivedCredentials: credentials(input: {
     where: [

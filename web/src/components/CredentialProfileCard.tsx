@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CredentialPostCard(props: Props) {
+function CredentialProfileCard(props: Props) {
   const { credential } = props
   const classes = useStyles();
   const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
@@ -142,20 +142,6 @@ function CredentialPostCard(props: Props) {
     }
   };
 
-
-
-  const tileData = [
-    { 
-      img: credential.subject.picture,
-      title: credential.subject.name,
-      cols: 1,
-    },
-    { 
-      img: '/kudos1.png',
-      title: 'Kudos',
-      cols: 1,
-    },
-  ]
   return (
     <Card elevation={2}>
       <CardActionAreaLink to={'/identity/' + credential.issuer.did}>
@@ -168,19 +154,13 @@ function CredentialPostCard(props: Props) {
           subheader={`${credential.issuer.nickname} | ${formatDistanceToNow(Date.parse(credential.issuanceDate))} ago`}
         />
       </CardActionAreaLink>
-      <CardActionAreaLink to={'/c/' + credential.id}>
-        <GridList cellHeight={160} className={classes.gridList} cols={2}>
-          {tileData.map((tile) => (
-            <GridListTile key={tile.img} cols={tile.cols || 1} >
-              <img src={tile.img} alt={tile.title} />
-            </GridListTile>
-          ))}
-        </GridList>
-        
-            
+      <CardActionAreaLink to={'/identity/' + credential.subject.did}>
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-          {credential.issuer.name} gave <strong>{credential.claims[0].value}</strong> kudos to {credential.subject.name}
+          {credential.issuer.name} claims about {credential.subject.name}
+          {credential.claims.map(claim => (
+            <Typography paragraph key={claim.type}>{claim.type}: <strong>{claim.value}</strong></Typography>
+          ))}
           </Typography>
         </CardContent>    
       </CardActionAreaLink>
@@ -205,4 +185,4 @@ function CredentialPostCard(props: Props) {
   );
 }
 
-export default CredentialPostCard;
+export default CredentialProfileCard;

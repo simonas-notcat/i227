@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme) => ({
 function CredentialDialog(props: Props) {
   const classes = useStyles()
   const history = useHistory()
-  const { getTokenSilently } = useAuth0()
-  const [kudos, setKudos] = useState<String|null>(null)
-  const [subject, setSubject] = useState<String|undefined>(props.subject)
+  const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
+  const [kudos, setKudos] = useState<string|null>(null)
+  const [subject, setSubject] = useState<string|undefined>(props.subject)
 
   const { loading, error, data } = useQuery<IdentitiesData>(getIdentities);
 
@@ -54,7 +54,7 @@ function CredentialDialog(props: Props) {
 
   const callApi = async () => {
     try {
-      const token = await getTokenSilently();
+      const token = isAuthenticated ? await getTokenSilently() : await getTokenWithPopup();
 
       const data = {
         type: 'Post',
