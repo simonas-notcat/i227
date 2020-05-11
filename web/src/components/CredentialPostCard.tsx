@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, CardHeader, CardContent, GridList, GridListTile, Tooltip } from "@material-ui/core";
+import { Typography, CardHeader, CardContent, GridList, GridListTile, Tooltip, Snackbar } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -10,7 +10,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
 import { useAuth0 } from "../react-auth0-spa";
-
+import Alert from '@material-ui/lab/Alert';
 import { formatDistanceToNow } from 'date-fns'
 import { Credential } from '../types'
 
@@ -108,6 +108,8 @@ function CredentialPostCard(props: Props) {
     }
   }
 
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+
   const handleReaction = async (reaction: string) => {
     try {
       const token = isAuthenticated ? await getTokenSilently() : await getTokenWithPopup();
@@ -121,7 +123,7 @@ function CredentialPostCard(props: Props) {
       //@ts-ignore
       data.credentialSubject[reaction]=credential.id
 
-      const response = await fetch(`https://i227.dev/sign`, {
+      await fetch(`https://i227.dev/sign`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -133,7 +135,8 @@ function CredentialPostCard(props: Props) {
         body: JSON.stringify(data)
       });
 
-
+      setOpenSnackbar(true)
+      
     } catch (error) {
       console.error(error);
     }
@@ -198,6 +201,11 @@ function CredentialPostCard(props: Props) {
         </Tooltip>
         
       </CardActions>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={()=>setOpenSnackbar(false)}>
+        <Alert onClose={()=>setOpenSnackbar(false)} severity="success" elevation={6} variant="filled" >
+          Success!
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }

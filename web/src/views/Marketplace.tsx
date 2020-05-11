@@ -1,10 +1,11 @@
 import React from "react";
-import { ListItemAvatar, ListItemText, Grid, Card, Typography } from "@material-ui/core";
+import { ListItemAvatar, ListItemText, Grid, Card, Tabs, Tab } from "@material-ui/core";
 import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import ListItemLink from "../components/Nav/ListItemLink";
 import { services } from '../utils/services'
 import { Service } from "../types";
+import AppBar from "../components/Nav/AppBar";
 
 interface ServiceBoxProps {
   service: Service
@@ -32,18 +33,29 @@ function ServiceBox(props: ServiceBoxProps) {
 
 function Marketplace(props: any) {
 
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: any, newValue: any) => {
+    setValue(newValue);
+  };
+
+
   return (
     <Container maxWidth="md">
-      <Typography variant="h6" >Available</Typography>
-      <Grid container spacing={2} justify="center" >
-        {services.filter(s => s.available).map(service => (
-          <ServiceBox key={service.id} service={service} />
-        ))}
-      </Grid>
+      <AppBar title='Marketplace'>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label="Available" />
+          <Tab label="Coming soon" />
+        </Tabs>
+      </AppBar>
 
-      <Typography variant="h6" >Coming soon</Typography>
-      <Grid container spacing={2} justify="center">
-        {services.filter(s => !s.available).map(service => (
+      <Grid container spacing={2} justify="center" >
+        {services.filter(s => s.available === (value === 0)).map(service => (
           <ServiceBox key={service.id} service={service} />
         ))}
       </Grid>

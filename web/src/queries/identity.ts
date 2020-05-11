@@ -18,11 +18,12 @@ export interface IdentityData {
 export interface IdentityVariables {
   did: string
   take: number
+  type: string[]
 }
 
 export const getIdentity = gql`
 ${profile}
-query getIdentity($did: String!, $take: Int!) {
+query getIdentity($did: String!, $type: [String]!, $take: Int!) {
   identity(did: $did) {
     ...profile
     url: latestClaimValue(type: "url")
@@ -31,7 +32,7 @@ query getIdentity($did: String!, $take: Int!) {
   receivedCredentials: credentials(input: {
     where: [
       { column: subject, value: [$did]},
-      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
+      { column: type, value: $type}
     ],
     order: [
       { column: issuanceDate, direction: DESC }
@@ -53,13 +54,13 @@ query getIdentity($did: String!, $take: Int!) {
   receivedCredentialsCount: credentialsCount(input: {
     where: [
       { column: subject, value: [$did]},
-      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
+      { column: type, value: $type}
     ]
   }) 
   issuedCredentials: credentials(input: {
     where: [
       { column: issuer, value: [$did]},
-      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
+      { column: type, value: $type}
     ],
     order: [
       { column: issuanceDate, direction: DESC }
@@ -81,7 +82,7 @@ query getIdentity($did: String!, $take: Int!) {
   issuedCredentialsCount: credentialsCount(input: {
     where: [
       { column: issuer, value: [$did]},
-      { column: type, value: "VerifiableCredential,ExternalUser", not: true}
+      { column: type, value: $type}
     ]
   }) 
 }

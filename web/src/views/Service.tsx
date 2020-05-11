@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import { services } from '../utils/services'
 import { useParams } from "react-router-dom";
+import AppBar from "../components/Nav/AppBar";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -20,6 +21,7 @@ function Service(props: any) {
 
   return (
     <Container maxWidth="md">
+      <AppBar title={service.title} />
       <Grid container spacing={2} justify="center">
         <Grid item xs={12} sm={3}>
           <Avatar

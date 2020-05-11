@@ -6,6 +6,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
 import CredentialFAB from "../components/CredentialFAB";
 import CredentialCard from "../components/CredentialCard";
+import AppBar from "../components/Nav/AppBar";
 
 function Credential(props: any) {
   const { id } = useParams<{ id: string }>()
@@ -21,6 +22,7 @@ function Credential(props: any) {
 
   return (
     <Container maxWidth="sm">
+      <AppBar/>
       {loading && <LinearProgress />}
       {credential !== undefined && <CredentialCard credential={credential} />}
       <CredentialFAB subject={credential?.subject.did} />

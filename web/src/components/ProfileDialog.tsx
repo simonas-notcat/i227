@@ -48,7 +48,7 @@ function ProfileDialog(props: Props) {
   const [email, setEmail] = useState<string|undefined>('')
   const [url, setUrl] = useState<string|undefined>('')
 
-  const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, {variables: {did: props.subject, take: 0}});
+  const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, {variables: {did: props.subject, take: 0, type: []}});
   useEffect(() => {
     if(data) {
       setName(data.identity.name)

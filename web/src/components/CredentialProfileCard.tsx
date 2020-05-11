@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, CardHeader, CardContent, Tooltip } from "@material-ui/core";
+import { Typography, CardHeader, CardContent, Tooltip, Grid, Snackbar } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -7,9 +7,9 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import { makeStyles } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
 import { useAuth0 } from "../react-auth0-spa";
+import Alert from '@material-ui/lab/Alert';
 
 import { formatDistanceToNow } from 'date-fns'
 import { Credential } from '../types'
@@ -18,82 +18,11 @@ interface Props {
   credential: Credential
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingRight: theme.spacing(2)
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    color: theme.palette.text.secondary
-  },
-  content: {
-    flex: '1 0 auto',
-  },
-  cover: {
-    [theme.breakpoints.down('sm')]: {
-      width: 100,
-      height: 100,
-    },
-    width: 150,
-    height: 150,
-    // marginTop: theme.spacing(2)
-    alignSelf: 'center',
-    margin: theme.spacing(2)
-  },
-  smallAvatar: {
-    width: 28,
-    height: 28,
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1)
-  },
-  actions: {
-    display: 'flex',
-    // justifyContent: 'space-between'
-  },
-  claim: {
-
-    display: 'flex',
-    flexDirection: 'column',
-    // alignItems: 'center'
-  },
-  claimTextBox: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    flex: 1,
-    // flexGrow: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.8)'
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  gridList: {
-    // width: 500,
-    // height: 450,
-  },
-}));
-
 function CredentialProfileCard(props: Props) {
   const { credential } = props
-  const classes = useStyles();
   const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
   const [openShareTooltip, setOpenShareTooltip] = React.useState(false);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const handleShare = async () => {
     const url = 'https://i227.dev/c/'+credential.id
@@ -121,7 +50,7 @@ function CredentialProfileCard(props: Props) {
       //@ts-ignore
       data.credentialSubject[reaction]=credential.id
 
-      const response = await fetch(`https://i227.dev/sign`, {
+      await fetch(`https://i227.dev/sign`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -132,6 +61,7 @@ function CredentialProfileCard(props: Props) {
         mode: 'cors',
         body: JSON.stringify(data)
       });
+      setOpenSnackbar(true)
 
 
     } catch (error) {
@@ -153,12 +83,19 @@ function CredentialProfileCard(props: Props) {
       </CardActionAreaLink>
       <CardActionAreaLink to={'/identity/' + credential.subject.did}>
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-          {credential.issuer.name} claims about {credential.subject.name}
-          {credential.claims.map(claim => (
-            <Typography paragraph key={claim.type}>{claim.type}: <strong>{claim.value}</strong></Typography>
-          ))}
+          <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
+          {credential.issuer.name} updated profile for {credential.subject.name}
           </Typography>
+
+          <Grid container spacing={1}>
+            {credential.claims.map(claim => (
+              <Grid item key={claim.type} xs={12} sm={6}>
+                <Typography variant='caption' color='textSecondary'>{claim.type}</Typography>
+                <Typography variant='body2'>{claim.value}</Typography>
+              </Grid>
+            ))}
+          </Grid>
+
         </CardContent>    
       </CardActionAreaLink>
       <CardActions  disableSpacing>
@@ -178,6 +115,12 @@ function CredentialProfileCard(props: Props) {
         </Tooltip>
         
       </CardActions>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={()=>setOpenSnackbar(false)}>
+        <Alert onClose={()=>setOpenSnackbar(false)} severity="success" elevation={6} variant="filled" >
+          Success!
+        </Alert>
+      </Snackbar>
+
     </Card>
   );
 }

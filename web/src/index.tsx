@@ -10,6 +10,7 @@ import history from "./utils/history";
 import { BrowserRouter } from 'react-router-dom' 
 import App from './App';
 import theme from './theme';
+import MobileProvider from './components/Nav/MobileProvider';
 
 import ApolloClient from 'apollo-boost';
 
@@ -34,16 +35,18 @@ ReactDOM.render(
         client_id={config.clientId}
         audience={config.audience}
         redirect_uri={window.location.origin}
+        cacheLocation={'localstorage'}
         //@ts-ignore
         onRedirectCallback={onRedirectCallback}
         >
-
-        <ApolloProvider client={client}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
-        </ApolloProvider>
+          <MobileProvider>
+            <ApolloProvider client={client}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <App />
+              </ThemeProvider>
+            </ApolloProvider>
+          </MobileProvider>
         </Auth0Provider>
     </BrowserRouter>
   </React.StrictMode>,

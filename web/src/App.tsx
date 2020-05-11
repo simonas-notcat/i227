@@ -1,20 +1,15 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PeopleIcon from '@material-ui/icons/People';
-import MenuIcon from '@material-ui/icons/Menu';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import StoreIcon from '@material-ui/icons/Store';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { useMobile } from './components/Nav/MobileProvider';
 
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import {
@@ -24,8 +19,6 @@ import {
   useRouteMatch
 } from 'react-router-dom' 
 
-import { useAuth0 } from "./react-auth0-spa";
-
 import Home from './views/Home'
 import Identities from './views/Identities'
 import Identity from './views/Identity'
@@ -33,7 +26,6 @@ import Credential from './views/Credential'
 import Marketplace from './views/Marketplace'
 import Service from './views/Service'
 import ListItemLink from './components/Nav/ListItemLink'
-import AuthBox from './components/AuthBox'
 
 const drawerWidth = 240;
 
@@ -72,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      paddingTop: theme.spacing(3),
+      paddingTop: theme.spacing(8),
     },
   }),
 );
@@ -81,16 +73,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ResponsiveDrawer() {
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { loading } = useAuth0();
+  const { mobileOpen, setMobileOpen } = useMobile();
   const homeMatch = useRouteMatch("/home");
   const identitiesMatch = useRouteMatch("/identities");
   const identityMatch = useRouteMatch("/identity/:did");
   const marketPlaceMatch = useRouteMatch("/marketplace");
   const serviceMatch = useRouteMatch("/s/:id");
   
-  
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -100,7 +89,6 @@ export default function ResponsiveDrawer() {
       <div className={classes.toolbar} />
       <List>
       <Divider />
-      <AuthBox />
         
         <ListItemLink to={'/home'} 
           selected={homeMatch !== null}
@@ -129,29 +117,10 @@ export default function ResponsiveDrawer() {
 
   const container = window.document.body
 
-  if (loading) {
-    return <LinearProgress />;
-  }
-
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar} color={'inherit'}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            
-          </Typography>
-        </Toolbar>
-      </AppBar>
+
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -185,6 +154,7 @@ export default function ResponsiveDrawer() {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/home" />} />
           <Route path={'/home'} component={Home} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Grid, Typography, makeStyles, Card, CardContent, CardActions, Button, IconButton, Collapse, useTheme, useMediaQuery, Box } from "@material-ui/core";
+import { Grid, Typography, makeStyles, Card, CardContent, CardActions, Button, IconButton, Collapse, useTheme, useMediaQuery, Box, Tabs, Tab } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
@@ -13,6 +13,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { getIdentity, IdentityData, IdentityVariables } from '../queries/identity'
 import CredentialFAB from "../components/CredentialFAB";
 import ProfileDialog from "../components/ProfileDialog"
+import AppBar from "../components/Nav/AppBar";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -49,6 +50,12 @@ function Identity(props: any) {
   const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
 
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: any, newValue: any) => {
+    setValue(newValue);
+  };
+
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -59,8 +66,32 @@ function Identity(props: any) {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
+  let type = [
+    'VerifiableCredential,Post',
+    'VerifiableCredential,Reaction',
+    'VerifiableCredential,Profile',
+    'VerifiableCredential,Service',
+  ]
+  switch (value) {
+    case 0: 
+    break
+    case 1: 
+      type = ['VerifiableCredential,Post']
+    break
+    case 2: 
+      type = ['VerifiableCredential,Profile']
+    break
+    case 3: 
+      type = ['VerifiableCredential,Reaction']
+    break
+    case 4: 
+      type = ['VerifiableCredential,Service']
+    break
+  }
+
   const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, { 
-    variables: { did, take: 5 },
+    variables: { did, take: 5, type },
     fetchPolicy: 'cache-and-network'
   });
 
@@ -68,6 +99,20 @@ function Identity(props: any) {
 
   return (
     <Container maxWidth="sm">
+      <AppBar title={data?.identity?.name || ''}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label="All" />
+          <Tab label="Posts" />
+          <Tab label="Profile" />
+          <Tab label="Reactions" />
+          <Tab label="Services" />
+        </Tabs>
+      </AppBar>
       {loading && <LinearProgress />}
       <Grid container spacing={4} justify="center">
         <Grid item xs={12}>
