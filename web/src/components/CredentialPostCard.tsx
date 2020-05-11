@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, CardHeader, Collapse, CardContent, GridList, GridListTile, Tooltip } from "@material-ui/core";
+import { Typography, CardHeader, CardContent, GridList, GridListTile, Tooltip } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -9,9 +9,6 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CredentialDetails from './CredentialDetails'
-import clsx from 'clsx';
 import { useAuth0 } from "../react-auth0-spa";
 
 import { formatDistanceToNow } from 'date-fns'

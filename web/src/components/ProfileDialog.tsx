@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import { useAuth0 } from "../react-auth0-spa";
 import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from "react-router-dom";
-import { Dialog, DialogTitle, DialogContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions, LinearProgress, InputLabel, Select, MenuItem, makeStyles, Avatar, List, ListItem, ListItemAvatar, ListItemText, TextField } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, DialogActions, LinearProgress, makeStyles, TextField } from "@material-ui/core";
 import { getIdentity, IdentityData, IdentityVariables } from '../queries/identity'
 
 interface Props {

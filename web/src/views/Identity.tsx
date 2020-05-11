@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from '@apollo/react-hooks';
-import { Grid, Typography, ListItemAvatar, ListItemText, ListItem, makeStyles, Card, CardHeader, CardContent, CardActions, Button, IconButton, Collapse, useTheme, useMediaQuery, Box } from "@material-ui/core";
+import { Grid, Typography, makeStyles, Card, CardContent, CardActions, Button, IconButton, Collapse, useTheme, useMediaQuery, Box } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
