@@ -46,7 +46,7 @@ const AppBarTabs: React.FC<Props> = props => {
   const { children } = props
   const classes = useStyles();
   const { mobileOpen, setMobileOpen } = useMobile();
-  const { user, isAuthenticated, loginWithRedirect, logout, loading } = useAuth0();
+  const { user, isAuthenticated, loginWithPopup, logout, loading } = useAuth0();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -112,7 +112,7 @@ const AppBarTabs: React.FC<Props> = props => {
                 </ListItem>}
 
                 {isAuthenticated && <MenuItem onClick={logout}>Logout</MenuItem>}
-                {!isAuthenticated && <MenuItem onClick={loginWithRedirect}>Login</MenuItem>}
+                {!isAuthenticated && <MenuItem onClick={loginWithPopup}>Login</MenuItem>}
               </Menu>
             </div>
         </Toolbar>
