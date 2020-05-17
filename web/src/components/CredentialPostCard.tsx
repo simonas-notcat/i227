@@ -1,12 +1,12 @@
 import React from "react";
-import { Typography, CardHeader, CardContent, GridList, GridListTile, Tooltip, Snackbar } from "@material-ui/core";
+import { Typography, CardHeader, CardContent, Tooltip, Snackbar, CardMedia } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDownAltOutlined';
+import ThumbUpIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
 import { useAuth0 } from "../react-auth0-spa";
@@ -142,20 +142,6 @@ function CredentialPostCard(props: Props) {
     }
   };
 
-
-
-  const tileData = [
-    { 
-      img: credential.subject.picture,
-      title: credential.subject.name,
-      cols: 1,
-    },
-    { 
-      img: '/kudos1.png',
-      title: 'Kudos',
-      cols: 1,
-    },
-  ]
   return (
     <Card elevation={2}>
       <CardActionAreaLink to={'/identity/' + credential.issuer.did}>
@@ -169,13 +155,19 @@ function CredentialPostCard(props: Props) {
         />
       </CardActionAreaLink>
       <CardActionAreaLink to={'/c/' + credential.id}>
-        <GridList cellHeight={160} className={classes.gridList} cols={2}>
-          {tileData.map((tile) => (
-            <GridListTile key={tile.img} cols={tile.cols || 1} >
-              <img src={tile.img} alt={tile.title} />
-            </GridListTile>
-          ))}
-        </GridList>
+        {credential.claims.map(claim => (
+          <CardMedia 
+            key={claim.hash}
+            className={classes.claim}
+            image={'/'+claim.value+'.png'}
+            >
+            <Avatar
+              variant="circle" 
+              className={classes.cover}
+              src={credential.subject.picture}
+            />
+          </CardMedia>
+        ))}
         
             
         <CardContent>
