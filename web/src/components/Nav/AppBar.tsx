@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Toolbar, IconButton, AppBar, Typography, Menu, MenuItem, Avatar, ListItemAvatar, ListItem, ListItemText } from '@material-ui/core';
+import { Toolbar, IconButton, AppBar, Typography, Menu, MenuItem, Avatar, ListItemAvatar, ListItemText } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useMobile } from './MobileProvider';
@@ -78,7 +78,7 @@ const AppBarTabs: React.FC<Props> = props => {
       fetchCurrentDid()
     }
       
-  }, [isAuthenticated])
+  }, [isAuthenticated, getTokenSilently])
 
   const handleMenu = (event:any) => {
     setAnchorEl(event.currentTarget);
