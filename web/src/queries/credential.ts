@@ -1,9 +1,14 @@
 import { gql } from 'apollo-boost';
-import { Credential, Claim } from '../types'
+import { Credential, Claim, Identity } from '../types'
 import { profile } from './fragments'
 
 export interface CredentialData {
   credentials: Credential[]
+  reactions: {
+    issuer: Identity,
+    issuanceDate: string,
+    type: 'like' | 'dislike'
+  }[]
 }
 
 export interface CredentialVariables {
@@ -32,6 +37,16 @@ export const getCredential = gql`
         type
         value
       }
+    }
+    reactions: claims(input: {
+      where: [
+        { column: credentialType, value: "VerifiableCredential,Reaction" },
+        { column: value, value: [$id] }
+      ]
+    }) {
+      issuer { ...profile }
+      type
+      issuanceDate
     }
   }
 `
