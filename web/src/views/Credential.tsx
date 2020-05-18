@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Divider, Box } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import { formatDistanceToNow } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
