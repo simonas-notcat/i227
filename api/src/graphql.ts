@@ -90,5 +90,16 @@ app.post('/sign', cors(corsOptions), express.json(), checkJwt, async (req, res) 
     
 })
 
+app.options('/auth0did', cors(corsOptions))
+app.post('/auth0did', cors(corsOptions), express.json(), checkJwt, async (req, res) => {
+  const request = await fetch(process.env.AUTH0_DOMAIN + 'userinfo', {
+    headers: { Authorization: req.headers.authorization }
+  })
+  const userInfo = await request.json()  
+  const issuer = await getAuth0UserIdentity(userInfo)
+  res.send({did: issuer.did})
+    
+})
+
 app.listen({port: 8080})
 console.log(`🚀  Server ready at http://localhost:8080`)
