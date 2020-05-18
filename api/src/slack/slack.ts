@@ -89,16 +89,16 @@ app.view('kudosForm', async(args) => {
               "type": "mrkdwn",
               text
             },
-            "accessory": {
-              "type": "button",
-              "action_id": "message_give_pressed",
-              "text": {
-                "type": "plain_text",
-                "text": "Give",
-                "emoji": true
-              },
-              "value": `${credential.id}`
-            }
+            // "accessory": {
+            //   "type": "button",
+            //   "action_id": "message_give_pressed",
+            //   "text": {
+            //     "type": "plain_text",
+            //     "text": "Give",
+            //     "emoji": true
+            //   },
+            //   "value": `${credential.id}`
+            // }
           },
           
           {
