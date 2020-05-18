@@ -53,7 +53,7 @@ app.get('/img/c/:id/:type', async (req, res) => {
   const { credentials } = await api.request(queries.getCredentialsById, { id })
   const credential = credentials[0]
 
-  const bgImg = fs.readFileSync('/home/simonas/dev/i227/web/public/kudos1.png')
+  const bgImg = fs.readFileSync('/home/simonas/dev/i227/web/public/' + credential.claims[0].value + '.png')
   const bgImgType = await fileType.fromBuffer(bgImg)
   const bgImgBase64 = bgImg.toString('base64')
 
