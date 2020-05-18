@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Toolbar, IconButton, AppBar, Typography, Menu, MenuItem, Avatar, ListItemAvatar, ListItem, ListItemText } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useMobile } from './MobileProvider';
 import { useAuth0 } from "../../react-auth0-spa";
-
+import ListItemLink from './ListItemLink'
 const drawerWidth = 240;
 
 
@@ -46,10 +46,39 @@ const AppBarTabs: React.FC<Props> = props => {
   const { children } = props
   const classes = useStyles();
   const { mobileOpen, setMobileOpen } = useMobile();
-  const { user, isAuthenticated, loginWithPopup, logout, loading } = useAuth0();
+  const { user, isAuthenticated, loginWithPopup, logout, loading, getTokenSilently } = useAuth0();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [currentDid, setCurrentDid] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const fetchCurrentDid = async () => {
+
+      const token = await getTokenSilently()
+      
+      const response = await fetch(`https://i227.dev/auth0did`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Origin: 'http://localhost:3000',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: ''
+      });
+      
+      const { did } = await response.json();
+      if (did) {
+        setCurrentDid(did)
+      }
+    }
+    if (isAuthenticated) {
+      fetchCurrentDid()
+    }
+      
+  }, [isAuthenticated])
 
   const handleMenu = (event:any) => {
     setAnchorEl(event.currentTarget);
@@ -104,12 +133,12 @@ const AppBarTabs: React.FC<Props> = props => {
                 open={open}
                 onClose={handleClose}
               >
-                {!loading && isAuthenticated && <ListItem button >
+                {!loading && isAuthenticated && currentDid && <ListItemLink to={'/identity/' + currentDid} >
                   <ListItemAvatar>
                     <Avatar src={user.picture} />
                   </ListItemAvatar>
                   <ListItemText primary={user.nickname} secondary={user.name}/>
-                </ListItem>}
+                </ListItemLink>}
 
                 {isAuthenticated && <MenuItem onClick={logout}>Logout</MenuItem>}
                 {!isAuthenticated && <MenuItem onClick={loginWithPopup}>Login</MenuItem>}
