@@ -13,25 +13,26 @@ import { Credential } from '../types'
 
 interface Props {
   credential: Credential
+  type: 'summary' | 'details'
 }
 
 function CredentialCard(props: Props) {
   const { credential } = props
 
   if (credential.type.includes('Post')) {
-    return (<CredentialPostCard credential={credential} /> )
+    return (<CredentialPostCard {...props} /> )
   }
   
   if (credential.type.includes('Profile')) {
-    return (<CredentialProfileCard credential={credential} /> )
+    return (<CredentialProfileCard  {...props} /> )
   }
 
   if (credential.type.includes('Reaction')) {
-    return (<CredentialReactionCard credential={credential} /> )
+    return (<CredentialReactionCard  {...props} /> )
   }
 
   if (credential.type.includes('Service')) {
-    return (<CredentialServiceCard credential={credential} /> )
+    return (<CredentialServiceCard  {...props} /> )
   }
 
   return (

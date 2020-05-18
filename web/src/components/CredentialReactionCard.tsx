@@ -14,6 +14,7 @@ import { NavLink } from 'react-router-dom'
 
 interface Props {
   credential: Credential
+  type: 'summary' | 'details'
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +60,7 @@ function CredentialReactionCard(props: Props) {
         </NavLink>
       </Box>
       {loading && <LinearProgress />}
-      {data?.credentials[0] && <CredentialPostCard credential={data?.credentials[0]} />}
+      {data?.credentials[0] && <CredentialPostCard credential={data?.credentials[0]} type={props.type}/>}
     </Box>
   );
 }

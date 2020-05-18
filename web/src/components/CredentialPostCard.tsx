@@ -16,6 +16,7 @@ import { Credential } from '../types'
 
 interface Props {
   credential: Credential
+  type: 'summary' | 'details'
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -154,7 +155,7 @@ function CredentialPostCard(props: Props) {
           subheader={`${credential.issuer.nickname} | ${formatDistanceToNow(Date.parse(credential.issuanceDate))} ago`}
         />
       </CardActionAreaLink>
-      <CardActionAreaLink to={'/c/' + credential.id}>
+      <CardActionAreaLink to={ props.type === 'summary' ? '/c/' + credential.id : '/identity/' + credential.subject.did}>
         {credential.claims.map(claim => (
           <CardMedia 
             key={claim.hash}

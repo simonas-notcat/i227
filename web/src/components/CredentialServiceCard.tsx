@@ -16,6 +16,7 @@ import { Credential } from '../types'
 
 interface Props {
   credential: Credential
+  type: 'summary' | 'details'
 }
 
 function CredentialServiceCard(props: Props) {

@@ -47,7 +47,7 @@ function Home(props: any) {
       <Grid container spacing={2} justify="center">
         {data?.credentials.map(credential => (
           <Grid item key={credential.id} xs={12}>
-            <CredentialCard credential={credential} />
+            <CredentialCard credential={credential} type='summary' />
           </Grid>
         ))}
       </Grid>

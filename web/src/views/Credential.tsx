@@ -52,7 +52,7 @@ function Credential(props: any) {
     <Container maxWidth="sm">
       <AppBar/>
       {loading && <LinearProgress />}
-      {credential !== undefined && <CredentialCard credential={credential} />}
+      {credential !== undefined && <CredentialCard credential={credential} type='details' />}
       <Box className={classes.reactions}>
       {data?.reactions.map(reaction => (<NavLink to={'/identity/' + reaction.issuer.did} className={classes.link}>
           {reaction.type === 'like' && <ThumbUpIcon className={classes.icon} />}
