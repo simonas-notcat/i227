@@ -24,11 +24,51 @@ export const services: Service[] = [
   {
     id: 'sb',
     title: 'Slack app',
-    subtitle: 'Verifiable credentials',
+    subtitle: 'Verifiable reputation from your workspace',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
     url: 'https://slack.com',
-    picture: 'https://cdn.mos.cms.futurecdn.net/SDDw7CnuoUGax6x9mTo7dd.jpg',
+    picture: 'https://a.slack-edge.com/80588/marketing/img/meta/slack_hash_256.png',
     available: true
+  },
+
+  {
+    id: 'ha',
+    title: 'Heroku agent',
+    subtitle: 'Your private cloud agent',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
+    url: 'https://dafui.herokuapp.com/settings',
+    picture: 'https://pbs.twimg.com/profile_images/746035845803585536/rlpdFbua_400x400.jpg',
+    available: true
+  },
+
+  {
+    id: 'aw',
+    title: 'AWS agent',
+    subtitle: 'Your private cloud agent',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
+    url: 'https://aws.amazon.com/marketplace',
+    picture: 'https://www.signalfx.com/wp-content/uploads/new.aws_.logo_-500x500.png',
+    available: true
+  },
+
+  {
+    id: 'no',
+    title: 'Notabene',
+    subtitle: 'Crypto regulations made simple',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
+    url: 'https://notabene.id/',
+    picture: 'https://uploads-ssl.webflow.com/5e68f0772de982756aa8c1a4/5e6aa3e417d6f864506febe0_Full_black_transparent-p-500.png',
+    available: false
+  },
+
+  {
+    id: 'gs',
+    title: 'G Suite Add-on',
+    subtitle: 'Verifiable Credentials in your favorite apps',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
+    url: 'https://gsuite.google.com/intl/en_ie/products/add-ons/',
+    picture: 'https://www.gstatic.com/images/branding/product/1x/gsuite_addons_64dp.png',
+    available: false
   },
 
   {
@@ -44,7 +84,7 @@ export const services: Service[] = [
   {
     id: 'tb',
     title: 'Telegram bot',
-    subtitle: 'Verifiable credentials in chat',
+    subtitle: 'Build and share your reputation',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
     url: 'https://telegram.org/',
     picture: 'https://pbs.twimg.com/profile_images/1183117696730390529/LRDASku7_400x400.jpg',
@@ -55,7 +95,7 @@ export const services: Service[] = [
   {
     id: 'jolo',
     title: 'Jolocom',
-    subtitle: 'Decentralized identity & access management',
+    subtitle: 'Verifiable data wallet',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
     url: 'https://jolocom.io/',
     picture: 'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4',
