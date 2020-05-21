@@ -103,7 +103,7 @@ function Identity(props: any) {
 
   const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, { 
     variables: { did, take: 5, type },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'no-cache'
   });
 
   if (error) return <p>Error :(</p>;

@@ -19,7 +19,7 @@ function Home(props: any) {
 
 
   const { loading, error, data } = useQuery<LatestPostsData, LatestPostsVariables>(getLatestPosts, { 
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache',
     variables: {
       take: 10,
       skip: 0

@@ -41,7 +41,7 @@ function Credential(props: any) {
   const classes = useStyles();
   const { loading, error, data } = useQuery<CredentialData, CredentialVariables>(getCredential, { 
     variables: { id },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'no-cache'
   });
 
   if (error) return <p>Error :(</p>;
