@@ -1,6 +1,5 @@
 import { Claim, Identity } from 'daf-core'
 import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
-import { App } from '@slack/bolt'
 import { agent } from '../agent/agent'
 
 export interface Auth0UserInfo{
@@ -40,7 +39,7 @@ export const getAuth0UserIdentity = async ( userInfo: Auth0UserInfo): Promise<Id
       save: true,
       data: {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
-        type: ['VerifiableCredential', 'ExternalUser'],
+        type: ['VerifiableCredential', 'Profile'],
         issuer: process.env.MAIN_DID,
         credentialSubject
       }

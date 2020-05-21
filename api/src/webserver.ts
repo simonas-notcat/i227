@@ -63,6 +63,8 @@ app.get('/img/c/:id/:type', async (req, res) => {
   // const issuerImgbase64 = issuerImgBuffer.toString('base64')
 
   const subjectImgReq = await fetch(credential.subject.picture)
+  console.log('credential.subject.picture', credential.subject.picture)
+  console.log(subjectImgReq)
   const subjectImgBuffer = await subjectImgReq.buffer()
   const subjectImgtype = await fileType.fromBuffer(subjectImgBuffer)
   const subjectImgbase64 = subjectImgBuffer.toString('base64')

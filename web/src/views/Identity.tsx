@@ -172,7 +172,7 @@ function Identity(props: any) {
         </Grid>
 
         {data?.receivedCredentials.map(credential => (
-          <Grid item key={credential.id} xs={12}>
+          <Grid item key={credential.hash} xs={12}>
             <CredentialCard credential={credential} type='summary' />
           </Grid>
         ))}
@@ -181,7 +181,7 @@ function Identity(props: any) {
           <Typography variant='h6'>Sent( {data?.issuedCredentialsCount})</Typography>
         </Grid>
         {data?.issuedCredentials.map(credential => (
-          <Grid item key={credential.id} xs={12}>
+          <Grid item key={credential.hash} xs={12}>
             <CredentialCard credential={credential} type='summary' />
           </Grid>
         ))}

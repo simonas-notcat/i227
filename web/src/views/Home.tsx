@@ -46,7 +46,7 @@ function Home(props: any) {
       {loading && <LinearProgress />}
       <Grid container spacing={2} justify="center">
         {data?.credentials.map(credential => (
-          <Grid item key={credential.id} xs={12}>
+          <Grid item key={credential.hash} xs={12}>
             <CredentialCard credential={credential} type='summary' />
           </Grid>
         ))}

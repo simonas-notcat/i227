@@ -31,6 +31,17 @@ export const services: Service[] = [
     available: true
   },
 
+
+  {
+    id: 'discordapp',
+    title: 'Discord bot',
+    subtitle: 'Verifiable reputation from your community',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
+    url: 'https://discordapp.com/oauth2/authorize?client_id=569969891382394881&scope=bot',
+    picture: 'https://cdn0.iconfinder.com/data/icons/free-social-media-set/24/discord-512.png',
+    available: true
+  },
+
   {
     id: 'ha',
     title: 'Heroku agent',
@@ -41,15 +52,6 @@ export const services: Service[] = [
     available: true
   },
 
-  {
-    id: 'aw',
-    title: 'AWS agent',
-    subtitle: 'Your private cloud agent',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
-    url: 'https://aws.amazon.com/marketplace',
-    picture: 'https://www.signalfx.com/wp-content/uploads/new.aws_.logo_-500x500.png',
-    available: true
-  },
 
   {
     id: 'no',

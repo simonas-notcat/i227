@@ -33,6 +33,7 @@ export const getLatestPosts = gql`
       issuer { ...profile }
       subject { ...profile }
       id
+      hash
       type
       issuanceDate
       claims {

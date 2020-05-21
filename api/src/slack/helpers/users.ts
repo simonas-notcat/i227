@@ -41,7 +41,7 @@ export const getSlackUserIdentity = async (slackUserId: string, app: App, token:
       save: true,
       data: {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
-        type: ['VerifiableCredential', 'ExternalUser'],
+        type: ['VerifiableCredential', 'Profile'],
         issuer: process.env.MAIN_DID,
         credentialSubject
       }

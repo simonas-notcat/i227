@@ -92,7 +92,8 @@ function CredentialProfileCard(props: Props) {
             {credential.claims.map(claim => (
               <Grid item key={claim.type} xs={12} sm={6}>
                 <Typography variant='caption' color='textSecondary'>{claim.type}</Typography>
-                <Typography variant='body2'>{claim.value}</Typography>
+                {claim.type !== 'picture' && <Typography variant='body2'>{claim.value}</Typography>}
+                {claim.type === 'picture' && <Avatar src={claim.value}/>}
               </Grid>
             ))}
           </Grid>
