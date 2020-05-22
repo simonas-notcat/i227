@@ -62,10 +62,15 @@ app.get('/img/c/:id/:type', async (req, res) => {
   // const issuerImgtype = await fileType.fromBuffer(issuerImgBuffer)
   // const issuerImgbase64 = issuerImgBuffer.toString('base64')
 
-  const subjectImgReq = await fetch(credential.subject.picture)
-  console.log('credential.subject.picture', credential.subject.picture)
-  console.log(subjectImgReq)
-  const subjectImgBuffer = await subjectImgReq.buffer()
+  let subjectImgBuffer
+  const subjectPictureUrl = credential.subject.picture || process.env.BASE_URL + 'default'
+
+  if (credential.subject.picture) {
+    const subjectImgReq = await fetch(credential.subject.picture)
+    subjectImgBuffer = await subjectImgReq.buffer()
+  } else {
+    subjectImgBuffer = fs.readFileSync('/home/simonas/dev/i227/web/public/defaultavatar.png')
+  }
   const subjectImgtype = await fileType.fromBuffer(subjectImgBuffer)
   const subjectImgbase64 = subjectImgBuffer.toString('base64')
 

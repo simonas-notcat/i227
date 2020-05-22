@@ -9,21 +9,16 @@ import { getProfileView, getProfileBlocks } from './views/profile-view'
 import { getSlackUserIdentity } from './helpers/users'
 import { GraphQLClient } from 'graphql-request'
 import * as queries from '../queries/queries'
-
-
-
+import { issueKudosPost } from '../kudos'
 import { agent } from '../agent/agent'
-
 
 const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
-// Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   logLevel: LogLevel.INFO
-});
-
+})
 
 app.command('/kudos', async ({ command, ack, say, payload, context, body }) => {
   await ack();
@@ -57,20 +52,7 @@ app.view('kudosForm', async(args) => {
   const issuer = await getSlackUserIdentity(issuerSlackId, app, args.context.botToken)
   const subject = await getSlackUserIdentity(subjectSlackId, app, args.context.botToken)
 
-  const credential: Credential = await agent.handleAction({
-    type: ActionTypes.signCredentialJwt,
-    save: true,
-    data: {
-      id: shortId.generate(),
-      '@context': ['https://www.w3.org/2018/credentials/v1'],
-      type: ['VerifiableCredential', 'Post'],
-      issuer: issuer.did,
-      credentialSubject: {
-        id: subject.did,
-        kudos: kudos.text.text
-      }
-    }
-  } as ActionSignW3cVc)
+  const credential: Credential = await issueKudosPost(issuer, subject, kudos.text.text)
 
   if (args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation) {
     try {
