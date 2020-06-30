@@ -12,12 +12,12 @@ export const services: Service[] = [
   },
 
   {
-    id: 'mo',
-    title: 'Monetha',
-    subtitle: 'Your portable digital identity',
-    description: 'Welcome to Monetha – your portable digital identity. It helps you own and control your personal data. Securely store your data from multiple service providers. Share it between different services to be trusted wherever you go.    ',
-    url: 'https://www.monetha.io/',
-    picture: 'https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/96/dd/ec/96ddec6e-2a37-c806-1ace-bd93bb8992a0/AppIcon-1x_U007emarketing-0-7-0-0-85-220.png/230x0w.png',
+    id: 'gh',
+    title: 'Github App',
+    subtitle: 'Issue Contributor credentials',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
+    url: 'https://www.github.com/',
+    picture: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png',
     available: false
   },
 
@@ -54,16 +54,6 @@ export const services: Service[] = [
 
 
   {
-    id: 'no',
-    title: 'Notabene',
-    subtitle: 'Crypto regulations made simple',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
-    url: 'https://notabene.id/',
-    picture: 'https://uploads-ssl.webflow.com/5e68f0772de982756aa8c1a4/5e6aa3e417d6f864506febe0_Full_black_transparent-p-500.png',
-    available: false
-  },
-
-  {
     id: 'gs',
     title: 'G Suite Add-on',
     subtitle: 'Verifiable Credentials in your favorite apps',
@@ -94,14 +84,6 @@ export const services: Service[] = [
   },
   
 
-  {
-    id: 'jolo',
-    title: 'Jolocom',
-    subtitle: 'Verifiable data wallet',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non arcu ut lacus vehicula pretium at ut mauris. Donec lobortis nisl pellentesque tincidunt posuere. Integer accumsan aliquam diam sit amet malesuada. Sed ipsum justo, pharetra eu felis vitae, interdum lobortis turpis. Nullam efficitur augue at ipsum congue, et laoreet ex posuere. Nullam at orci at dolor auctor iaculis. Nulla venenatis iaculis commodo. Vestibulum eget tellus in urna tristique maximus. Proin ac vehicula augue. Vivamus efficitur sem pellentesque, pellentesque odio sit amet, venenatis libero. Ut felis metus, congue ut tempus sed, interdum fermentum arcu.',
-    url: 'https://jolocom.io/',
-    picture: 'https://avatars0.githubusercontent.com/u/4603324?s=200&v=4',
-    available: false
-  },
+
   
 ]
