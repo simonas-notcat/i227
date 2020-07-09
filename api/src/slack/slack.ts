@@ -1,16 +1,16 @@
 import { config } from 'dotenv'
 config()
-import { Credential } from 'daf-core'
-import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
 import { App, LogLevel } from '@slack/bolt'
 import shortId from 'shortid'
 import { getKudosFormView } from './views/kudos-form-view'
 import { getProfileView, getProfileBlocks } from './views/profile-view'
+import { getLatestClaimValue } from '../helpers/users'
 import { getSlackUserIdentity } from './helpers/users'
 import { GraphQLClient } from 'graphql-request'
 import * as queries from '../queries/queries'
 import { issueKudosPost } from '../kudos'
 import { agent } from '../agent/agent'
+
 
 const api = new GraphQLClient(process.env.GRAPHQL_URL, { headers: {} })
 
@@ -52,12 +52,13 @@ app.view('kudosForm', async(args) => {
   const issuer = await getSlackUserIdentity(issuerSlackId, app, args.context.botToken)
   const subject = await getSlackUserIdentity(subjectSlackId, app, args.context.botToken)
 
-  const credential: Credential = await issueKudosPost(issuer, subject, kudos.text.text)
+  const credential = await issueKudosPost(issuer, subject, kudos.text.text)
 
   if (args.body.view.state.values?.result_channel_block?.result_channel_id?.selected_conversation) {
     try {
-      const issuerName = await credential.issuer.getLatestClaimValue(agent.dbConnection, {type: 'name'})
-      const subjectName = await credential.subject.getLatestClaimValue(agent.dbConnection, {type: 'name'})
+      const issuerName = await getLatestClaimValue({did: issuer.did, type: 'name', credentialType: 'VerifiableCredential,Profile'})
+      const subjectName = await getLatestClaimValue({did: subject.did, type: 'name', credentialType: 'VerifiableCredential,Profile'})
+
       const image_url = `${process.env.BASE_URL}img/c/${credential.id}/png`
       const text = `<${process.env.BASE_URL}identity/${credential.issuer.did}|${issuerName}> gave  <${process.env.BASE_URL}c/${credential.id}|${kudos.text.text}> kudos to <${process.env.BASE_URL}identity/${credential.subject.did}|${subjectName}>`
       await app.client.chat.postMessage({

@@ -57,11 +57,11 @@ const AppBarTabs: React.FC<Props> = props => {
 
       const token = await getTokenSilently()
       
-      const response = await fetch(`https://i227.dev/auth0did`, {
+      const response = await fetch(`${process.env.REACT_APP_HOST}/auth0did`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          Origin: 'http://localhost:3000',
+          Origin: `${process.env.REACT_APP_HOST}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },

@@ -26,7 +26,7 @@ function CredentialServiceCard(props: Props) {
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const handleShare = async () => {
-    const url = 'https://i227.dev/c/'+credential.id
+    const url = process.env.REACT_APP_HOST + '/c/'+ credential.id
     try {
       //@ts-ignore
       await navigator.share({ title: "Credential", url });
@@ -51,11 +51,11 @@ function CredentialServiceCard(props: Props) {
       //@ts-ignore
       data.credentialSubject[reaction]=credential.id
 
-      await fetch(`https://i227.dev/sign`, {
+      await fetch(`${process.env.REACT_APP_HOST}/sign`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          Origin: 'http://localhost:3000',
+          Origin: `${process.env.REACT_APP_HOST}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },

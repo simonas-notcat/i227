@@ -1,9 +1,18 @@
-import Discord from 'discord.js'
+import Discord, { User } from 'discord.js'
 import { config } from 'dotenv'
 config()
 import { prefix } from './config'
 import { getAvailableKudos, issueKudosPost } from '../kudos'
-import { getDiscordUserIdentity } from './users'
+import { getIdentityAndUpdateProfile } from '../helpers/users'
+
+async function getIdentity(user: User) {
+  return getIdentityAndUpdateProfile({
+    alias: 'discord' + user.id,
+    name: user.username,
+    nickname: `${user.username}#${user.discriminator}`,
+    picture: user.displayAvatarURL({format: "png"})
+  })
+}
 
 const client = new Discord.Client()
 
@@ -27,8 +36,8 @@ client.on('message', async (message) => {
         return message.reply('available kudos types: \n' + availableKudos.join('\n'))
       }
 
-      const issuer = await getDiscordUserIdentity(message.author)
-      const subject = await getDiscordUserIdentity(mentionedUser)
+      const issuer = await getIdentity(message.author)
+      const subject = await getIdentity(mentionedUser)
       const credential = await issueKudosPost(issuer, subject, kudos)
 
       const embed = new Discord.MessageEmbed()

@@ -83,11 +83,11 @@ function ProfileDialog(props: Props) {
       if (url) data.credentialSubject['url'] = url
       if (email) data.credentialSubject['email'] = email
 
-      const response = await fetch(`https://i227.dev/sign`, {
+      const response = await fetch(`${process.env.REACT_APP_HOST}/sign`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          Origin: 'http://localhost:3000',
+          Origin: `${process.env.REACT_APP_HOST}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },

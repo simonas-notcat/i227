@@ -1,5 +1,4 @@
-import { Identity, Credential } from 'daf-core'
-import { ActionSignW3cVc, ActionTypes } from 'daf-w3c'
+import { IIdentity, VerifiableCredential } from 'daf-core'
 import { agent } from '../agent/agent'
 import shortId from 'shortid'
 
@@ -16,21 +15,22 @@ export const getAvailableKudos = async() => [
   'Making an Impact',
   ]
 
-export const issueKudosPost = async (issuer: Identity, subject: Identity, kudos: string): Promise<Credential> => {
-  const credential: Credential = await agent.handleAction({
-    type: ActionTypes.signCredentialJwt,
+export const issueKudosPost = async (issuer: IIdentity, subject: IIdentity, kudos: string): Promise<VerifiableCredential> => {
+  const credential = await agent.createVerifiableCredential({
+    proofFormat: 'jwt',
     save: true,
-    data: {
+    credential: {
       id: shortId.generate(),
       '@context': ['https://www.w3.org/2018/credentials/v1'],
       type: ['VerifiableCredential', 'Post'],
-      issuer: issuer.did,
+      issuer: { id: issuer.did },
+      issuanceDate: new Date().toISOString(),
       credentialSubject: {
         id: subject.did,
         kudos
       }
     }
-  } as ActionSignW3cVc)
+  })
 
   return credential
 }

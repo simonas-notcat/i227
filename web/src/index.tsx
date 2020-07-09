@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { Auth0Provider } from "./react-auth0-spa";
-import config from "./auth_config.json";
 import history from "./utils/history";
 import { BrowserRouter } from 'react-router-dom' 
 import App from './App';
@@ -31,9 +30,9 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Auth0Provider
-        domain={config.domain}
-        client_id={config.clientId}
-        audience={config.audience}
+        domain={process.env.REACT_APP_AUTH0_DOMAIN}
+        client_id={process.env.REACT_APP_AUTH0_CLIENT_ID}
+        audience={process.env.REACT_APP_AUTH0_AUDIENCE}
         redirect_uri={window.location.origin}
         cacheLocation={'localstorage'}
         //@ts-ignore

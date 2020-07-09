@@ -1,46 +1,88 @@
-import { Entities, migrations, KeyStore, IdentityStore, Agent} from 'daf-core'
-import { JwtMessageHandler } from 'daf-did-jwt'
-import { W3cMessageHandler, W3cActionHandler} from 'daf-w3c'
-import { SdrMessageHandler, SdrActionHandler } from 'daf-selective-disclosure'
-import { IdentityProvider } from 'daf-ethr-did'
-import { KeyManagementSystem, SecretBox} from 'daf-libsodium'
-import { DafResolver } from 'daf-resolver'
+import {
+  createAgent,
+  KeyManager,
+  IdentityManager,
+  TAgent,
+  IIdentityManager,
+  IResolveDid,
+  IKeyManager,
+  IDataStore,
+  IHandleMessage,
+  MessageHandler,
+} from 'daf-core'
 import { createConnection } from 'typeorm'
+import { DafResolver } from 'daf-resolver'
+import { JwtMessageHandler } from 'daf-did-jwt'
+import { W3c, IW3c, W3cMessageHandler } from 'daf-w3c'
+import { EthrIdentityProvider } from 'daf-ethr-did'
+import { WebIdentityProvider } from 'daf-web-did'
+import { Sdr, ISdr, SdrMessageHandler } from 'daf-selective-disclosure'
+import { KeyManagementSystem, SecretBox } from 'daf-libsodium'
+import { Entities, KeyStore, IdentityStore, IDataStoreORM, DataStore, DataStoreORM } from 'daf-typeorm'
 
-let didResolver = new DafResolver({ infuraProjectId: process.env.INFURA_PROJECT_ID })
+const databaseFile = process.env.DATABASE_FILE
+const infuraProjectId = process.env.INFURA_PROJECT_ID
+const secretKey = process.env.SECRET_KEY
 
 const dbConnection = createConnection({
   type: 'sqlite',
-  database: 'database.sqlite',
+  database: databaseFile,
   synchronize: true,
-  logging: process.env.DB_DEBUG=='1',
+  logging: false,
   entities: Entities,
-  migrations: [...migrations]
 })
 
-const identityProviders = [
-  new IdentityProvider({
-    kms: new KeyManagementSystem(new KeyStore(dbConnection, new SecretBox(process.env.SECRET_KEY))),
-    identityStore: new IdentityStore('rinkeby-ethr', dbConnection),
-    network: 'rinkeby',
-    rpcUrl: 'https://rinkeby.infura.io/v3/' + process.env.INFURA_PROJECT_ID,
+
+export const agent = createAgent<
+TAgent<
+  IIdentityManager &
+    IKeyManager &
+    IDataStore &
+    IDataStoreORM &
+    IResolveDid &
+    IHandleMessage &
+    IW3c &
+    ISdr
+>
+>({
+context: {
+  // authenticatedDid: 'did:example:3456'
+},
+plugins: [
+  new KeyManager({
+    store: new KeyStore(dbConnection, new SecretBox(secretKey)),
+    kms: {
+      local: new KeyManagementSystem(),
+    },
   }),
-]
-const serviceControllers = []
-
-const messageHandler = new JwtMessageHandler()
-messageHandler
-  .setNext(new W3cMessageHandler())
-  .setNext(new SdrMessageHandler())
-
-const actionHandler = new W3cActionHandler()
-actionHandler.setNext(new SdrActionHandler())
-
-export const agent = new Agent({
-  dbConnection,
-  identityProviders,
-  serviceControllers,
-  didResolver,
-  messageHandler,
-  actionHandler,
+  new IdentityManager({
+    store: new IdentityStore(dbConnection),
+    defaultProvider: 'did:ethr:rinkeby',
+    providers: {
+      'did:ethr:rinkeby': new EthrIdentityProvider({
+        defaultKms: 'local',
+        network: 'rinkeby',
+        rpcUrl: 'https://rinkeby.infura.io/v3/' + infuraProjectId,
+        gas: 1000001,
+        ttl: 60 * 60 * 24 * 30 * 12 + 1,
+      }),
+      'did:web': new WebIdentityProvider({
+        defaultKms: 'local',
+      }),
+    },
+  }),
+  new DafResolver({ infuraProjectId }),
+  new DataStore(dbConnection),
+  new DataStoreORM(dbConnection),
+  new MessageHandler({
+    messageHandlers: [
+      new JwtMessageHandler(),
+      new W3cMessageHandler(),
+      new SdrMessageHandler(),
+    ],
+  }),
+  new W3c(),
+  new Sdr(),
+],
 })
+

@@ -1,9 +1,10 @@
 import { View, Block } from '@slack/types'
 import { App } from '@slack/bolt'
-import { Claim } from 'daf-core'
 import { formatDistanceToNow } from 'date-fns'
 import { getSlackUserIdentity } from '../helpers/users'
+import { getLatestClaimValue } from '../../helpers/users'
 import { agent } from '../../agent/agent'
+import { VerifiableCredential } from 'daf-core'
 
 export const getProfileView = async (options: { initial_user?: string }, app: App, token: string): Promise<View> => { 
 
@@ -54,8 +55,8 @@ export const getProfileView = async (options: { initial_user?: string }, app: Ap
 export const getProfileBlocks = async(slackUserId: string, app: App, token: string) => {
   const blocks = []
   const subject = await getSlackUserIdentity(slackUserId, app, token)
-    const name = await subject.getLatestClaimValue(agent.dbConnection, {type: 'name'})
-    const picture = await subject.getLatestClaimValue(agent.dbConnection, {type: 'picture'})
+    const name = await getLatestClaimValue({ type: 'name', credentialType: 'VerifiableCredential,Profile', did: subject.did })
+    const picture = await getLatestClaimValue({ type: 'picture', credentialType: 'VerifiableCredential,Profile', did: subject.did })
     blocks.push({
       "type": "section",
       "text": {
@@ -73,29 +74,33 @@ export const getProfileBlocks = async(slackUserId: string, app: App, token: stri
       "type": "divider"
     })
 
-    const claims = await Claim.find({
-      where: {
-        subject: subject,
-        type: 'kudos'
-      }
+    const posts = await agent.dataStoreORMGetVerifiableCredentials({
+      where: [
+        { column: 'type', value: ['VerifiableCredential,Post'] }
+      ],
+      order: [
+        { column: 'issuanceDate', direction: 'DESC' }
+      ]
     })
-    for (const claim of claims) {
-      const item = await kudosListItem(claim)
+    
+    for (const post of posts) {
+      const item = await listItem(post)
       //@ts-ignore
       blocks = [...blocks, ...item]
     }
   return blocks
 }
 
-const kudosListItem = async (claim: Claim) => {
-  const image_url = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'picture'})
-  const name = await claim.issuer.getLatestClaimValue(agent.dbConnection, {type: 'name'})
+const listItem = async (post: VerifiableCredential) => {
+  const name = await getLatestClaimValue({ type: 'name', credentialType: 'VerifiableCredential,Profile', did: post.issuer.id })
+  const picture = await getLatestClaimValue({ type: 'picture', credentialType: 'VerifiableCredential,Profile', did: post.issuer.id })
+
   return [
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": claim.value
+        "text": JSON.stringify(post.credentialSubject)
       }
     },
     {
@@ -103,12 +108,12 @@ const kudosListItem = async (claim: Claim) => {
       "elements": [
         {
           "type": "image",
-          image_url,
+          "image_url": picture,
           "alt_text": "plants"
         },
         {
           "type": "mrkdwn",
-          "text": `*${name}* | ` + formatDistanceToNow(claim.issuanceDate)
+          "text": `*${name}* | ` + formatDistanceToNow(new Date(post.issuanceDate))
         }
       ]
     },
