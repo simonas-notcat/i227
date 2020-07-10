@@ -1,12 +1,10 @@
 import React from "react";
-import { useQuery } from '@apollo/react-hooks';
 import { List, ListItemAvatar, ListItemText, Paper, IconButton, InputBase, makeStyles, Tabs, Tab } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 
 import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { getIdentities, IdentitiesData } from '../queries/identities'
 import CredentialFAB from "../components/CredentialFAB";
 import ListItemLink from "../components/Nav/ListItemLink";
 import AppBar from "../components/Nav/AppBar";
@@ -39,8 +37,6 @@ function Identities(props: any) {
   };
 
 
-  const { loading, error, data } = useQuery<IdentitiesData>(getIdentities, {fetchPolicy: 'cache-and-network'});
-  if (error) return <p>Error :(</p>;
   return (
     <Container maxWidth="sm">
 
@@ -67,23 +63,9 @@ function Identities(props: any) {
           <SearchIcon />
         </IconButton>
       </Paper>
-
-      {loading && <LinearProgress />}
       
       <List >
-      {data?.identities.map(identity => (
-        <ListItemLink key={identity.did} to={'/identity/'+ identity.did}>
-          <ListItemAvatar>
-          <Avatar
-           src={identity?.picture}
-          />
-          </ListItemAvatar>
-          <ListItemText 
-            primary={identity?.name} 
-            secondary={identity?.nickname} 
-            />
-        </ListItemLink>
-        ))}
+     
       </List>
       <CredentialFAB />
     </Container>

@@ -2,7 +2,7 @@ import React from "react";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import CredentialDialog from './CredentialDialog'
+import CredentialDialog from './PostDialog'
 import { useMediaQuery } from '@material-ui/core';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 

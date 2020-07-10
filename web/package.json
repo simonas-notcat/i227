@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.5",
     "@auth0/auth0-spa-js": "^1.7.0",
-    "@material-ui/core": "^4.9.12",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.52",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -16,7 +15,10 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
-    "apollo-boost": "^0.4.7",
+    "daf-core": "^7.0.0-beta.7",
+    "daf-rest": "^7.0.0-beta.7",
+    "daf-typeorm": "^7.0.0-beta.7",
+    "daf-w3c": "^7.0.0-beta.7",
     "date-fns": "^2.12.0",
     "graphql": "^15.0.0",
     "notistack": "^0.9.11",
@@ -24,13 +26,15 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "shortid": "^2.2.15",
     "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "update-daf-beta": "yarn add daf-core@beta daf-w3c@beta daf-typeorm@beta daf-rest@beta"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,5 +50,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/shortid": "^0.0.29"
   }
 }

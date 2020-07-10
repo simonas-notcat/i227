@@ -1,5 +1,6 @@
 import {
   createAgent,
+  IAgentBase,
   KeyManager,
   IdentityManager,
   TAgent,
@@ -35,6 +36,7 @@ const dbConnection = createConnection({
 
 export const agent = createAgent<
 TAgent<
+  IAgentBase &
   IIdentityManager &
     IKeyManager &
     IDataStore &

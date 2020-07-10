@@ -5,8 +5,6 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Credential } from '../types'
-import { useQuery } from '@apollo/react-hooks';
-import { getCredential, CredentialData, CredentialVariables } from '../queries/credential'
 import CredentialPostCard from './CredentialPostCard'
 import { formatDistanceToNow } from "date-fns";
 import { NavLink } from 'react-router-dom'
@@ -43,12 +41,6 @@ function CredentialReactionCard(props: Props) {
   const credentialId = liked ? liked.value : disliked?.value
 
 
-  const { loading, error, data } = useQuery<CredentialData, CredentialVariables>(getCredential, { 
-    variables: { id: credentialId || credential.id },
-    fetchPolicy: 'cache-and-network'
-  });
-
-  if (error) return <p>Error :(</p>;
 
   return (
     <Box >
@@ -59,8 +51,7 @@ function CredentialReactionCard(props: Props) {
           <Typography variant='caption' color='textSecondary' gutterBottom>{credential.issuer.name} {liked ? 'liked' : ''}{disliked ? 'disliked' : ''} {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
         </NavLink>
       </Box>
-      {loading && <LinearProgress />}
-      {data?.credentials[0] && <CredentialPostCard credential={data?.credentials[0]} type={props.type}/>}
+      
     </Box>
   );
 }

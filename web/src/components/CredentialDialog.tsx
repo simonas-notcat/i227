@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { useAuth0 } from "../react-auth0-spa";
-import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from "react-router-dom";
 import { Dialog, DialogTitle, DialogContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, DialogActions, LinearProgress, InputLabel, Select, MenuItem, makeStyles, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
-import { getIdentities, IdentitiesData } from '../queries/identities'
 
 interface Props {
   fullScreen: boolean,
@@ -46,11 +44,11 @@ function CredentialDialog(props: Props) {
   const [kudos, setKudos] = useState<string|null>(null)
   const [subject, setSubject] = useState<string|undefined>(props.subject)
 
-  const { loading, error, data } = useQuery<IdentitiesData>(getIdentities);
+  // const { loading, error, data } = useQuery<IdentitiesData>(getIdentities);
 
-  const identity = (data?.identities && subject) ? data.identities.find(i=>i.did === subject) : null
-  if (loading) return <LinearProgress />;
-  if (error) return <p>Error :(</p>;
+  // const identity = (data?.identities && subject) ? data.identities.find(i=>i.did === subject) : null
+  // if (loading) return <LinearProgress />;
+  // if (error) return <p>Error :(</p>;
 
   const callApi = async () => {
     try {
@@ -104,17 +102,17 @@ function CredentialDialog(props: Props) {
             value={subject}
             onChange={(event) => setSubject(event.target.value as string)}
           >
-            {data?.identities.map(identity => (
+            {/* {data?.identities.map(identity => (
               <MenuItem value={identity.did} key={identity.did}>
                 <Avatar src={identity.picture}/>
                 {identity.name}
               </MenuItem>
-            ))}
+            ))} */}
 
           </Select>
         </FormControl> }
 
-      {identity !== null && <List >
+      {/* {identity !== null && <List >
         <ListItem>
           <ListItemAvatar>
           <Avatar
@@ -126,7 +124,7 @@ function CredentialDialog(props: Props) {
             secondary={identity?.nickname} 
             />
         </ListItem>
-      </List>}
+      </List>} */}
 
 
         <FormControl component="fieldset" className={classes.formControl}>

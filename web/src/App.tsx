@@ -8,7 +8,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PeopleIcon from '@material-ui/icons/People';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import StoreIcon from '@material-ui/icons/Store';
 import { useMobile } from './components/Nav/MobileProvider';
 
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
@@ -23,8 +22,6 @@ import Home from './views/Home'
 import Identities from './views/Identities'
 import Identity from './views/Identity'
 import Credential from './views/Credential'
-import Marketplace from './views/Marketplace'
-import Service from './views/Service'
 import ListItemLink from './components/Nav/ListItemLink'
 
 const drawerWidth = 240;
@@ -77,8 +74,7 @@ export default function ResponsiveDrawer() {
   const homeMatch = useRouteMatch("/home");
   const identitiesMatch = useRouteMatch("/identities");
   const identityMatch = useRouteMatch("/identity/:did");
-  const marketPlaceMatch = useRouteMatch("/marketplace");
-  const serviceMatch = useRouteMatch("/s/:id");
+
   
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -95,13 +91,6 @@ export default function ResponsiveDrawer() {
           >
           <ListItemIcon><DashboardIcon /></ListItemIcon>
           <ListItemText primary={'Activity'} />
-        </ListItemLink>
-        <ListItemLink 
-          to={'/marketplace'}
-          selected={marketPlaceMatch !== null || serviceMatch !== null}
-        >
-          <ListItemIcon><StoreIcon /></ListItemIcon>
-          <ListItemText primary={'Marketplace'} />
         </ListItemLink>
         <ListItemLink
           to={'/identities'}
@@ -161,8 +150,6 @@ export default function ResponsiveDrawer() {
           <Route path={'/identities'} component={Identities} />
           <Route path={'/identity/:did'} component={Identity} />
           <Route path={'/c/:id'} component={Credential} />
-          <Route path={'/marketplace'} component={Marketplace} />
-          <Route path={'/s/:id'} component={Service} />
         </Switch>
       </main>
     </div>

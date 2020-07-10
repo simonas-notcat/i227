@@ -1,53 +1,39 @@
-import React from "react";
-import { useQuery } from '@apollo/react-hooks';
-import { Grid, Tabs, Tab } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Grid } from "@material-ui/core";
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import CredentialCard from '../components/CredentialCard'
-import { getLatestPosts, LatestPostsData, LatestPostsVariables } from '../queries/latestPosts'
+import PostCard from '../components/PostCard'
 import CredentialFAB from "../components/CredentialFAB";
 import AppBar from "../components/Nav/AppBar";
+import { useAgent } from '../agent'
+import { VerifiableCredential } from 'daf-core'
 
 function Home(props: any) {
+  const { agent } = useAgent()
+  const [ loading, setLoading ] = useState(false)
+  const [ credentials, setCredentials ] = useState<Array<VerifiableCredential>>([])
 
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: any, newValue: any) => {
-    setValue(newValue);
-  };
-
-
-
-  const { loading, error, data } = useQuery<LatestPostsData, LatestPostsVariables>(getLatestPosts, { 
-    fetchPolicy: 'no-cache',
-    variables: {
-      take: 10,
-      skip: 0
-    }
-  });
-
-
-  if (error) return <p>Error :(</p>;
-
+  useEffect(() => {
+    setLoading(true)
+    agent.dataStoreORMGetVerifiableCredentials({
+      order: [
+        { column: 'issuanceDate', direction: 'DESC' }
+      ]
+    })
+    .then(setCredentials)
+    .finally(() => setLoading(false))
+  }, [agent])
+  
   return (
     <Container maxWidth="sm">
       <AppBar title='Activity'>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-        >
-          <Tab label="All" />
-          <Tab label="Connections" />
-          <Tab label="My" />
-        </Tabs>
+
       </AppBar>
       {loading && <LinearProgress />}
       <Grid container spacing={2} justify="center">
-        {data?.credentials.map(credential => (
-          <Grid item key={credential.hash} xs={12}>
-            <CredentialCard credential={credential} type='summary' />
+        {credentials.map(credential => (
+          <Grid item key={credential.issuanceDate} xs={12}>
+            <PostCard credential={credential} type={'details'}/>
           </Grid>
         ))}
       </Grid>

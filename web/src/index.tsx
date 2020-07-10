@@ -3,20 +3,13 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { ApolloProvider } from '@apollo/react-hooks';
 import { Auth0Provider } from "./react-auth0-spa";
 import history from "./utils/history";
 import { BrowserRouter } from 'react-router-dom' 
 import App from './App';
 import theme from './theme';
 import MobileProvider from './components/Nav/MobileProvider';
-
-import ApolloClient from 'apollo-boost';
-
-const client = new ApolloClient({
-  uri: 'https://i227.dev/graphql',
-});
-
+import AgentProvider from './agent';
 
 const onRedirectCallback = (appState: any) => {
   history.push(
@@ -38,15 +31,15 @@ ReactDOM.render(
         //@ts-ignore
         onRedirectCallback={onRedirectCallback}
         >
+        <AgentProvider>
           <MobileProvider>
-            <ApolloProvider client={client}>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <App />
-              </ThemeProvider>
-            </ApolloProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <App />
+            </ThemeProvider>
           </MobileProvider>
-        </Auth0Provider>
+        </AgentProvider>
+      </Auth0Provider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

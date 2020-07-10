@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import { useAuth0 } from "../react-auth0-spa";
-import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from "react-router-dom";
 import { Dialog, DialogTitle, DialogContent, DialogActions, LinearProgress, makeStyles, TextField } from "@material-ui/core";
-import { getIdentity, IdentityData, IdentityVariables } from '../queries/identity'
+// import { getIdentity, IdentityData, IdentityVariables } from '../queries/identity'
 
 interface Props {
   fullScreen: boolean,
@@ -48,19 +47,19 @@ function ProfileDialog(props: Props) {
   const [email, setEmail] = useState<string|undefined>('')
   const [url, setUrl] = useState<string|undefined>('')
 
-  const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, {variables: {did: props.subject, take: 0, type: []}});
-  useEffect(() => {
-    if(data) {
-      setName(data.identity.name)
-      setNickname(data.identity.nickname)
-      setEmail(data.identity.email)
-      setUrl(data.identity.url)
-    }
-  },[data])
+  // const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, {variables: {did: props.subject, take: 0, type: []}});
+  // useEffect(() => {
+  //   if(data) {
+  //     setName(data.identity.name)
+  //     setNickname(data.identity.nickname)
+  //     setEmail(data.identity.email)
+  //     setUrl(data.identity.url)
+  //   }
+  // },[data])
 
 
-  if (loading) return <LinearProgress />;
-  if (error) return <p>Error :(</p>;
+  // if (loading) return <LinearProgress />;
+  // if (error) return <p>Error :(</p>;
 
   const saveProfileInfo = async () => {
     try {

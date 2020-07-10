@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Toolbar, IconButton, AppBar, Typography, Menu, MenuItem, Avatar, ListItemAvatar, ListItemText } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useMobile } from './MobileProvider';
 import { useAuth0 } from "../../react-auth0-spa";
+import { useAgent } from "../../agent";
 import ListItemLink from './ListItemLink'
 const drawerWidth = 240;
 
@@ -46,39 +47,11 @@ const AppBarTabs: React.FC<Props> = props => {
   const { children } = props
   const classes = useStyles();
   const { mobileOpen, setMobileOpen } = useMobile();
-  const { user, isAuthenticated, loginWithPopup, logout, loading, getTokenSilently } = useAuth0();
+  const { user, isAuthenticated, loginWithPopup, logout, loading } = useAuth0();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [currentDid, setCurrentDid] = React.useState(null);
+  const { authenticatedDid } = useAgent()
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    const fetchCurrentDid = async () => {
-
-      const token = await getTokenSilently()
-      
-      const response = await fetch(`${process.env.REACT_APP_HOST}/auth0did`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Origin: `${process.env.REACT_APP_HOST}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        mode: 'cors',
-        body: ''
-      });
-      
-      const { did } = await response.json();
-      if (did) {
-        setCurrentDid(did)
-      }
-    }
-    if (isAuthenticated) {
-      fetchCurrentDid()
-    }
-      
-  }, [isAuthenticated, getTokenSilently])
 
   const handleMenu = (event:any) => {
     setAnchorEl(event.currentTarget);
@@ -133,14 +106,15 @@ const AppBarTabs: React.FC<Props> = props => {
                 open={open}
                 onClose={handleClose}
               >
-                {!loading && isAuthenticated && currentDid && <ListItemLink to={'/identity/' + currentDid} >
+                {!loading && isAuthenticated && authenticatedDid && <ListItemLink to={'/identity/' + authenticatedDid} >
                   <ListItemAvatar>
                     <Avatar src={user.picture} />
                   </ListItemAvatar>
                   <ListItemText primary={user.nickname} secondary={user.name}/>
+                  <ListItemText secondary={authenticatedDid}/>
                 </ListItemLink>}
 
-                {isAuthenticated && <MenuItem onClick={logout}>Logout</MenuItem>}
+                {isAuthenticated && <MenuItem onClick={() => logout({ returnTo: process.env.REACT_APP_AUTH0_AUDIENCE })}>Logout</MenuItem>}
                 {!isAuthenticated && <MenuItem onClick={loginWithPopup}>Login</MenuItem>}
               </Menu>
             </div>
