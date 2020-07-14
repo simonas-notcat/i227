@@ -59,7 +59,7 @@ function Credential(props: any) {
       {loading && <LinearProgress />}
       <Grid container spacing={2} justify="center">
         {credentials.map(credential => (
-          <Grid item key={credential.issuanceDate} xs={12}>
+          <Grid item key={credential.id} xs={12}>
             <CredentialCard credential={credential} type='details' />
           </Grid>
         ))}

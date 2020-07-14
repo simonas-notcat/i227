@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Typography, makeStyles, Card, CardContent, CardActions, Button, IconButton, Collapse, useTheme, useMediaQuery, Box, Tabs, Tab } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
@@ -13,6 +13,10 @@ import CredentialFAB from "../components/CredentialFAB";
 import ProfileDialog from "../components/ProfileDialog"
 import ServiceDialog from "../components/ServiceDialog"
 import AppBar from "../components/Nav/AppBar";
+import { VerifiableCredential } from "daf-core";
+import { id } from "date-fns/locale";
+import { useAgent } from "../agent";
+import { IdentityProfile } from "../types";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -48,6 +52,11 @@ function Identity(props: any) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
+  const { agent } = useAgent()
+  const [ identity, setIdentity ] = useState<IdentityProfile | undefined>(undefined)
+  const [ loading, setLoading ] = useState(false)
+  const [ credentials, setCredentials ] = useState<Array<VerifiableCredential>>([])
+
 
   const [value, setValue] = React.useState(0);
 
@@ -76,39 +85,47 @@ function Identity(props: any) {
   };
 
   
-  let type = [
-    'VerifiableCredential,Post',
-    'VerifiableCredential,Reaction',
-    'VerifiableCredential,Profile',
-    'VerifiableCredential,Service',
-  ]
-  switch (value) {
-    case 0: 
-    break
-    case 1: 
-      type = ['VerifiableCredential,Post']
-    break
-    case 2: 
-      type = ['VerifiableCredential,Profile']
-    break
-    case 3: 
-      type = ['VerifiableCredential,Reaction']
-    break
-    case 4: 
-      type = ['VerifiableCredential,Service']
-    break
-  }
 
-  // const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, { 
-  //   variables: { did, take: 5, type },
-  //   fetchPolicy: 'no-cache'
-  // });
 
-  // if (error) return <p>Error :(</p>;
+  useEffect(() => {
+    agent.getIdentityProfile({ did })
+    .then(setIdentity)
+  }, [agent])
+
+  useEffect(() => {
+    setLoading(true)
+    agent.dataStoreORMGetVerifiableCredentials({      
+      where: [ 
+        { column: value === 0 ? 'issuer' : 'subject', value: [did] },
+      ]
+    })
+    .then(setCredentials)
+    .finally(() => setLoading(false))
+  }, [agent, value])
+
+
 
   return (
     <Container maxWidth="sm">
-      
+      <AppBar title={identity?.name || ''}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label="Received" />
+          <Tab label="Issued" />
+        </Tabs>
+      </AppBar>
+      {loading && <LinearProgress />}
+      <Grid container spacing={2} justify="center">
+        {credentials.map(credential => (
+          <Grid item key={credential.id} xs={12}>
+            <CredentialCard credential={credential} type='summary' />
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 }
