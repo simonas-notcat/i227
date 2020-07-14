@@ -44,7 +44,7 @@ function PostDialog(props: Props) {
   const history = useHistory()
   const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
   const { agent, authenticatedDid } = useAgent()
-  const [description, setDescription] = useState<string|undefined>('')
+  const [comment, setComment] = useState<string|undefined>('')
 
 
   const callApi = async () => {
@@ -52,16 +52,17 @@ function PostDialog(props: Props) {
       if (!authenticatedDid) {
         throw Error('Not authenticated')
       }
+      const uniqId = shortId.generate()
       const verifiableCredential = await agent.createVerifiableCredential({
         credential: {
           issuer: { id: authenticatedDid },
           '@context': ['https://www.w3.org/2018/credentials/v1'],
           type: ['VerifiableCredential', 'Post'],
           issuanceDate: new Date().toISOString(),
-          id: shortId.generate(),
+          id: process.env.REACT_APP_HOST + '/c/' + uniqId,
           credentialSubject: {
             id: authenticatedDid,
-            description,
+            comment,
           },
         },
         save: true,
@@ -69,7 +70,7 @@ function PostDialog(props: Props) {
       })
       
       props.onClose()
-      history.push('/c/'+ verifiableCredential.id)
+      history.push('/c/'+ uniqId)
 
     } catch (error) {
       console.error(error);
@@ -88,12 +89,12 @@ function PostDialog(props: Props) {
         <form className={classes.form} noValidate>
 
         <TextField
-            id="description"
+            id="comment"
             label="Tweet"
             type="text"
             multiline
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             fullWidth
           />
         </form>
@@ -104,7 +105,7 @@ function PostDialog(props: Props) {
             Cancel
           </Button>
           <Button onClick={callApi} color="primary" autoFocus>
-            Sign
+            Tweet
           </Button>
         </DialogActions>
       </Dialog>

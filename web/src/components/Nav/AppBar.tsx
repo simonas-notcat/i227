@@ -111,7 +111,6 @@ const AppBarTabs: React.FC<Props> = props => {
                     <Avatar src={user.picture} />
                   </ListItemAvatar>
                   <ListItemText primary={user.nickname} secondary={user.name}/>
-                  <ListItemText secondary={authenticatedDid}/>
                 </ListItemLink>}
 
                 {isAuthenticated && <MenuItem onClick={() => logout({ returnTo: process.env.REACT_APP_AUTH0_AUDIENCE })}>Logout</MenuItem>}

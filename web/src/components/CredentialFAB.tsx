@@ -2,8 +2,9 @@ import React from "react";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import CredentialDialog from './PostDialog'
-import { useMediaQuery } from '@material-ui/core';
+import PostDialog from './PostDialog'
+import CredentialDialog from './CredentialDialog'
+import { useMediaQuery, Box } from '@material-ui/core';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 
 
@@ -28,29 +29,36 @@ function CredentialFAB(props: Props) {
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [openModal, setOpenModal] = React.useState(false);
+  const [openKudosModal, setOpenKudosModal] = React.useState(false);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
+  const handleOpenModal = () => setOpenModal(true)
+  const handleCloseModal = () => setOpenModal(false)
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
+  const handleOpenKudosModal = () => setOpenKudosModal(true)
+  const handleCloseKudosModal = () => setOpenKudosModal(false)
   
 
   return (
-    <div>
-      <Fab color="primary" aria-label="New" className={classes.fab} onClick={handleOpenModal}>
-        <AddIcon />
+    <Box className={classes.fab}>
+      <Fab color="primary" variant='extended'  onClick={handleOpenModal}>
+        Tweet
       </Fab>
-      <CredentialDialog
+      {/* <Fab color="primary" variant='extended' onClick={handleOpenKudosModal}>
+        Kudos
+      </Fab> */}
+      <PostDialog
         fullScreen={fullScreen}
         open={openModal}
         onClose={handleCloseModal}
         subject={props.subject}
       />
-    </div>
+      <CredentialDialog
+        fullScreen={fullScreen}
+        open={openKudosModal}
+        onClose={handleCloseKudosModal}
+        subject={props.subject}
+      />
+    </Box>
   );
 
 }

@@ -1,5 +1,7 @@
 import { IIdentity } from 'daf-core'
 import { agent } from '../agent/agent'
+import shortId from 'shortid'
+
 
 export interface UserInfo {
   provider?: string,
@@ -38,6 +40,7 @@ export const getIdentityAndUpdateProfile = async ( userInfo: UserInfo ): Promise
       credential: {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
         type: ['VerifiableCredential', 'Profile'],
+        id: process.env.BASE_URL + 'c/' + shortId.generate(),
         issuer: { id: process.env.MAIN_DID },
         issuanceDate: new Date().toISOString(),
         credentialSubject: {

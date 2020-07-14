@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import PostCard from '../components/PostCard'
+import CredentialCard from '../components/CredentialCard'
 import CredentialFAB from "../components/CredentialFAB";
 import AppBar from "../components/Nav/AppBar";
 import { useAgent } from '../agent'
@@ -32,8 +32,8 @@ function Home(props: any) {
       {loading && <LinearProgress />}
       <Grid container spacing={2} justify="center">
         {credentials.map(credential => (
-          <Grid item key={credential.issuanceDate} xs={12}>
-            <PostCard credential={credential} type={'details'}/>
+          <Grid item key={credential.id} xs={12}>
+            <CredentialCard credential={credential} type={'summary'}/>
           </Grid>
         ))}
       </Grid>

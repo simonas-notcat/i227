@@ -5,7 +5,6 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
 // import RepeatIcon from '@material-ui/icons/Repeat';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Credential } from '../types'
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Avatar from '@material-ui/core/Avatar';
 

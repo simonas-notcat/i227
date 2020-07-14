@@ -9,13 +9,7 @@ import ListItemLink from "../components/Nav/ListItemLink";
 import AppBar from "../components/Nav/AppBar";
 import { useAgent } from '../agent'
 import { IIdentity } from 'daf-core'
-
-interface IdentityProfile {
-  did: string
-  name?: string
-  nickname?: string
-  picture?: string
-}
+import { IdentityProfile } from "../types";
 
 
 function Identities(props: { did: string }) {
@@ -26,8 +20,8 @@ function Identities(props: { did: string }) {
   useEffect(() => {
     setLoading(true)
     agent.getIdentityProfile({did: props.did})
-    .then(setIdentity)
-    .finally(() => setLoading(false))
+      .then(setIdentity)
+      .finally(() => setLoading(false))
   }, [agent])
 
   if (loading || !identity) {

@@ -47,7 +47,7 @@ function Credential(props: any) {
   useEffect(() => {
     setLoading(true)
     agent.dataStoreORMGetVerifiableCredentials({      
-      where: [ { column: 'id', value: [id]}]
+      where: [ { column: 'id', value: [process.env.REACT_APP_HOST + '/c/' + id]}]
     })
     .then(setCredentials)
     .finally(() => setLoading(false))
@@ -60,7 +60,7 @@ function Credential(props: any) {
       <Grid container spacing={2} justify="center">
         {credentials.map(credential => (
           <Grid item key={credential.issuanceDate} xs={12}>
-            {JSON.stringify(credential)}
+            <CredentialCard credential={credential} type='details' />
           </Grid>
         ))}
       </Grid>

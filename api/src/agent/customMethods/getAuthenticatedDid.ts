@@ -2,6 +2,6 @@ export const getAuthenticatedDid = async (args: any, context: { authenticatedDid
   if (context.authenticatedDid) {
     return context.authenticatedDid
   } else {
-    return Promise.reject('Not authenticated')
+    return ''
   }
 }

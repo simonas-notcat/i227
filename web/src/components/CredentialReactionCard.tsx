@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box } from "@material-ui/core";
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Credential } from '../types'
-import CredentialPostCard from './CredentialPostCard'
+import CredentialCard from './CredentialCard'
 import { formatDistanceToNow } from "date-fns";
 import { NavLink } from 'react-router-dom'
-
+import { VerifiableCredential } from "daf-core";
+import { IdentityProfile } from "../types";
+import { useAgent } from "../agent";
 
 interface Props {
-  credential: Credential
+  credential: VerifiableCredential
+  issuer: IdentityProfile
+  subject?: IdentityProfile
   type: 'summary' | 'details'
 }
 
@@ -33,25 +36,36 @@ const useStyles = makeStyles((theme) => ({
 
 function CredentialReactionCard(props: Props) {
   const classes = useStyles();
-  const { credential } = props
+  const { credential, issuer, subject } = props
 
-  const liked = credential.claims.find(claim => claim.type === 'like')
-  const disliked = credential.claims.find(claim => claim.type === 'dislike')
+  const liked = credential.credentialSubject['like'] !== undefined
+  const disliked = credential.credentialSubject['dislike'] !== undefined
 
-  const credentialId = liked ? liked.value : disliked?.value
-
-
-
+  const credentialId = liked ? credential.credentialSubject['like'] : credential.credentialSubject['dislike']
+  const { agent } = useAgent()
+  const [ loading, setLoading ] = useState(false)
+  const [ credentials, setCredentials ] = useState<Array<VerifiableCredential>>([])
+  useEffect(() => {
+    setLoading(true)
+    agent.dataStoreORMGetVerifiableCredentials({      
+      where: [ { column: 'id', value: [credentialId]}]
+    })
+    .then(result => {
+      setCredentials(result)
+    })
+    .finally(() => setLoading(false))
+  }, [agent])
+  
   return (
     <Box >
       <Box className={classes.row}>
-        <NavLink to={'/identity/' + credential.issuer.did} className={classes.link}>
-          {liked !== undefined && <ThumbUpIcon className={classes.icon} />}
-          {disliked !== undefined && <ThumbDownIcon className={classes.icon} />}
-          <Typography variant='caption' color='textSecondary' gutterBottom>{credential.issuer.name} {liked ? 'liked' : ''}{disliked ? 'disliked' : ''} {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
+        <NavLink to={'/identity/' + issuer.did} className={classes.link}>
+          {liked && <ThumbUpIcon className={classes.icon} />}
+          {disliked && <ThumbDownIcon className={classes.icon} />}
+          <Typography variant='caption' color='textSecondary' gutterBottom>{issuer.name} {liked ? 'liked' : ''}{disliked ? 'disliked' : ''} {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
         </NavLink>
       </Box>
-      
+      {credentials[0] && <CredentialCard credential={credentials[0]} type={props.type}/>}
     </Box>
   );
 }

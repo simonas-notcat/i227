@@ -56,17 +56,7 @@ function Identities(props: any) {
 
       </AppBar>
 
-      <Paper component="form" className={classes.root}>
-
-        <InputBase
-          className={classes.input}
-          placeholder="Search"
-          inputProps={{ 'aria-label': 'search ' }}
-        />
-        <IconButton type="submit" className={classes.iconButton} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
+     
       {loading && <LinearProgress />}
       <List >
       {identities.map(identity => (
