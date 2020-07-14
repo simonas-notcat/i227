@@ -12,6 +12,10 @@ import { EthrIdentityProvider } from 'daf-ethr-did'
 import { KeyManagementSystem, SecretBox } from 'daf-libsodium'
 import { Entities, KeyStore, IdentityStore, DataStore, DataStoreORM } from 'daf-typeorm'
 
+import { getAuthenticatedDid } from './customMethods/getAuthenticatedDid'
+import { getIdentityProfile } from './customMethods/getIdentityProfile'
+import { getLatestClaimValue } from './customMethods/getLatestClaimValue'
+
 const databaseFile = process.env.DATABASE_FILE
 const infuraProjectId = process.env.INFURA_PROJECT_ID
 const secretKey = process.env.SECRET_KEY
@@ -84,13 +88,9 @@ const getAgentForRequest = async (req: Request): Promise<Agent> => {
       new W3c(),
     ],
     overrides: {
-      getAuthenticatedDid: async (args: any, context: { authenticatedDid?: string}): Promise<string> => {
-        if (context.authenticatedDid) {
-          return context.authenticatedDid
-        } else {
-          return Promise.reject('Not authenticated')
-        }
-      }
+      getAuthenticatedDid,
+      getIdentityProfile,
+      getLatestClaimValue
     }
   })
 
@@ -100,14 +100,17 @@ const getAgentForRequest = async (req: Request): Promise<Agent> => {
 export const agentRouter = AgentRouter({
   getAgentForRequest,
   overrides: {
-    getAuthenticatedDid: { type: 'POST', path: '/getAuthenticatedDid'}
+    getAuthenticatedDid: { type: 'POST', path: '/getAuthenticatedDid'},
+    getIdentityProfile: { type: 'POST', path: '/getIdentityProfile'}
   },
   exposedMethods: [
+    'getIdentityProfile',
     'getAuthenticatedDid',
     'createVerifiableCredential',
     'createVerifiablePresentation',
     'dataStoreORMGetVerifiablePresentations',
-    'dataStoreORMGetVerifiableCredentials'
+    'dataStoreORMGetVerifiableCredentials',
+    'dataStoreORMGetIdentities',
   ],
 })
 

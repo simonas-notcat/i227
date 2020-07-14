@@ -8,17 +8,21 @@ import { useAuth0 } from "./react-auth0-spa";
 const url = `${process.env.REACT_APP_HOST}/agent`
 const enabledMethods = [
   'getAuthenticatedDid',
+  'getIdentityProfile',
   'createVerifiableCredential',
   'createVerifiablePresentation',
   'dataStoreORMGetVerifiablePresentations',
+  'dataStoreORMGetIdentities',
   'dataStoreORMGetVerifiableCredentials'
 ]
 const overrides: Record<string,IAgentRESTMethod> = {
-  getAuthenticatedDid: { type: 'POST', path: '/getAuthenticatedDid'}
+  getAuthenticatedDid: { type: 'POST', path: '/getAuthenticatedDid'},
+  getIdentityProfile: { type: 'POST', path: '/getIdentityProfile'}
 }
 
 type Agent = TAgent<IDataStore & IDataStoreORM & IW3c> & {
-  getAuthenticatedDid(): Promise<string>
+  getAuthenticatedDid(): Promise<string>,
+  getIdentityProfile(args: { did: string }): Promise<{did: string, name?: string, nickname?: string, picture?: string}>
 }
 
 interface Context {

@@ -7,7 +7,7 @@ import { getIdentityAndUpdateProfile } from '../helpers/users'
 
 async function getIdentity(user: User) {
   return getIdentityAndUpdateProfile({
-    alias: 'discord' + user.id,
+    alias: 'discord|' + user.id,
     name: user.username,
     nickname: `${user.username}#${user.discriminator}`,
     picture: user.displayAvatarURL({format: "png"})
