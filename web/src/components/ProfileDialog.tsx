@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import { useAuth0 } from "../react-auth0-spa";
+import { useAgent } from "../agent";
 import { useHistory } from "react-router-dom";
-import { Dialog, DialogTitle, DialogContent, DialogActions, LinearProgress, makeStyles, TextField } from "@material-ui/core";
-// import { getIdentity, IdentityData, IdentityVariables } from '../queries/identity'
+import { Dialog, DialogTitle, DialogContent, DialogActions, makeStyles, TextField } from "@material-ui/core";
+import shortId from 'shortid'
 
 interface Props {
   fullScreen: boolean,
@@ -41,62 +41,42 @@ const useStyles = makeStyles((theme) => ({
 function ProfileDialog(props: Props) {
   const classes = useStyles()
   const history = useHistory()
-  const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
+  const { agent, authenticatedDid } = useAgent()
+
   const [name, setName] = useState<string|undefined>('')
   const [nickname, setNickname] = useState<string|undefined>('')
-  const [email, setEmail] = useState<string|undefined>('')
-  const [url, setUrl] = useState<string|undefined>('')
-
-  // const { loading, error, data } = useQuery<IdentityData, IdentityVariables>(getIdentity, {variables: {did: props.subject, take: 0, type: []}});
-  // useEffect(() => {
-  //   if(data) {
-  //     setName(data.identity.name)
-  //     setNickname(data.identity.nickname)
-  //     setEmail(data.identity.email)
-  //     setUrl(data.identity.url)
-  //   }
-  // },[data])
-
-
-  // if (loading) return <LinearProgress />;
-  // if (error) return <p>Error :(</p>;
 
   const saveProfileInfo = async () => {
     try {
-      const token = isAuthenticated ? await getTokenSilently() : await getTokenWithPopup();
+      if (!authenticatedDid) throw Error('Not authenticated')
 
-      const data = {
-        type: 'Profile',
-        credentialSubject: {
-          id: props.subject,
-        }
-      } as { type: string, credentialSubject: {
+      const credentialSubject = {
+        id: props.subject,
+      } as { 
+        id: string,
         name?: string,
         nickname?: string,
-        url?: string,
-        email?: string
-      }}
+      }
 
-      if (name) data.credentialSubject['name'] = name
-      if (nickname) data.credentialSubject['nickname'] = nickname
-      if (url) data.credentialSubject['url'] = url
-      if (email) data.credentialSubject['email'] = email
+      if (name) credentialSubject['name'] = name
+      if (nickname) credentialSubject['nickname'] = nickname
 
-      const response = await fetch(`${process.env.REACT_APP_HOST}/sign`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Origin: `${process.env.REACT_APP_HOST}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+      const uniqId = shortId.generate()
+      await agent.createVerifiableCredential({
+        credential: {
+          issuer: { id: authenticatedDid },
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+          type: ['VerifiableCredential', 'Profile'],
+          issuanceDate: new Date().toISOString(),
+          id: process.env.REACT_APP_HOST + '/c/' + uniqId,
+          credentialSubject,
         },
-        mode: 'cors',
-        body: JSON.stringify(data)
-      });
+        save: true,
+        proofFormat: 'jwt',
+      })
 
-      const responseData = await response.json();
       props.onClose()
-      history.push('/c/'+ responseData.id)
+      history.push('/c/'+ uniqId)
 
     } catch (error) {
       console.error(error);
@@ -132,22 +112,6 @@ function ProfileDialog(props: Props) {
             fullWidth
           />
 
-          <TextField
-            id="url"
-            label="Url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            fullWidth
-          />
-
-          <TextField
-            id="email"
-            label="Email Address"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-          />
         </form>
 
         </DialogContent>

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 function CredentialReactionCard(props: Props) {
   const classes = useStyles();
-  const { credential, issuer, subject } = props
+  const { credential, issuer } = props
 
   const liked = credential.credentialSubject['like'] !== undefined
   const disliked = credential.credentialSubject['dislike'] !== undefined
@@ -54,7 +54,7 @@ function CredentialReactionCard(props: Props) {
       setCredentials(result)
     })
     .finally(() => setLoading(false))
-  }, [agent])
+  }, [agent, credentialId])
   
   return (
     <Box >
@@ -65,6 +65,7 @@ function CredentialReactionCard(props: Props) {
           <Typography variant='caption' color='textSecondary' gutterBottom>{issuer.name} {liked ? 'liked' : ''}{disliked ? 'disliked' : ''} {formatDistanceToNow(Date.parse(credential.issuanceDate))} ago</Typography>
         </NavLink>
       </Box>
+      {loading && <LinearProgress />}
       {credentials[0] && <CredentialCard credential={credentials[0]} type={props.type}/>}
     </Box>
   );

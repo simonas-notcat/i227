@@ -16,6 +16,9 @@ function Home(props: any) {
   useEffect(() => {
     setLoading(true)
     agent.dataStoreORMGetVerifiableCredentials({
+      where: [
+        { column: 'type', value: ['VerifiableCredential,Profile'], op: 'Equal', not: true}
+      ],
       order: [
         { column: 'issuanceDate', direction: 'DESC' }
       ]

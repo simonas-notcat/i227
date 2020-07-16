@@ -7,7 +7,6 @@ type Context = {
 
 export interface IGetLatestClaimValue {
   getLatestClaimValue: ( args: { did: string, credentialType: string, type: string}, context: Context)=>Promise<string>
-
 }
 
 export const getLatestClaimValue = async ( args: {

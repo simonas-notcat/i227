@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, CardHeader, CardContent, Tooltip, Snackbar, CardMedia, Grid, LinearProgress } from "@material-ui/core";
+import { CardHeader, Tooltip, Snackbar, LinearProgress } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionAreaLink from "./Nav/CardActionAreaLink";
 import CardActions from "@material-ui/core/CardActions";
@@ -7,9 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import ThumbDownIcon from '@material-ui/icons/ThumbDownAlt';
 import ThumbUpIcon from '@material-ui/icons/ThumbUpAlt';
-import { makeStyles } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
-import { useAuth0 } from "../react-auth0-spa";
 import Alert from '@material-ui/lab/Alert';
 import { formatDistanceToNow } from 'date-fns'
 import { VerifiableCredential } from "daf-core";
@@ -25,81 +23,8 @@ interface Props {
   type: 'summary' | 'details'
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingRight: theme.spacing(2)
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    color: theme.palette.text.secondary
-  },
-  content: {
-    flex: '1 0 auto',
-  },
-  cover: {
-    [theme.breakpoints.down('sm')]: {
-      width: 100,
-      height: 100,
-    },
-    width: 150,
-    height: 150,
-    // marginTop: theme.spacing(2)
-    alignSelf: 'center',
-    margin: theme.spacing(2)
-  },
-  smallAvatar: {
-    width: 28,
-    height: 28,
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1)
-  },
-  actions: {
-    display: 'flex',
-    // justifyContent: 'space-between'
-  },
-  claim: {
-
-    display: 'flex',
-    flexDirection: 'column',
-    // alignItems: 'center'
-  },
-  claimTextBox: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    flex: 1,
-    // flexGrow: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.8)'
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  gridList: {
-    // width: 500,
-    // height: 450,
-  },
-}));
-
 function CredentialPostCard(props: Props) {
   const { credential } = props
-  const classes = useStyles();
-  const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
   const [openShareTooltip, setOpenShareTooltip] = React.useState(false);
   const { agent, authenticatedDid } = useAgent()
   const [ loading, setLoading ] = useState(false)
@@ -118,7 +43,7 @@ function CredentialPostCard(props: Props) {
       setSubject(result[1])
     })
     .finally(() => setLoading(false))
-  }, [agent])
+  }, [agent, credential.issuer.id, credential.credentialSubject.id])
 
   if (loading) {
     return (<LinearProgress />)
@@ -147,7 +72,6 @@ function CredentialPostCard(props: Props) {
 
   const handleReaction = async (reaction: string) => {
     try {
-      const token = isAuthenticated ? await getTokenSilently() : await getTokenWithPopup();
 
       const credentialSubject = {
         id: credential.credentialSubject.id,
@@ -157,7 +81,7 @@ function CredentialPostCard(props: Props) {
 
       if (!authenticatedDid) throw Error('Not authenticated')
 
-      const verifiableCredential = await agent.createVerifiableCredential({
+      await agent.createVerifiableCredential({
         credential: {
           issuer: { id: authenticatedDid },
           '@context': ['https://www.w3.org/2018/credentials/v1'],

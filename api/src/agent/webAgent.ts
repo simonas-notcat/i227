@@ -15,6 +15,7 @@ import { Entities, KeyStore, IdentityStore, DataStore, DataStoreORM } from 'daf-
 import { getAuthenticatedDid } from './customMethods/getAuthenticatedDid'
 import { getIdentityProfile } from './customMethods/getIdentityProfile'
 import { getLatestClaimValue } from './customMethods/getLatestClaimValue'
+import { getAllIdentitiesWithProfiles } from './customMethods/getAllIdentitiesWithProfiles'
 
 const databaseFile = process.env.DATABASE_FILE
 const infuraProjectId = process.env.INFURA_PROJECT_ID
@@ -90,7 +91,8 @@ const getAgentForRequest = async (req: Request): Promise<Agent> => {
     overrides: {
       getAuthenticatedDid,
       getIdentityProfile,
-      getLatestClaimValue
+      getLatestClaimValue,
+      getAllIdentitiesWithProfiles,
     }
   })
 
@@ -101,10 +103,12 @@ export const agentRouter = AgentRouter({
   getAgentForRequest,
   overrides: {
     getAuthenticatedDid: { type: 'POST', path: '/getAuthenticatedDid'},
-    getIdentityProfile: { type: 'POST', path: '/getIdentityProfile'}
+    getIdentityProfile: { type: 'POST', path: '/getIdentityProfile'},
+    getAllIdentitiesWithProfiles: { type: 'POST', path: '/getAllIdentitiesWithProfiles'}
   },
   exposedMethods: [
     'getIdentityProfile',
+    'getAllIdentitiesWithProfiles',
     'getAuthenticatedDid',
     'createVerifiableCredential',
     'createVerifiablePresentation',

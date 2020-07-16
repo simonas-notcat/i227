@@ -4,11 +4,13 @@ import { IW3c } from 'daf-w3c'
 import { IDataStoreORM } from 'daf-typeorm'
 import { AgentRestClient, IAgentRESTMethod } from 'daf-rest'
 import { useAuth0 } from "./react-auth0-spa";
+import { IdentityProfile } from './types'
 
 const url = `${process.env.REACT_APP_HOST}/agent`
 const enabledMethods = [
   'getAuthenticatedDid',
   'getIdentityProfile',
+  'getAllIdentitiesWithProfiles',
   'createVerifiableCredential',
   'createVerifiablePresentation',
   'dataStoreORMGetVerifiablePresentations',
@@ -17,17 +19,19 @@ const enabledMethods = [
 ]
 const overrides: Record<string,IAgentRESTMethod> = {
   getAuthenticatedDid: { type: 'POST', path: '/getAuthenticatedDid'},
-  getIdentityProfile: { type: 'POST', path: '/getIdentityProfile'}
+  getIdentityProfile: { type: 'POST', path: '/getIdentityProfile'},
+  getAllIdentitiesWithProfiles: { type: 'POST', path: '/getAllIdentitiesWithProfiles'},
 }
 
 type Agent = TAgent<IDataStore & IDataStoreORM & IW3c> & {
   getAuthenticatedDid(): Promise<string>,
-  getIdentityProfile(args: { did: string }): Promise<{did: string, name?: string, nickname?: string, picture?: string}>
+  getIdentityProfile(args: { did: string }): Promise<IdentityProfile>,
+  getAllIdentitiesWithProfiles(): Promise<IdentityProfile[]>,
 }
 
 interface Context {
   agent: Agent,
-  authenticatedDid?: string | null
+  authenticatedDid: string | null
 }
 
 const defaultAgent = createAgent<Agent>({

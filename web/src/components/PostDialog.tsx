@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
-import { useAuth0 } from "../react-auth0-spa";
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { useAgent } from "../agent";
 import { useHistory } from "react-router-dom";
-import { Dialog, DialogTitle, DialogContent,  DialogActions, makeStyles, TextField } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent,  DialogActions, makeStyles, TextField, FormControl, InputLabel, Select, MenuItem, Avatar, ListItemText, ListItemAvatar } from "@material-ui/core";
 import shortId from 'shortid'
+import { IdentityProfile } from "../types";
 
 interface Props {
   fullScreen: boolean,
@@ -42,18 +43,27 @@ const useStyles = makeStyles((theme) => ({
 function PostDialog(props: Props) {
   const classes = useStyles()
   const history = useHistory()
-  const { getTokenWithPopup, getTokenSilently, isAuthenticated } = useAuth0()
   const { agent, authenticatedDid } = useAgent()
   const [comment, setComment] = useState<string|undefined>('')
+  const [subject, setSubject] = useState<string|undefined>(props.subject)
+  const [ loading, setLoading ] = useState(false)
+  const [ identities, setIdentities ] = useState<Array<IdentityProfile>>([])
+
+  useEffect(() => {
+    setLoading(true)
+    agent.getAllIdentitiesWithProfiles()
+    .then(setIdentities)
+    .finally(() => setLoading(false))
+  }, [agent])
 
 
   const callApi = async () => {
     try {
-      if (!authenticatedDid) {
+      if (!authenticatedDid || !subject) {
         throw Error('Not authenticated')
       }
       const uniqId = shortId.generate()
-      const verifiableCredential = await agent.createVerifiableCredential({
+      await agent.createVerifiableCredential({
         credential: {
           issuer: { id: authenticatedDid },
           '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -61,7 +71,7 @@ function PostDialog(props: Props) {
           issuanceDate: new Date().toISOString(),
           id: process.env.REACT_APP_HOST + '/c/' + uniqId,
           credentialSubject: {
-            id: authenticatedDid,
+            id: subject || authenticatedDid,
             comment,
           },
         },
@@ -84,13 +94,36 @@ function PostDialog(props: Props) {
         onClose={props.onClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">Create new Tweet</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">Create new Post</DialogTitle>
         <DialogContent>
         <form className={classes.form} noValidate>
+        {loading && <LinearProgress />}
+        {identities && <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-label">Subject</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={subject}
+            onChange={(event) => setSubject(event.target.value as string)}
+          >
+            {identities.map(identity => (
+              <MenuItem value={identity.did} key={identity.did}>
+                <ListItemAvatar>
+                  <Avatar src={identity.picture} />
+                </ListItemAvatar>
+                <ListItemText primary={identity.name} secondary={identity.nickname} />
+              </MenuItem>
+            ))}
+
+          </Select>
+        </FormControl>}
+
+
+
 
         <TextField
             id="comment"
-            label="Tweet"
+            label="Comment"
             type="text"
             multiline
             value={comment}

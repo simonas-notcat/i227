@@ -11,10 +11,8 @@ import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CredentialFAB from "../components/CredentialFAB";
 import ProfileDialog from "../components/ProfileDialog"
-import ServiceDialog from "../components/ServiceDialog"
 import AppBar from "../components/Nav/AppBar";
 import { VerifiableCredential } from "daf-core";
-import { id } from "date-fns/locale";
 import { useAgent } from "../agent";
 import { IdentityProfile } from "../types";
 
@@ -66,8 +64,7 @@ function Identity(props: any) {
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const [openProfileModal, setOpenProfileModal] = React.useState(false);
-  const [openServiceModal, setOpenServiceModal] = React.useState(false);
-
+  
   const handleOpenProfileModal = () => {
     setOpenProfileModal(true);
   };
@@ -76,21 +73,10 @@ function Identity(props: any) {
     setOpenProfileModal(false);
   };
 
-  const handleOpenServiceModal = () => {
-    setOpenServiceModal(true);
-  };
-
-  const handleCloseServiceModal = () => {
-    setOpenServiceModal(false);
-  };
-
-  
-
-
   useEffect(() => {
     agent.getIdentityProfile({ did })
     .then(setIdentity)
-  }, [agent])
+  }, [agent, did])
 
   useEffect(() => {
     setLoading(true)
@@ -101,9 +87,7 @@ function Identity(props: any) {
     })
     .then(setCredentials)
     .finally(() => setLoading(false))
-  }, [agent, value])
-
-
+  }, [agent, value, did])
 
   return (
     <Container maxWidth="sm">
@@ -114,18 +98,64 @@ function Identity(props: any) {
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="Received" />
           <Tab label="Issued" />
+          <Tab label="Received" />
         </Tabs>
       </AppBar>
       {loading && <LinearProgress />}
       <Grid container spacing={2} justify="center">
+      <Grid item xs={12}>
+          <Card variant='outlined'>
+            <CardContent className={classes.header}>
+
+              <Avatar
+                className={classes.avatar}
+                src={identity?.picture}
+                />
+              <Typography variant='h5'>{identity?.name}</Typography>
+              <Typography variant='h6'>{identity?.nickname}</Typography>
+            </CardContent>
+            <CardActions>
+            
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+            </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit >
+              <Box className={classes.collapse}>
+
+                <Typography variant='subtitle2' color='textSecondary'>{identity?.did}</Typography>
+                <Button size="small" color="primary" onClick={handleOpenProfileModal}>
+                  Profile
+                </Button>
+              </Box>
+            </Collapse>
+          </Card>
+        </Grid>
+
+
         {credentials.map(credential => (
           <Grid item key={credential.id} xs={12}>
             <CredentialCard credential={credential} type='summary' />
           </Grid>
         ))}
       </Grid>
+      {identity && <ProfileDialog
+        fullScreen={fullScreen}
+        open={openProfileModal}
+        onClose={handleCloseProfileModal}
+        subject={identity.did}
+      />}
+
+      <CredentialFAB subject={identity?.did}/>
+
     </Container>
   );
 }
