@@ -1,1 +1,1 @@
-export const prefix = 'i!'
+export const prefix = '!'

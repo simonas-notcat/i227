@@ -4,7 +4,7 @@ import { AgentRouter } from 'daf-express'
 import { Request } from 'express'
 import fetch from 'node-fetch'
 import { getIdentityAndUpdateProfile } from '../helpers/users'
-
+import { DafResolver } from 'daf-resolver'
 import { Agent,KeyManager, IdentityManager } from 'daf-core'
 import { createConnection } from 'typeorm'
 import { W3c } from 'daf-w3c'
@@ -84,6 +84,7 @@ const getAgentForRequest = async (req: Request): Promise<Agent> => {
           }),
         },
       }),
+      new DafResolver({ infuraProjectId }),
       new DataStoreORM(dbConnection),
       new DataStore(dbConnection),
       new W3c(),
@@ -107,6 +108,7 @@ export const agentRouter = AgentRouter({
     getAllIdentitiesWithProfiles: { type: 'POST', path: '/getAllIdentitiesWithProfiles'}
   },
   exposedMethods: [
+    'resolveDid',
     'getIdentityProfile',
     'getAllIdentitiesWithProfiles',
     'getAuthenticatedDid',
